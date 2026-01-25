@@ -1,62 +1,135 @@
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
+import { View, Text, ScrollView, Pressable, TextInput } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, ChevronDown } from "lucide-react-native";
 
-interface SuggestChurchScreenProps {
-  onBack: () => void;
-}
+import { Button, Card, CardContent } from "@/shared/components/ui";
 
-export function SuggestChurchScreen({ onBack }: SuggestChurchScreenProps) {
+export function SuggestChurchScreen() {
+  const insets = useSafeAreaInsets();
+  const [form, setForm] = useState({
+    churchName: "",
+    denomination: "",
+    address: "",
+    phone: "",
+    website: "",
+    notes: "",
+  });
+
+  const handleSubmit = () => {
+    console.log("Submitting suggestion:", form);
+    router.back();
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">Suggest a Church</h1>
-        </div>
-      </div>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">Suggest a Church</Text>
+        </View>
+      </View>
 
-      <div className="p-4">
-        <p className="text-sm text-gray-600 mb-4">Help us grow our directory by suggesting a church in your area.</p>
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+        <Text className="text-sm text-gray-600 mb-4">
+          Help us grow our directory by suggesting a church in your area.
+        </Text>
+
         <Card>
-          <CardContent className="p-4 space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Church Name *</label>
-              <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Denomination *</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option>Select denomination</option>
-                <option>Pentecostal</option>
-                <option>Anglican</option>
-                <option>Catholic</option>
-                <option>Baptist</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Address *</label>
-              <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Phone</label>
-              <input type="tel" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Website</label>
-              <input type="url" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Additional Notes</label>
-              <textarea className="w-full px-3 py-2 border border-gray-300 rounded-lg" rows={3}></textarea>
-            </div>
-            <Button className="w-full">Submit Suggestion</Button>
+          <CardContent className="gap-4">
+            {/* Church Name */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Church Name *</Text>
+              <TextInput
+                value={form.churchName}
+                onChangeText={(text) => setForm({ ...form, churchName: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Enter church name"
+                placeholderTextColor="#9ca3af"
+              />
+            </View>
+
+            {/* Denomination */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Denomination *</Text>
+              <Pressable className="flex-row items-center justify-between px-3 py-3 border border-gray-300 rounded-lg">
+                <Text className={form.denomination ? "text-gray-900" : "text-gray-400"}>
+                  {form.denomination || "Select denomination"}
+                </Text>
+                <ChevronDown size={20} color="#6b7280" />
+              </Pressable>
+            </View>
+
+            {/* Address */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Address *</Text>
+              <TextInput
+                value={form.address}
+                onChangeText={(text) => setForm({ ...form, address: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Enter address"
+                placeholderTextColor="#9ca3af"
+              />
+            </View>
+
+            {/* Phone */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Phone</Text>
+              <TextInput
+                value={form.phone}
+                onChangeText={(text) => setForm({ ...form, phone: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Enter phone number"
+                placeholderTextColor="#9ca3af"
+                keyboardType="phone-pad"
+              />
+            </View>
+
+            {/* Website */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Website</Text>
+              <TextInput
+                value={form.website}
+                onChangeText={(text) => setForm({ ...form, website: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Enter website URL"
+                placeholderTextColor="#9ca3af"
+                keyboardType="url"
+                autoCapitalize="none"
+              />
+            </View>
+
+            {/* Notes */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Additional Notes</Text>
+              <TextInput
+                value={form.notes}
+                onChangeText={(text) => setForm({ ...form, notes: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Any additional information..."
+                placeholderTextColor="#9ca3af"
+                multiline
+                numberOfLines={3}
+                textAlignVertical="top"
+                style={{ minHeight: 80 }}
+              />
+            </View>
+
+            <Button className="w-full" onPress={handleSubmit}>
+              <Text className="text-white font-medium">Submit Suggestion</Text>
+            </Button>
           </CardContent>
         </Card>
-      </div>
-    </div>
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }

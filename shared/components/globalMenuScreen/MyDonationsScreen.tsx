@@ -1,61 +1,70 @@
-import { ArrowLeft, Download, DollarSign } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
+import { View, Text, ScrollView, Pressable } from "react-native";
+import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, Download, DollarSign } from "lucide-react-native";
 
-interface MyDonationsScreenProps {
-  onBack: () => void;
-}
+import { Button, Card, CardContent } from "@/shared/components/ui";
 
-export function MyDonationsScreen({ onBack }: MyDonationsScreenProps) {
-  const donations = [
-    { id: "1", church: "Grace Community Church", amount: 100, date: "Jan 15, 2026", type: "Tithe" },
-    { id: "2", church: "St. James Cathedral", amount: 50, date: "Jan 8, 2026", type: "Offering" },
-    { id: "3", church: "Grace Community Church", amount: 100, date: "Jan 1, 2026", type: "Tithe" },
-  ];
+const donations = [
+  { id: "1", church: "Grace Community Church", amount: 100, date: "Jan 15, 2026", type: "Tithe" },
+  { id: "2", church: "St. James Cathedral", amount: 50, date: "Jan 8, 2026", type: "Offering" },
+  { id: "3", church: "Grace Community Church", amount: 100, date: "Jan 1, 2026", type: "Tithe" },
+];
+
+export function MyDonationsScreen() {
+  const insets = useSafeAreaInsets();
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">My Donations</h1>
-        </div>
-      </div>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">My Donations</Text>
+        </View>
+      </View>
 
-      <div className="p-4">
-        <Card className="mb-4 bg-gradient-to-br from-indigo-500 to-purple-600 text-white border-0">
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+        {/* Total Giving Card */}
+        <Card className="mb-4 bg-indigo-600 border-0">
           <CardContent className="p-6">
-            <p className="text-sm text-white/80 mb-1">Total Giving (2026)</p>
-            <h2 className="text-3xl font-bold">$250.00</h2>
+            <Text className="text-sm text-white/80 mb-1">Total Giving (2026)</Text>
+            <Text className="text-3xl font-bold text-white">$250.00</Text>
           </CardContent>
         </Card>
 
-        <h2 className="font-semibold mb-3">Donation History</h2>
-        <div className="space-y-2">
+        {/* Donation History */}
+        <Text className="font-semibold text-gray-900 mb-3">Donation History</Text>
+        <View className="gap-2">
           {donations.map((donation) => (
             <Card key={donation.id}>
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-medium mb-1">{donation.church}</h3>
-                    <p className="text-sm text-gray-600 mb-1">{donation.type}</p>
-                    <p className="text-xs text-gray-500">{donation.date}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-lg">${donation.amount}</p>
-                    <Button size="sm" variant="ghost" className="mt-1">
-                      <Download className="h-3 w-3 mr-1" />
-                      Receipt
-                    </Button>
-                  </div>
-                </div>
+              <CardContent>
+                <View className="flex-row items-start justify-between">
+                  <View className="flex-1">
+                    <Text className="font-medium text-gray-900 mb-1">{donation.church}</Text>
+                    <Text className="text-sm text-gray-600 mb-1">{donation.type}</Text>
+                    <Text className="text-xs text-gray-500">{donation.date}</Text>
+                  </View>
+                  <View className="items-end">
+                    <Text className="font-semibold text-lg text-gray-900">${donation.amount}</Text>
+                    <Pressable className="flex-row items-center gap-1 mt-2 px-2 py-1 rounded active:bg-gray-100">
+                      <Download size={12} color="#6b7280" />
+                      <Text className="text-xs text-gray-600">Receipt</Text>
+                    </Pressable>
+                  </View>
+                </View>
               </CardContent>
             </Card>
           ))}
-        </div>
-      </div>
-    </div>
+        </View>
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }

@@ -1,51 +1,71 @@
-import { ArrowLeft, Calendar, MapPin } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
+import { View, Text, ScrollView, Pressable } from "react-native";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, Calendar, MapPin } from "lucide-react-native";
+
+import { Button, Card, CardContent } from "@/shared/components/ui";
 import { events } from "@/data/mockData";
 
-interface MyEventsScreenProps {
-  onBack: () => void;
-}
+export function MyEventsScreen() {
+  const insets = useSafeAreaInsets();
 
-export function MyEventsScreen({ onBack }: MyEventsScreenProps) {
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">My Events</h1>
-        </div>
-      </div>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">My Events</Text>
+        </View>
+      </View>
 
-      <div className="p-4 space-y-4">
-        <div>
-          <h2 className="font-semibold mb-3">Upcoming RSVPs</h2>
-          <div className="space-y-3">
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+        {/* Upcoming RSVPs */}
+        <View className="mb-6">
+          <Text className="font-semibold text-gray-900 mb-3">Upcoming RSVPs</Text>
+          <View className="gap-3">
             {events.slice(0, 2).map((event) => (
               <Card key={event.id}>
-                <CardContent className="p-4 flex gap-3">
-                  <img src={event.image} alt={event.title} className="w-20 h-20 rounded-lg object-cover" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-1">{event.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{event.church}</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Calendar className="h-3 w-3" />
-                      <span>{event.date} at {event.time}</span>
-                    </div>
-                  </div>
+                <CardContent>
+                  <View className="flex-row gap-3">
+                    <Image
+                      source={{ uri: event.image }}
+                      style={{ width: 80, height: 80, borderRadius: 8 }}
+                      contentFit="cover"
+                    />
+                    <View className="flex-1">
+                      <Text className="font-semibold text-gray-900 mb-1">{event.title}</Text>
+                      <Text className="text-sm text-gray-600 mb-2">{event.church}</Text>
+                      <View className="flex-row items-center gap-2">
+                        <Calendar size={12} color="#6b7280" />
+                        <Text className="text-xs text-gray-500">
+                          {event.date} at {event.time}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
                 </CardContent>
               </Card>
             ))}
-          </div>
-        </div>
+          </View>
+        </View>
 
-        <div>
-          <h2 className="font-semibold mb-3">Past Events</h2>
-          <Button variant="outline" className="w-full">View Event History</Button>
-        </div>
-      </div>
-    </div>
+        {/* Past Events */}
+        <View>
+          <Text className="font-semibold text-gray-900 mb-3">Past Events</Text>
+          <Button variant="outline" className="w-full">
+            <Text className="text-gray-900 font-medium">View Event History</Text>
+          </Button>
+        </View>
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }

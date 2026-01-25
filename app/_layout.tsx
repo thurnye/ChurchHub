@@ -56,6 +56,7 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name='(tabs)' />
+        {/* Auth screens */}
         <Stack.Screen
           name='login'
           options={{
@@ -76,6 +77,43 @@ function RootLayoutNav() {
             headerShown: false,
             animation: 'slide_from_right',
           }}
+        />
+        {/* Global menu screens */}
+        <Stack.Screen
+          name='my-churches'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='my-events'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='my-donations'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='preferences'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='help'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='suggest-church'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='terms'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='report'
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='language'
+          options={{ animation: 'slide_from_right' }}
         />
       </Stack>
     </ThemeProvider>

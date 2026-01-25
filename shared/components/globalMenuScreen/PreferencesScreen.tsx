@@ -1,70 +1,107 @@
-import { ArrowLeft, Bell, Globe, Heart } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
+import { View, Text, ScrollView, Pressable, Switch } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, Bell, ChevronDown } from "lucide-react-native";
 
-interface PreferencesScreenProps {
-  onBack: () => void;
-}
+import { Button, Card, CardContent } from "@/shared/components/ui";
 
-export function PreferencesScreen({ onBack }: PreferencesScreenProps) {
+export function PreferencesScreen() {
+  const insets = useSafeAreaInsets();
+  const [preferences, setPreferences] = useState({
+    denomination: "All Denominations",
+    church: "None Selected",
+    worshipStyle: "All Styles",
+  });
+  const [notifications, setNotifications] = useState({
+    serviceReminders: true,
+    eventUpdates: true,
+    newSermons: true,
+    prayerRequests: false,
+  });
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">Preferences</h1>
-        </div>
-      </div>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">Preferences</Text>
+        </View>
+      </View>
 
-      <div className="p-4 space-y-4">
-        <Card>
-          <CardContent className="p-4 space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Preferred Denomination</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option>All Denominations</option>
-                <option>Pentecostal</option>
-                <option>Anglican</option>
-                <option>Catholic</option>
-                <option>Baptist</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Preferred Church</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option>None Selected</option>
-                <option>Grace Community Church</option>
-                <option>St. James Cathedral</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Worship Style</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option>All Styles</option>
-                <option>Contemporary</option>
-                <option>Traditional</option>
-                <option>Blended</option>
-              </select>
-            </div>
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+        {/* Preferences */}
+        <Card className="mb-4">
+          <CardContent className="gap-4">
+            {/* Denomination */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Preferred Denomination</Text>
+              <Pressable className="flex-row items-center justify-between px-3 py-3 border border-gray-300 rounded-lg">
+                <Text className="text-gray-700">{preferences.denomination}</Text>
+                <ChevronDown size={20} color="#6b7280" />
+              </Pressable>
+            </View>
+
+            {/* Church */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Preferred Church</Text>
+              <Pressable className="flex-row items-center justify-between px-3 py-3 border border-gray-300 rounded-lg">
+                <Text className="text-gray-700">{preferences.church}</Text>
+                <ChevronDown size={20} color="#6b7280" />
+              </Pressable>
+            </View>
+
+            {/* Worship Style */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Worship Style</Text>
+              <Pressable className="flex-row items-center justify-between px-3 py-3 border border-gray-300 rounded-lg">
+                <Text className="text-gray-700">{preferences.worshipStyle}</Text>
+                <ChevronDown size={20} color="#6b7280" />
+              </Pressable>
+            </View>
           </CardContent>
         </Card>
 
-        <h3 className="font-semibold">Notifications</h3>
-        <Card>
-          <CardContent className="p-4 space-y-3">
-            {["Service Reminders", "Event Updates", "New Sermons", "Prayer Requests"].map((item) => (
-              <div key={item} className="flex items-center justify-between">
-                <span className="text-sm">{item}</span>
-                <input type="checkbox" className="w-5 h-5" defaultChecked />
-              </div>
+        {/* Notifications */}
+        <Text className="font-semibold text-gray-900 mb-3">Notifications</Text>
+        <Card className="mb-6">
+          <CardContent className="gap-1">
+            {[
+              { key: "serviceReminders", label: "Service Reminders" },
+              { key: "eventUpdates", label: "Event Updates" },
+              { key: "newSermons", label: "New Sermons" },
+              { key: "prayerRequests", label: "Prayer Requests" },
+            ].map((item) => (
+              <View
+                key={item.key}
+                className="flex-row items-center justify-between py-3 border-b border-gray-100 last:border-b-0"
+              >
+                <Text className="text-sm text-gray-900">{item.label}</Text>
+                <Switch
+                  value={notifications[item.key as keyof typeof notifications]}
+                  onValueChange={(value) =>
+                    setNotifications({ ...notifications, [item.key]: value })
+                  }
+                  trackColor={{ false: "#e5e7eb", true: "#818cf8" }}
+                  thumbColor={notifications[item.key as keyof typeof notifications] ? "#4f46e5" : "#f3f4f6"}
+                />
+              </View>
             ))}
           </CardContent>
         </Card>
 
-        <Button className="w-full">Save Preferences</Button>
-      </div>
-    </div>
+        <Button className="w-full">
+          <Text className="text-white font-medium">Save Preferences</Text>
+        </Button>
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }

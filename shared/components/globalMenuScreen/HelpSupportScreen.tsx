@@ -1,74 +1,112 @@
-import { ArrowLeft, Mail, MessageCircle, Phone } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion";
+import { View, Text, ScrollView, Pressable } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, Mail, MessageCircle, Phone, ChevronDown, ChevronUp } from "lucide-react-native";
 
-interface HelpSupportScreenProps {
-  onBack: () => void;
-}
+import { Button, Card, CardContent } from "@/shared/components/ui";
 
-export function HelpSupportScreen({ onBack }: HelpSupportScreenProps) {
+const faqs = [
+  {
+    id: "faq1",
+    question: "How do I find churches near me?",
+    answer: "Navigate to the \"Churches\" tab and enable location services. The map will show all churches in your area.",
+  },
+  {
+    id: "faq2",
+    question: "Can I follow multiple churches?",
+    answer: "Yes! You can follow as many churches as you'd like. Simply tap the heart icon on any church profile.",
+  },
+  {
+    id: "faq3",
+    question: "How do I make a donation?",
+    answer: "Visit the church's profile, go to the \"Give\" tab, and follow the secure payment process.",
+  },
+  {
+    id: "faq4",
+    question: "Is my donation information secure?",
+    answer: "Yes, all donation transactions are encrypted and processed through secure payment gateways.",
+  },
+];
+
+export function HelpSupportScreen() {
+  const insets = useSafeAreaInsets();
+  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">Help & Support</h1>
-        </div>
-      </div>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">Help & Support</Text>
+        </View>
+      </View>
 
-      <div className="p-4 space-y-4">
-        <Card>
-          <CardContent className="p-4 space-y-3">
-            <Button variant="outline" className="w-full justify-start">
-              <Mail className="h-4 w-4 mr-2" />
-              Email Support
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+        {/* Contact Options */}
+        <Card className="mb-6">
+          <CardContent className="gap-3">
+            <Button variant="outline" className="w-full">
+              <View className="flex-row items-center gap-2">
+                <Mail size={16} color="#111827" />
+                <Text className="text-gray-900 font-medium">Email Support</Text>
+              </View>
             </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Live Chat
+            <Button variant="outline" className="w-full">
+              <View className="flex-row items-center gap-2">
+                <MessageCircle size={16} color="#111827" />
+                <Text className="text-gray-900 font-medium">Live Chat</Text>
+              </View>
             </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <Phone className="h-4 w-4 mr-2" />
-              Call Us
+            <Button variant="outline" className="w-full">
+              <View className="flex-row items-center gap-2">
+                <Phone size={16} color="#111827" />
+                <Text className="text-gray-900 font-medium">Call Us</Text>
+              </View>
             </Button>
           </CardContent>
         </Card>
 
-        <h3 className="font-semibold">Frequently Asked Questions</h3>
+        {/* FAQs */}
+        <Text className="font-semibold text-gray-900 mb-3">Frequently Asked Questions</Text>
         <Card>
-          <CardContent className="p-4">
-            <Accordion type="single" collapsible>
-              <AccordionItem value="faq1">
-                <AccordionTrigger>How do I find churches near me?</AccordionTrigger>
-                <AccordionContent>
-                  Navigate to the "Churches" tab and enable location services. The map will show all churches in your area.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="faq2">
-                <AccordionTrigger>Can I follow multiple churches?</AccordionTrigger>
-                <AccordionContent>
-                  Yes! You can follow as many churches as you'd like. Simply tap the heart icon on any church profile.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="faq3">
-                <AccordionTrigger>How do I make a donation?</AccordionTrigger>
-                <AccordionContent>
-                  Visit the church's profile, go to the "Give" tab, and follow the secure payment process.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="faq4">
-                <AccordionTrigger>Is my donation information secure?</AccordionTrigger>
-                <AccordionContent>
-                  Yes, all donation transactions are encrypted and processed through secure payment gateways.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+          <CardContent className="p-0">
+            {faqs.map((faq, index) => (
+              <View
+                key={faq.id}
+                className={index !== faqs.length - 1 ? "border-b border-gray-100" : ""}
+              >
+                <Pressable
+                  onPress={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
+                  className="flex-row items-center justify-between p-4"
+                >
+                  <Text className="flex-1 text-sm font-medium text-gray-900 pr-2">
+                    {faq.question}
+                  </Text>
+                  {expandedFaq === faq.id ? (
+                    <ChevronUp size={20} color="#6b7280" />
+                  ) : (
+                    <ChevronDown size={20} color="#6b7280" />
+                  )}
+                </Pressable>
+                {expandedFaq === faq.id && (
+                  <View className="px-4 pb-4">
+                    <Text className="text-sm text-gray-600">{faq.answer}</Text>
+                  </View>
+                )}
+              </View>
+            ))}
           </CardContent>
         </Card>
-      </div>
-    </div>
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }

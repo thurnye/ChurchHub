@@ -1,5 +1,6 @@
 import { View, Text, Pressable, ScrollView, Modal } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import {
   X,
   Home,
@@ -90,13 +91,57 @@ export function HamburgerMenu({
   }));
 
   const handleItemPress = (action: string) => {
+    onClose();
+
     if (action === 'logout') {
-      onClose();
       logout();
       return;
     }
-    onNavigate(action);
-    onClose();
+
+    // Navigate to screens based on action
+    switch (action) {
+      case 'nearby-churches':
+        router.push('/(tabs)/churches');
+        break;
+      case 'denominations':
+        router.push('/(tabs)/churches');
+        break;
+      case 'events':
+        router.push('/(tabs)/community');
+        break;
+      case 'sermons':
+        router.push('/(tabs)/worship');
+        break;
+      case 'my-churches':
+        router.push('/my-churches');
+        break;
+      case 'my-events':
+        router.push('/my-events');
+        break;
+      case 'my-donations':
+        router.push('/my-donations');
+        break;
+      case 'preferences':
+        router.push('/preferences');
+        break;
+      case 'report':
+        router.push('/report');
+        break;
+      case 'suggest-church':
+        router.push('/suggest-church');
+        break;
+      case 'terms':
+        router.push('/terms');
+        break;
+      case 'language':
+        router.push('/language');
+        break;
+      case 'help':
+        router.push('/help');
+        break;
+      default:
+        onNavigate(action);
+    }
   };
 
   return (

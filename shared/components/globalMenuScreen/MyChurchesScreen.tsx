@@ -1,64 +1,93 @@
-import { ArrowLeft, Heart, Navigation, Clock } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
-import { Badge } from "@/app/components/ui/badge";
+import { View, Text, ScrollView, Pressable } from "react-native";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, Heart, Navigation, Clock } from "lucide-react-native";
+
+import { Button, Card, CardContent, Badge } from "@/shared/components/ui";
 import { churches } from "@/data/mockData";
 
-interface MyChurchesScreenProps {
-  onBack: () => void;
-  onNavigateToChurch: (churchId: string) => void;
-}
-
-export function MyChurchesScreen({ onBack, onNavigateToChurch }: MyChurchesScreenProps) {
+export function MyChurchesScreen() {
+  const insets = useSafeAreaInsets();
   // Mock: User follows first 3 churches
   const followedChurches = churches.slice(0, 3);
 
-  return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">My Churches</h1>
-        </div>
-      </div>
+  const handleNavigateToChurch = (churchId: string) => {
+    router.push(`/(tabs)/church/${churchId}`);
+  };
 
-      <div className="p-4 space-y-3">
-        {followedChurches.map((church) => (
-          <Card key={church.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3 mb-3">
-                <img
-                  src={church.image}
-                  alt={church.name}
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-1">{church.name}</h3>
-                  <Badge variant="secondary" className="mb-2">{church.denomination}</Badge>
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>{church.nextService}</span>
-                  </div>
-                </div>
-                <Button variant="ghost" size="icon" className="text-red-500">
-                  <Heart className="h-5 w-5" fill="currentColor" />
-                </Button>
-              </div>
-              <div className="flex gap-2">
-                <Button size="sm" onClick={() => onNavigateToChurch(church.id)} className="flex-1">
-                  View Church
-                </Button>
-                <Button size="sm" variant="outline">
-                  <Navigation className="h-4 w-4 mr-1" />
-                  Directions
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+  return (
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">My Churches</Text>
+        </View>
+      </View>
+
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+        <View className="gap-3">
+          {followedChurches.map((church) => (
+            <Card key={church.id}>
+              <CardContent>
+                <View className="flex-row items-start gap-3 mb-3">
+                  <Image
+                    source={{ uri: church.image }}
+                    style={{ width: 80, height: 80, borderRadius: 8 }}
+                    contentFit="cover"
+                  />
+                  <View className="flex-1">
+                    <Text className="font-semibold text-gray-900 mb-1">{church.name}</Text>
+                    <Badge variant="secondary" className="self-start mb-2">
+                      <Text className="text-xs text-gray-700">{church.denomination}</Text>
+                    </Badge>
+                    <View className="flex-row items-center gap-1">
+                      <Clock size={14} color="#6b7280" />
+                      <Text className="text-sm text-gray-600">{church.nextService}</Text>
+                    </View>
+                  </View>
+                  <Pressable className="w-10 h-10 items-center justify-center">
+                    <Heart size={20} color="#dc2626" fill="#dc2626" />
+                  </Pressable>
+                </View>
+                <View className="flex-row gap-2">
+                  <Button
+                    size="sm"
+                    onPress={() => handleNavigateToChurch(church.id)}
+                    className="flex-1"
+                  >
+                    <Text className="text-white text-sm font-medium">View Church</Text>
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <View className="flex-row items-center gap-1">
+                      <Navigation size={14} color="#111827" />
+                      <Text className="text-gray-900 text-sm font-medium">Directions</Text>
+                    </View>
+                  </Button>
+                </View>
+              </CardContent>
+            </Card>
+          ))}
+        </View>
+
+        {followedChurches.length === 0 && (
+          <View className="items-center py-12">
+            <Heart size={48} color="#9ca3af" />
+            <Text className="text-gray-500 mt-4 text-center">
+              You haven't followed any churches yet.{"\n"}
+              Tap the heart icon on a church to follow it.
+            </Text>
+          </View>
+        )}
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }

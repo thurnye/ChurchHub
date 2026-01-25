@@ -1,47 +1,87 @@
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/app/components/ui/button";
-import { Card, CardContent } from "@/app/components/ui/card";
+import { View, Text, ScrollView, Pressable, TextInput } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeft, ChevronDown } from "lucide-react-native";
 
-interface ReportChurchScreenProps {
-  onBack: () => void;
-}
+import { Button, Card, CardContent } from "@/shared/components/ui";
 
-export function ReportChurchScreen({ onBack }: ReportChurchScreenProps) {
+export function ReportChurchScreen() {
+  const insets = useSafeAreaInsets();
+  const [form, setForm] = useState({
+    churchName: "",
+    issueType: "Incorrect Address",
+    details: "",
+  });
+
+  const handleSubmit = () => {
+    console.log("Submitting report:", form);
+    router.back();
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="font-semibold text-lg">Report Church Info</h1>
-        </div>
-      </div>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {/* Header */}
+      <View className="bg-white border-b border-gray-200 px-4 py-3">
+        <View className="flex-row items-center gap-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <ArrowLeft size={20} color="#111827" />
+          </Pressable>
+          <Text className="font-semibold text-lg text-gray-900">Report Church Info</Text>
+        </View>
+      </View>
 
-      <div className="p-4">
+      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
         <Card>
-          <CardContent className="p-4 space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Church Name</label>
-              <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Select or type church name" />
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Issue Type</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option>Incorrect Address</option>
-                <option>Incorrect Service Times</option>
-                <option>Incorrect Contact Info</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Details</label>
-              <textarea className="w-full px-3 py-2 border border-gray-300 rounded-lg" rows={4} placeholder="Please describe the issue..."></textarea>
-            </div>
-            <Button className="w-full">Submit Report</Button>
+          <CardContent className="gap-4">
+            {/* Church Name */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Church Name</Text>
+              <TextInput
+                value={form.churchName}
+                onChangeText={(text) => setForm({ ...form, churchName: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Select or type church name"
+                placeholderTextColor="#9ca3af"
+              />
+            </View>
+
+            {/* Issue Type */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Issue Type</Text>
+              <Pressable className="flex-row items-center justify-between px-3 py-3 border border-gray-300 rounded-lg">
+                <Text className="text-gray-900">{form.issueType}</Text>
+                <ChevronDown size={20} color="#6b7280" />
+              </Pressable>
+            </View>
+
+            {/* Details */}
+            <View>
+              <Text className="text-sm font-medium text-gray-900 mb-2">Details</Text>
+              <TextInput
+                value={form.details}
+                onChangeText={(text) => setForm({ ...form, details: text })}
+                className="px-3 py-3 border border-gray-300 rounded-lg text-gray-900"
+                placeholder="Please describe the issue..."
+                placeholderTextColor="#9ca3af"
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                style={{ minHeight: 100 }}
+              />
+            </View>
+
+            <Button className="w-full" onPress={handleSubmit}>
+              <Text className="text-white font-medium">Submit Report</Text>
+            </Button>
           </CardContent>
         </Card>
-      </div>
-    </div>
+
+        <View className="h-8" />
+      </ScrollView>
+    </View>
   );
 }
