@@ -42,8 +42,8 @@ const menuSections: MenuSection[] = [
     items: [
       { icon: MapPin, label: 'Nearby Churches', action: 'nearby-churches' },
       { icon: Church, label: 'Denominations', action: 'denominations' },
-      { icon: Calendar, label: 'Events', action: 'events' },
-      { icon: Radio, label: 'Sermons', action: 'sermons' },
+      { icon: Calendar, label: 'Events', action: 'global-events' },
+      { icon: Radio, label: 'Sermons', action: 'global-sermons' },
     ],
   },
   {
@@ -97,6 +97,7 @@ export function HamburgerMenu({
       logout();
       return;
     }
+    console.log
 
     // Navigate to screens based on action
     switch (action) {
@@ -106,11 +107,11 @@ export function HamburgerMenu({
       case 'denominations':
         router.push('/(tabs)/churches');
         break;
-      case 'events':
-        router.push('/(tabs)/community');
+      case 'global-events':
+        router.push('/global-events');
         break;
-      case 'sermons':
-        router.push('/(tabs)/worship');
+      case 'global-sermons':
+        router.push('/global-sermons');
         break;
       case 'my-churches':
         router.push('/my-churches');

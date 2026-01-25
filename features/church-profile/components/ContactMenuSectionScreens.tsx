@@ -1,146 +1,307 @@
-// Continuation of church screens - Ministries, Give, Events, Community, Resources, Contact
-import { GraduationCap, BookOpen, Users, Heart, DollarSign, Calendar, Music, HeartHandshake, FileText, Phone, MapPin } from "lucide-react";
+// church-screens-contact.tsx (React Native + NativeWind)
+// Converts the provided CONTACT & VISIT screens to React Native.
+// Assumes:
+// - ChurchScreenTemplate is RN + NativeWind and accepts icon from lucide-react-native
+// - Card/CardContent/Button are RN components that accept className (NativeWind)
+// - If you want real map + directions, plug in expo-location + react-native-maps / Linking
+
+import React, { useState } from "react";
+import { View, Text, TextInput, Linking, Platform } from "react-native";
+import {
+  Phone,
+  MapPin,
+  Users,
+  Mail as MailIcon,
+} from "lucide-react-native";
+
 import { Church } from "@/data/mockData";
 import { ChurchScreenTemplate } from "./ChurchScreenTemplate";
-import { Card, CardContent } from "@/app/components/ui/card";
-import { Button } from "@/app/components/ui/button";
+import { Card, CardContent, Button } from "@/shared/components/ui";
 
 interface ChurchScreenProps {
   church: Church;
-  onBack: () => void;
 }
 
+// helpers
+const openPhone = (phone: string) => Linking.openURL(`tel:${phone}`);
+const openEmail = (email: string) => Linking.openURL(`mailto:${email}`);
+
+const openMaps = (address: string) => {
+  const encoded = encodeURIComponent(address);
+  const url =
+    Platform.OS === "ios"
+      ? `maps:0,0?q=${encoded}`
+      : `geo:0,0?q=${encoded}`;
+  Linking.openURL(url);
+};
+
 // CONTACT & VISIT SECTION
-export function ChurchContactOfficialsScreen({ church, onBack }: ChurchScreenProps) {
+export function ChurchContactOfficialsScreen({ church }: ChurchScreenProps) {
+  const topClergy = church.clergy?.slice(0, 2) ?? [];
+
   return (
-    <ChurchScreenTemplate church={church} onBack={onBack} title="Contact Officials" icon={Phone}>
-      <div className="space-y-3">
+    <ChurchScreenTemplate
+      church={church}
+      title="Contact Officials"
+      icon={Phone}
+    >
+      <View className="gap-3">
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <img src={church.pastor.photo} alt={church.pastor.name} className="w-12 h-12 rounded-full object-cover" />
-              <div>
-                <h3 className="font-semibold">{church.pastor.name}</h3>
-                <p className="text-sm text-gray-600">{church.pastor.role}</p>
-              </div>
-            </div>
-            <Button size="sm" className="w-full">Send Message</Button>
+            <View className="flex-row items-center gap-3 mb-3">
+              {/* Replace with your Avatar component if you have one */}
+              <View className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <ImageLike uri={church.pastor.photo} />
+              </View>
+
+              <View className="flex-1">
+                <Text className="font-semibold text-gray-900" numberOfLines={1}>
+                  {church.pastor.name}
+                </Text>
+                <Text className="text-sm text-gray-600" numberOfLines={1}>
+                  {church.pastor.role}
+                </Text>
+              </View>
+            </View>
+
+            <Button
+              size="sm"
+              className="w-full"
+              onPress={() => openEmail(church.email)}
+            >
+              <Text className="text-white font-medium">Send Message</Text>
+            </Button>
           </CardContent>
         </Card>
-        {church.clergy.slice(0, 2).map((clergy, idx) => (
+
+        {topClergy.map((clergy, idx) => (
           <Card key={idx}>
             <CardContent className="p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <img src={clergy.photo} alt={clergy.name} className="w-12 h-12 rounded-full object-cover" />
-                <div>
-                  <h3 className="font-medium">{clergy.name}</h3>
-                  <p className="text-sm text-gray-600">{clergy.role}</p>
-                </div>
-              </div>
-              <Button size="sm" variant="outline" className="w-full">Send Message</Button>
+              <View className="flex-row items-center gap-3 mb-3">
+                <View className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                  {/* @ts-ignore */}
+                  <ImageLike uri={clergy.photo} />
+                </View>
+
+                <View className="flex-1">
+                  <Text className="font-medium text-gray-900" numberOfLines={1}>
+                    {clergy.name}
+                  </Text>
+                  <Text className="text-sm text-gray-600" numberOfLines={1}>
+                    {clergy.role}
+                  </Text>
+                </View>
+              </View>
+
+              <Button
+                size="sm"
+                variant="outline"
+                className="w-full"
+                onPress={() => openEmail(clergy.email)}
+              >
+                <Text className="text-gray-900 font-medium">Send Message</Text>
+              </Button>
             </CardContent>
           </Card>
         ))}
-      </div>
+      </View>
     </ChurchScreenTemplate>
   );
 }
 
-export function ChurchGeneralEnquiriesScreen({ church, onBack }: ChurchScreenProps) {
-  return (
-    <ChurchScreenTemplate church={church} onBack={onBack} title="General Enquiries" icon={Phone}>
-      <Card>
-        <CardContent className="p-4 space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2">Contact Us</h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 text-sm">
-                <Phone className="h-4 w-4 text-gray-400" />
-                <a href={`tel:${church.phone}`} className="text-indigo-600">{church.phone}</a>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Mail className="h-4 w-4 text-gray-400" />
-                <a href={`mailto:${church.email}`} className="text-indigo-600">{church.email}</a>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">Office Hours</h3>
-            <p className="text-sm text-gray-600">{church.officeHours}</p>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-3">Send a Message</h3>
-            <div className="space-y-3">
-              <input type="text" placeholder="Your Name" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-              <input type="email" placeholder="Your Email" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-              <textarea placeholder="Your Message" rows={4} className="w-full px-3 py-2 border border-gray-300 rounded-lg"></textarea>
-              <Button className="w-full">Send Message</Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </ChurchScreenTemplate>
-  );
-}
+export function ChurchGeneralEnquiriesScreen({ church }: ChurchScreenProps) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-export function ChurchLocationScreen({ church, onBack }: ChurchScreenProps) {
   return (
-    <ChurchScreenTemplate church={church} onBack={onBack} title="Location & Map" icon={MapPin}>
-      <Card className="mb-4">
-        <CardContent className="p-0">
-          <div className="h-48 bg-gray-200 flex items-center justify-center rounded-t-lg">
-            <MapPin className="h-12 w-12 text-gray-400" />
-            <p className="text-sm text-gray-500 ml-2">Map placeholder</p>
-          </div>
-          <div className="p-4">
-            <h3 className="font-semibold mb-2">Address</h3>
-            <p className="text-sm text-gray-600 mb-3">{church.address}</p>
-            <Button className="w-full">Get Directions</Button>
-          </div>
-        </CardContent>
-      </Card>
+    <ChurchScreenTemplate
+      church={church}
+      title="General Enquiries"
+      icon={Phone}
+    >
       <Card>
         <CardContent className="p-4">
-          <h3 className="font-semibold mb-2">Parking</h3>
-          <p className="text-sm text-gray-600">{church.parkingInfo}</p>
+          {/* Contact Us */}
+          <View className="mb-5">
+            <Text className="font-semibold text-gray-900 mb-2">Contact Us</Text>
+
+            <View className="gap-3">
+              <View className="flex-row items-center gap-2">
+                <Phone size={16} color="#9ca3af" />
+                <Text
+                  className="text-indigo-600"
+                  onPress={() => openPhone(church.phone)}
+                >
+                  {church.phone}
+                </Text>
+              </View>
+
+              <View className="flex-row items-center gap-2">
+                <MailIcon size={16} color="#9ca3af" />
+                <Text
+                  className="text-indigo-600"
+                  onPress={() => openEmail(church.email)}
+                >
+                  {church.email}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Office Hours */}
+          <View className="mb-5">
+            <Text className="font-semibold text-gray-900 mb-2">Office Hours</Text>
+            <Text className="text-sm text-gray-600">{church.officeHours}</Text>
+          </View>
+
+          {/* Send a Message */}
+          <View>
+            <Text className="font-semibold text-gray-900 mb-3">Send a Message</Text>
+
+            <View className="gap-3">
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder="Your Name"
+                placeholderTextColor="#9ca3af"
+                className="w-full px-3 py-3 border border-gray-300 rounded-xl text-gray-900 bg-white"
+              />
+
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Your Email"
+                placeholderTextColor="#9ca3af"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                className="w-full px-3 py-3 border border-gray-300 rounded-xl text-gray-900 bg-white"
+              />
+
+              <TextInput
+                value={message}
+                onChangeText={setMessage}
+                placeholder="Your Message"
+                placeholderTextColor="#9ca3af"
+                multiline
+                textAlignVertical="top"
+                className="w-full px-3 py-3 border border-gray-300 rounded-xl text-gray-900 bg-white min-h-[120px]"
+              />
+
+              <Button
+                className="w-full"
+                onPress={() => {
+                  // Hook this into your API later.
+                  // For now, just open the user's email app with a prefilled subject/body.
+                  const subject = encodeURIComponent(`General Enquiry - ${church.name}`);
+                  const body = encodeURIComponent(
+                    `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+                  );
+                  Linking.openURL(`mailto:${church.email}?subject=${subject}&body=${body}`);
+                }}
+              >
+                <Text className="text-white font-medium">Send Message</Text>
+              </Button>
+            </View>
+          </View>
         </CardContent>
       </Card>
     </ChurchScreenTemplate>
   );
 }
 
-export function ChurchAccessibilityScreen({ church, onBack }: ChurchScreenProps) {
+export function ChurchLocationScreen({ church }: ChurchScreenProps) {
   return (
-    <ChurchScreenTemplate church={church} onBack={onBack} title="Accessibility" icon={Users}>
+    <ChurchScreenTemplate
+      church={church}
+      title="Location & Map"
+      icon={MapPin}
+    >
+      <Card className="mb-4">
+        <CardContent className="p-0">
+          {/* Map placeholder */}
+          <View className="h-48 bg-gray-200 rounded-t-2xl flex-row items-center justify-center">
+            <MapPin size={40} color="#9ca3af" />
+            <Text className="text-sm text-gray-500 ml-2">Map placeholder</Text>
+          </View>
+
+          <View className="p-4">
+            <Text className="font-semibold text-gray-900 mb-2">Address</Text>
+            <Text className="text-sm text-gray-600 mb-3">{church.address}</Text>
+
+            <Button className="w-full" onPress={() => openMaps(church.address)}>
+              <Text className="text-white font-medium">Get Directions</Text>
+            </Button>
+          </View>
+        </CardContent>
+      </Card>
+
       <Card>
-        <CardContent className="p-4 space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2">Accessibility Features</h3>
-            <p className="text-sm text-gray-600 mb-3">{church.accessibilityInfo}</p>
-          </div>
-          <ul className="text-sm space-y-2">
-            <li>✓ Wheelchair accessible entrance</li>
-            <li>✓ Accessible restrooms</li>
-            <li>✓ Reserved parking spaces</li>
-            <li>✓ Hearing assistance available</li>
-            <li>✓ Large print materials available</li>
-          </ul>
-          <div className="bg-indigo-50 p-3 rounded-lg">
-            <p className="text-sm">
-              For special accommodation requests, please contact our office at {church.phone}
-            </p>
-          </div>
+        <CardContent className="p-4">
+          <Text className="font-semibold text-gray-900 mb-2">Parking</Text>
+          <Text className="text-sm text-gray-600">{church.parkingInfo}</Text>
         </CardContent>
       </Card>
     </ChurchScreenTemplate>
   );
 }
 
-function Mail({ className }: { className?: string }) {
+export function ChurchAccessibilityScreen({ church }: ChurchScreenProps) {
+  const items = [
+    "Wheelchair accessible entrance",
+    "Accessible restrooms",
+    "Reserved parking spaces",
+    "Hearing assistance available",
+    "Large print materials available",
+  ];
+
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="20" height="16" x="2" y="4" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-    </svg>
+    <ChurchScreenTemplate
+      church={church}
+      title="Accessibility"
+      icon={Users}
+    >
+      <Card>
+        <CardContent className="p-4">
+          <View className="mb-4">
+            <Text className="font-semibold text-gray-900 mb-2">
+              Accessibility Features
+            </Text>
+            <Text className="text-sm text-gray-600">{church.accessibilityInfo}</Text>
+          </View>
+
+          <View className="gap-2 mb-4">
+            {items.map((t) => (
+              <Text key={t} className="text-sm text-gray-900">
+                ✓ {t}
+              </Text>
+            ))}
+          </View>
+
+          <View className="bg-indigo-50 p-3 rounded-xl">
+            <Text className="text-sm text-gray-800">
+              For special accommodation requests, please contact our office at{" "}
+              <Text className="text-indigo-600" onPress={() => openPhone(church.phone)}>
+                {church.phone}
+              </Text>
+              .
+            </Text>
+          </View>
+        </CardContent>
+      </Card>
+    </ChurchScreenTemplate>
   );
+}
+
+/**
+ * Tiny helper to avoid bringing expo-image into this snippet.
+ * Replace with:
+ *   import { Image } from "expo-image";
+ *   <Image source={{ uri }} style={{ width: "100%", height: "100%" }} contentFit="cover" />
+ */
+function ImageLike({ uri }: { uri: string }) {
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <View className="flex-1 bg-gray-300" />;
 }

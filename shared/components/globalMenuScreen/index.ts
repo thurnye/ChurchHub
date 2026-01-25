@@ -1,3 +1,5 @@
+export { GlobalSermonsScreen } from "./GlobalSermonsScreen";
+export { GlobalEventsScreen } from "./GlobalEventsScreen";
 export { MyChurchesScreen } from "./MyChurchesScreen";
 export { MyEventsScreen } from "./MyEventsScreen";
 export { MyDonationsScreen } from "./MyDonationsScreen";
