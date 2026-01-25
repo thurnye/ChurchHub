@@ -229,33 +229,93 @@ export function ChurchProfileScreen() {
   const handleMenuNavigation = (action: string) => {
     // DO NOT DELETE THIS COMMENTED CODE:
     // If the action should just switch to an existing tab:
-    // const actionToTab: Record<string, (typeof tabs)[number]> = {
-    //   events: 'Overview',
-    //   sermons: 'Overview',
-    //   'contact-clergy': 'Overview',
-    //   'general-enquiries': 'Overview',
-    //   location: 'Overview',
-    //   accessibility: 'Overview',
-    //   'sunday-services': 'Overview',
-    //   'weekday-services': 'Overview',
-    //   'special-services': 'Overview',
-    // };
+    const actionToTab: Record<string, (typeof tabs)[number]> = {
+      // events: 'Overview',
+      // sermons: 'Overview',
+      // 'contact-clergy': 'Overview',
+      // 'general-enquiries': 'Overview',
+      // location: 'Overview',
+      // accessibility: 'Overview',
+      // 'sunday-services': 'Overview',
+      // 'weekday-services': 'Overview',
+      // 'special-services': 'Overview',
 
-    // if (actionToTab[action]) {
-    //   setActiveMenuAction(null);
-    //   setActiveTab(actionToTab[action]);
-    //   return;
-    // }
-    setActiveTab('Overview');
+      // About
+      'who-we-are': 'Overview',
+      'mission-vision': 'Overview',
+      beliefs: 'Overview',
+      history: 'Overview',
+      structure: 'Overview',
+      architecture: 'Overview',
+      clergy: 'Clergy',
+      staff: 'Clergy',
+      'global-church-news': 'Events',
+      careers: 'Overview',
 
-    // Otherwise render a dedicated screen inside the tab content area
-    if (menuScreenRegistry[action]) {
-      setActiveMenuAction(action);
-      return;
-    }
 
-    // Fallback: if you tapped something not wired yet
-    console.log('No screen wired for action:', action);
+      // Worship
+      'worship-online': 'Services',
+      sermons: 'Services',
+      music: 'Services',
+      'baptism-weddings': 'Services',
+      stewardship: 'Services',
+      sacraments: 'Services',
+      newsletters: 'Services',
+
+      // Ministries
+      'faith-formation': 'Services',
+      'bible-study': 'Services',
+      'youth-family': 'Services',
+      groups: 'Services',
+      'pastoral-care': 'Services',
+      membership: 'Services',
+
+      // Give
+      'why-give': 'Give',
+      'how-to-give': 'Give',
+      'online-giving': 'Give',
+      pledges: 'Give',
+      receipts: 'Give',
+
+      // Events
+      events: 'Events',
+      'special-services': 'Events',
+      conferences: 'Events',
+      lectures: 'Events',
+      'past-events': 'Events',
+
+      // Community
+      'community-programs': 'Overview',
+      outreach: 'Overview',
+      'food-banks': 'Overview',
+      'health-counseling': 'Overview',
+      volunteer: 'Overview',
+
+      // Resources
+      devotionals: 'Overview',
+      'study-guides': 'Overview',
+      forms: 'Overview',
+
+      // Contact
+      'contact-clergy': 'Contact',
+      'general-enquiries': 'Contact',
+      location: 'Contact',
+      accessibility: 'Contact', 
+    };
+
+    // Always set the pill first (if mapped)
+  const nextTab = actionToTab[action];
+  if (nextTab) setActiveTab(nextTab);
+
+  // If we have a screen for this action, show it
+  if (menuScreenRegistry[action]) {
+    setActiveMenuAction(action);
+    return;
+  }
+
+  // If no screen exists, fall back to normal tab content
+  setActiveMenuAction(null);
+  console.log('No screen wired for action:', action);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView, Image } from 'react-native';
 import {
   MapPin,
@@ -20,6 +20,13 @@ export function Discover({  }: DiscoverProps) {
   const [selectedDenomination, setSelectedDenomination] = useState<
     string | null
   >(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (searchQuery) {
+      console.log('Search query:', searchQuery);
+    }
+  }, [searchQuery]);
 
   const filteredChurches = selectedDenomination
     ? churches.filter((c) => c.denomination === selectedDenomination)
@@ -33,7 +40,11 @@ export function Discover({  }: DiscoverProps) {
     <View className='flex-1 bg-gray-50'>
       <TopBar
         title='Find Churches'
-        onSearchPress={() => console.log('Search')}
+          onSearchSubmit={(text) => {
+          console.log('Search submitted:', text); 
+          setSearchQuery(text);
+        }}
+        showSearch={true}
       />
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         {/* Map View */}

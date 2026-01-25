@@ -1,5 +1,5 @@
 import { Discover } from '@/features/discover';
 
-export default function ChurchesTab() {
+export default function DiscoverTab() {
   return <Discover />;
 }
