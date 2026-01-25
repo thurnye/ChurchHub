@@ -24,6 +24,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
+import { useAuth } from '@/shared/context/AuthContext';
 
 interface MenuSection {
   title: string;
@@ -78,6 +79,7 @@ export function HamburgerMenu({
 }: HamburgerMenuProps) {
   const insets = useSafeAreaInsets();
   const translateX = useSharedValue(300);
+  const { logout } = useAuth();
 
   useEffect(() => {
     translateX.value = withTiming(isOpen ? 0 : 300, { duration: 250 });
@@ -88,6 +90,11 @@ export function HamburgerMenu({
   }));
 
   const handleItemPress = (action: string) => {
+    if (action === 'logout') {
+      onClose();
+      logout();
+      return;
+    }
     onNavigate(action);
     onClose();
   };

@@ -16,6 +16,7 @@ import {
 import { TopBar } from "@/shared/components/TopBar";
 import { HamburgerMenu } from "@/shared/components/HamburgerMenu";
 import { Card, CardContent, Avatar, Badge } from "@/shared/components/ui";
+import { useAuth } from "@/shared/context/AuthContext";
 
 interface MenuItem {
   icon: typeof Heart;
@@ -39,8 +40,13 @@ const settingsItems: MenuItem[] = [
 
 export function ProfileScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logout, user } = useAuth();
 
   const handleItemPress = (action: string) => {
+    if (action === "logout") {
+      logout();
+      return;
+    }
     console.log("Action:", action);
   };
 
@@ -56,16 +62,16 @@ export function ProfileScreen() {
         {/* Profile Header */}
         <View className="bg-white px-4 py-6 items-center border-b border-gray-100">
           <Avatar
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400"
-            alt="Daniel"
+            src={user?.avatar}
+            alt={user?.name}
             size="xl"
             className="mb-3"
           />
           <Text className="text-xl font-semibold text-gray-900 mb-1">
-            Daniel Johnson
+            {user?.name || "Guest"}
           </Text>
           <Text className="text-sm text-gray-500 mb-3">
-            daniel.johnson@email.com
+            {user?.email || "Not signed in"}
           </Text>
           <Badge variant="secondary">
             <Text className="text-xs text-gray-700">Member since 2023</Text>

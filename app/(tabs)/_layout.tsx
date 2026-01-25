@@ -56,6 +56,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
+      {/* Hidden screens - still in tabs for tab bar visibility but not shown as tabs */}
+      <Tabs.Screen
+        name='church/[id]'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name='denomination/[id]'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
     </Tabs>
   );
 }
