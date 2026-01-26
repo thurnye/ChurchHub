@@ -217,7 +217,14 @@ export function HomeScreen() {
             <Text className='font-semibold text-lg text-gray-900'>
               Upcoming Events
             </Text>
-            <Pressable>
+            <Pressable onPress={() =>
+                router.push({
+                  pathname: '/global/global-events',
+                  params: {
+                    from: '/',
+                  },
+                })
+              }>
               <Text className='text-sm text-indigo-600 font-medium'>
                 View All
               </Text>

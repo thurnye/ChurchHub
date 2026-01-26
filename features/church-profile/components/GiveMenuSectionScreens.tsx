@@ -238,7 +238,8 @@ export function ChurchOnlineGivingScreen({ church }: ChurchScreenProps) {
 
 export function ChurchPledgesScreen({ church }: ChurchScreenProps) {
   const [pledgeAmount, setPledgeAmount] = useState("");
-  const [frequency, setFrequency] = useState("Monthly");
+  const [frequency, setFrequency] = useState("Once");
+
 
   return (
     <ChurchScreenTemplate church={church} title="Pledges" icon={FileText}>
@@ -264,10 +265,11 @@ export function ChurchPledgesScreen({ church }: ChurchScreenProps) {
               />
             </View>
 
+            
             <ChipSelect
               label="Frequency"
               value={frequency}
-              options={["Weekly", "Monthly", "Quarterly", "Annually"]}
+              options={["Once","Weekly", "Monthly", "Quarterly", "Annually"]}
               onChange={setFrequency}
             />
 

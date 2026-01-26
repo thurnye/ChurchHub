@@ -1,1 +1,1 @@
-export { ChurchProfileScreen } from "./ChurchProfileScreen";
+export { ChurchProfileScreen } from './screen/ChurchProfileScreen';

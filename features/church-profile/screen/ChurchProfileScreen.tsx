@@ -1,123 +1,119 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  Linking,
-  TextInput,
-} from 'react-native';
 import { Image } from 'expo-image';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import {
   ArrowLeft,
-  Heart,
-  Navigation,
-  Share2,
-  Clock,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
-  Video,
   Calendar,
-  DollarSign,
   ChevronRight,
-  Menu,
+  Clock,
+  DollarSign,
+  Globe,
+  Heart,
+  Mail,
+  MapPin,
+  Navigation,
+  Phone,
+  Share2,
+  Video,
 } from 'lucide-react-native';
+import { useCallback, useState } from 'react';
+import {
+  Linking,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Church, churches } from '@/data/mockData';
 import {
-  Card,
-  CardContent,
+  Avatar,
   Badge,
   Button,
-  Avatar,
+  Card,
+  CardContent,
 } from '@/shared/components/ui';
-import { Church, churches } from '@/data/mockData';
-import { ChurchMenu } from '@/shared/components/ChurchMenu';
 
 // ABOUT
 import {
-  ChurchWhoWeAreScreen,
-  ChurchMissionScreen,
-  ChurchBeliefsScreen,
-  ChurchHistoryScreen,
-  ChurchStructureScreen,
   ChurchArchitectureScreen,
-  ChurchClergyScreen,
-  ChurchStaffScreen,
-  ChurchGlobalChurchNewsScreen,
+  ChurchBeliefsScreen,
   ChurchCareersScreen,
-} from './components/AboutMenuSectionScreens'; // adjust path
-
+  ChurchClergyScreen,
+  ChurchGlobalChurchNewsScreen,
+  ChurchHistoryScreen,
+  ChurchMissionScreen,
+  ChurchStaffScreen,
+  ChurchStructureScreen,
+  ChurchWhoWeAreScreen,
+} from '../components/AboutMenuSectionScreens';
 // WORSHIP
 import {
+  ChurchBaptismWeddingsScreen,
+  ChurchMusicMinistryScreen,
+  ChurchNewslettersScreen,
+  ChurchSacramentsScreen,
+  ChurchSermonsScreen,
+  ChurchStewardshipScreen,
   ChurchSundayServicesScreen,
   ChurchWeekdayServicesScreen,
   ChurchWorshipOnlineScreen,
-  ChurchSermonsScreen,
-  ChurchMusicMinistryScreen,
-  ChurchBaptismWeddingsScreen,
-  ChurchStewardshipScreen,
-  ChurchSacramentsScreen,
-  ChurchNewslettersScreen,
-} from './components/WorshipMenuSectionScreens';
+} from '../components/WorshipMenuSectionScreens';
 
 // MINISTRIES
 import {
-  ChurchFaithFormationScreen,
   ChurchBibleStudyScreen,
-  ChurchYouthFamilyScreen,
+  ChurchFaithFormationScreen,
   ChurchGroupsScreen,
-  ChurchPastoralCareScreen,
   ChurchMembershipScreen,
-} from './components/MinistriesMenuSectionScreens';
+  ChurchPastoralCareScreen,
+  ChurchYouthFamilyScreen,
+} from '../components/MinistriesMenuSectionScreens';
 
 // GIVE
 import {
-  ChurchWhyGiveScreen,
   ChurchHowToGiveScreen,
   ChurchOnlineGivingScreen,
   ChurchPledgesScreen,
   ChurchReceiptsScreen,
-} from './components/GiveMenuSectionScreens';
+  ChurchWhyGiveScreen,
+} from '../components/GiveMenuSectionScreens';
 
 // EVENTS
 import {
-  ChurchEventsScreen,
-  ChurchSpecialServicesScreen,
   ChurchConferencesScreen,
+  ChurchEventsScreen,
   ChurchLecturesScreen,
   ChurchPastEventsScreen,
-} from './components/EventMenuSectionScreens';
+  ChurchSpecialServicesScreen,
+} from '../components/EventMenuSectionScreens';
 
 // COMMUNITY (you already have these)
 import {
   ChurchCommunityProgramsScreen,
-  ChurchOutreachScreen,
   ChurchFoodBanksScreen,
   ChurchHealthCounselingScreen,
+  ChurchOutreachScreen,
   ChurchVolunteerScreen,
-} from './components/CommunityMenuSectionScreens';
+} from '../components/CommunityMenuSectionScreens';
 
 // RESOURCES
 import {
   ChurchDevotionalsScreen,
-  ChurchStudyGuidesScreen,
   ChurchFormsScreen,
-} from './components/ResourcesMenuSectionScreens';
+  ChurchStudyGuidesScreen,
+} from '../components/ResourcesMenuSectionScreens';
 
 // CONTACT
 import {
+  ChurchAccessibilityScreen,
   ChurchContactOfficialsScreen,
   ChurchGeneralEnquiriesScreen,
   ChurchLocationScreen,
-  ChurchAccessibilityScreen,
-} from './components/ContactMenuSectionScreens';
+} from '../components/ContactMenuSectionScreens';
 
 import { ChurchTopBar } from '@/shared/components/ChurchTopBar';
-import { ChurchMenuAction } from './types/church.profile.types';
 
 const tabs = ['Overview', 'Services', 'Clergy', 'Events', 'Give', 'Contact'];
 
@@ -127,7 +123,7 @@ export type ChurchScreenComponent = React.ComponentType<{
 }>;
 
 export function ChurchProfileScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, from } = useLocalSearchParams<{ id: string; from: string }>();
   const insets = useSafeAreaInsets();
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState('Overview');
@@ -135,7 +131,6 @@ export function ChurchProfileScreen() {
     amount: 50,
     type: '',
   });
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const church = churches.find((c) => c.id === id);
 
@@ -148,6 +143,13 @@ export function ChurchProfileScreen() {
       </View>
     );
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      setActiveTab('Overview');
+      setActiveMenuAction(null);
+    }, []),
+  );
 
   const menuScreenRegistry: Partial<Record<string, ChurchScreenComponent>> = {
     // About
@@ -230,16 +232,6 @@ export function ChurchProfileScreen() {
     // DO NOT DELETE THIS COMMENTED CODE:
     // If the action should just switch to an existing tab:
     const actionToTab: Record<string, (typeof tabs)[number]> = {
-      // events: 'Overview',
-      // sermons: 'Overview',
-      // 'contact-clergy': 'Overview',
-      // 'general-enquiries': 'Overview',
-      // location: 'Overview',
-      // accessibility: 'Overview',
-      // 'sunday-services': 'Overview',
-      // 'weekday-services': 'Overview',
-      // 'special-services': 'Overview',
-
       // About
       'who-we-are': 'Overview',
       'mission-vision': 'Overview',
@@ -251,7 +243,6 @@ export function ChurchProfileScreen() {
       staff: 'Clergy',
       'global-church-news': 'Events',
       careers: 'Overview',
-
 
       // Worship
       'worship-online': 'Services',
@@ -300,22 +291,29 @@ export function ChurchProfileScreen() {
       'contact-clergy': 'Contact',
       'general-enquiries': 'Contact',
       location: 'Contact',
-      accessibility: 'Contact', 
+      accessibility: 'Contact',
     };
 
     // Always set the pill first (if mapped)
-  const nextTab = actionToTab[action];
-  if (nextTab) setActiveTab(nextTab);
+    const nextTab = actionToTab[action];
+    if (nextTab) setActiveTab(nextTab);
 
-  // If we have a screen for this action, show it
-  if (menuScreenRegistry[action]) {
-    setActiveMenuAction(action);
-    return;
-  }
+    // If we have a screen for this action, show it
+    if (menuScreenRegistry[action]) {
+      setActiveMenuAction(action);
+      return;
+    }
 
-  // If no screen exists, fall back to normal tab content
-  setActiveMenuAction(null);
-  console.log('No screen wired for action:', action);
+    // If no screen exists, fall back to normal tab content
+    setActiveMenuAction(null);
+    console.log('No screen wired for action:', action);
+  };
+  const handleBackNavigation = () => {
+    if (from) {
+      router.push(from as any);
+    } else {
+      router.back();
+    }
   };
 
   return (
@@ -342,7 +340,7 @@ export function ChurchProfileScreen() {
           >
             <View className='flex-row justify-between px-4 py-2'>
               <Pressable
-                onPress={() => router.back()}
+                onPress={handleBackNavigation}
                 className='w-10 h-10 bg-white/70 rounded-full items-center justify-center'
               >
                 <ArrowLeft size={20} color='#111827' />
@@ -719,7 +717,7 @@ export function ChurchProfileScreen() {
                       If not, swap this with TextInput and NativeWind className. */}
                         <View className='border border-gray-200 rounded-lg px-3 py-2'>
                           <TextInput
-                            value={String(donations)}
+                            value={`$${String(donations.amount)}`}
                             onChangeText={(text) => {
                               const num = parseInt(
                                 text.replace(/[^0-9]/g, ''),

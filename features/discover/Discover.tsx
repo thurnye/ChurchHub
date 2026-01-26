@@ -33,7 +33,13 @@ export function Discover({  }: DiscoverProps) {
     : churches;
 
   const handleNavigateToChurch = (churchId: string) => {
-    router.push(`/church/${churchId}`);
+     router.push({
+      pathname: '/church/[id]',
+      params: {
+        id: churchId,
+        from: 'discover',
+      },
+    });
   };
 
   return (
