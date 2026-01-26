@@ -103,37 +103,37 @@ export function HamburgerMenu({
         router.push('/discover');
         break;
       case 'global-events':
-        router.push('/global-events');
+        router.push('/global/global-events');
         break;
       case 'global-sermons':
-        router.push('/global-sermons');
+        router.push('/global/global-sermons');
         break;
       case 'my-churches':
-        router.push('/my-churches');
+        router.push('/global/my-churches');
         break;
       case 'my-events':
-        router.push('/my-events');
+        router.push('/global/my-events');
         break;
       case 'my-donations':
-        router.push('/my-donations');
+        router.push('/global/my-donations');
         break;
       case 'preferences':
-        router.push('/preferences');
+        router.push('/global/preferences');
         break;
       case 'report':
-        router.push('/report');
+        router.push('/global/report');
         break;
       case 'suggest-church':
-        router.push('/suggest-church');
+        router.push('/global/suggest-church');
         break;
       case 'terms':
-        router.push('/terms');
+        router.push('/global/terms');
         break;
       case 'language':
-        router.push('/language');
+        router.push('/global/language');
         break;
       case 'help':
-        router.push('/help');
+        router.push('/global/help');
         break;
       default:
         onNavigate(action);

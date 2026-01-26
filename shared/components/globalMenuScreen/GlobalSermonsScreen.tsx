@@ -7,14 +7,13 @@ import { sermons } from '@/data/mockData';
 import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
 
 interface GlobalSermonsScreenProps {
-  onBack: () => void;
   // optional: onPlay?: (sermonId: string) => void;
 }
 
 type FilterKey = 'All' | 'Video Only' | 'Audio Only' | 'Recent';
 const filters: FilterKey[] = ['All', 'Video Only', 'Audio Only', 'Recent'];
 
-export function GlobalSermonsScreen({ onBack }: GlobalSermonsScreenProps) {
+export function GlobalSermonsScreen({  }: GlobalSermonsScreenProps) {
   const insets = useSafeAreaInsets();
   const [activeFilter, setActiveFilter] = useState<FilterKey>('All');
 

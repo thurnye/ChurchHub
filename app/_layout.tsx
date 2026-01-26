@@ -78,51 +78,6 @@ function RootLayoutNav() {
             animation: 'slide_from_right',
           }}
         />
-        Global menu screens
-        <Stack.Screen
-          name='global-sermons'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='global-events'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='my-churches'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='my-events'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='my-donations'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='preferences'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='help'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='suggest-church'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='terms'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='report'
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name='language'
-          options={{ animation: 'slide_from_right' }}
-        />
       </Stack>
     </ThemeProvider>
   );

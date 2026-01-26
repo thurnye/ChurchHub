@@ -66,9 +66,79 @@ export default function TabLayout() {
       <Tabs.Screen
         name='denomination/[id]'
         options={{
-          href: null, // Hide from tab bar
+          href: null,
         }}
       />
+
+      {/* Global menu screens */}
+        <Tabs.Screen
+          name='global/global-sermons'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/global-events'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/my-churches'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/my-events'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/my-donations'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/preferences'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/help'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/suggest-church'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/terms'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/report'
+          options={{
+          href: null,
+        }}
+        />
+        <Tabs.Screen
+          name='global/language'
+          options={{
+          href: null,
+        }}
+        />
+
+      
       
     </Tabs>
   );
