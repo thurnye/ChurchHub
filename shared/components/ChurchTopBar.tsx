@@ -1,9 +1,10 @@
 import { View, Text, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Menu} from 'lucide-react-native';
+import { Bell, Menu } from 'lucide-react-native';
 import { cn } from '@/shared/utils/cn';
 import { useState } from 'react';
 import { ChurchMenu } from './ChurchMenu';
+import { router } from 'expo-router';
 
 interface ChurchTopBarProps {
   churchName: string;
@@ -20,8 +21,6 @@ export function ChurchTopBar({
 }: ChurchTopBarProps) {
   const insets = useSafeAreaInsets();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
 
   return (
     <View
@@ -49,6 +48,12 @@ export function ChurchTopBar({
 
         {/* Right side - Actions */}
         <View className='flex-row items-center gap-1'>
+          <Pressable
+            onPress={() => router.push(`/`)}
+            className='w-10 h-10 items-center justify-center rounded-full'
+          >
+            <Bell size={18} color='#374151' />
+          </Pressable>
           <Pressable
             onPress={() => setIsMenuOpen(true)}
             className='w-6 h-6 items-center justify-center rounded-full'

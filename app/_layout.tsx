@@ -78,7 +78,7 @@ function RootLayoutNav() {
             animation: 'slide_from_right',
           }}
         />
-        {/* Global menu screens */}
+        Global menu screens
         <Stack.Screen
           name='global-sermons'
           options={{ animation: 'slide_from_right' }}

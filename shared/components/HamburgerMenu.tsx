@@ -1,31 +1,30 @@
-import { View, Text, Pressable, ScrollView, Modal } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '@/shared/context/AuthContext';
 import { router } from 'expo-router';
 import {
-  X,
-  Home,
-  Church,
-  MapPin,
   Calendar,
-  Radio,
-  Heart,
-  DollarSign,
-  Settings,
-  HelpCircle,
-  LogOut,
   ChevronRight,
-  Globe,
-  Flag,
+  Church,
+  DollarSign,
   FileCheck,
+  Flag,
+  Globe,
+  Heart,
+  HelpCircle,
+  Home,
+  LogOut,
+  MapPin,
+  Radio,
+  Settings,
+  X,
 } from 'lucide-react-native';
-import { cn } from '@/shared/utils/cn';
+import { useEffect } from 'react';
+import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
-  withTiming,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
-import { useAuth } from '@/shared/context/AuthContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MenuSection {
   title: string;
@@ -41,7 +40,6 @@ const menuSections: MenuSection[] = [
     title: 'Discover',
     items: [
       { icon: MapPin, label: 'Nearby Churches', action: 'nearby-churches' },
-      { icon: Church, label: 'Denominations', action: 'denominations' },
       { icon: Calendar, label: 'Events', action: 'global-events' },
       { icon: Radio, label: 'Sermons', action: 'global-sermons' },
     ],
@@ -97,15 +95,12 @@ export function HamburgerMenu({
       logout();
       return;
     }
-    console.log
+    console.log;
 
     // Navigate to screens based on action
     switch (action) {
       case 'nearby-churches':
-        router.push('/(tabs)/churches');
-        break;
-      case 'denominations':
-        router.push('/(tabs)/churches');
+        router.push('/discover');
         break;
       case 'global-events':
         router.push('/global-events');

@@ -38,7 +38,6 @@ export function HomeScreen() {
       <TopBar
         showLogo
         show={true}
-        onSearchPress={() => console.log('Search')}
         onNotificationPress={() => console.log('Notifications')}
       />
 

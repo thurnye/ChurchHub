@@ -1,50 +1,47 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
-import { Image } from "expo-image";
-import { router } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ArrowLeft, Calendar, MapPin } from "lucide-react-native";
+import { View, Text, ScrollView, Pressable } from 'react-native';
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ArrowLeft, Calendar, MapPin } from 'lucide-react-native';
 
-import { Button, Card, CardContent } from "@/shared/components/ui";
-import { events } from "@/data/mockData";
+import { Button, Card, CardContent } from '@/shared/components/ui';
+import { events } from '@/data/mockData';
+import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
 
 export function MyEventsScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+    <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <View className="bg-white border-b border-gray-200 px-4 py-3">
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={() => router.back()}
-            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
-          >
-            <ArrowLeft size={20} color="#111827" />
-          </Pressable>
-          <Text className="font-semibold text-lg text-gray-900">My Events</Text>
-        </View>
-      </View>
+      <HiddenScreensTopBar show={true} title='My Events' />
 
-      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
+      <ScrollView className='flex-1 p-4' showsVerticalScrollIndicator={false}>
         {/* Upcoming RSVPs */}
-        <View className="mb-6">
-          <Text className="font-semibold text-gray-900 mb-3">Upcoming RSVPs</Text>
-          <View className="gap-3">
+        <View className='mb-6'>
+          <Text className='font-semibold text-gray-900 mb-3'>
+            Upcoming RSVPs
+          </Text>
+          <View className='gap-3'>
             {events.slice(0, 2).map((event) => (
               <Card key={event.id}>
                 <CardContent>
-                  <View className="flex-row gap-3">
+                  <View className='flex-row gap-3'>
                     <Image
                       source={{ uri: event.image }}
                       style={{ width: 80, height: 80, borderRadius: 8 }}
-                      contentFit="cover"
+                      contentFit='cover'
                     />
-                    <View className="flex-1">
-                      <Text className="font-semibold text-gray-900 mb-1">{event.title}</Text>
-                      <Text className="text-sm text-gray-600 mb-2">{event.church}</Text>
-                      <View className="flex-row items-center gap-2">
-                        <Calendar size={12} color="#6b7280" />
-                        <Text className="text-xs text-gray-500">
+                    <View className='flex-1'>
+                      <Text className='font-semibold text-gray-900 mb-1'>
+                        {event.title}
+                      </Text>
+                      <Text className='text-sm text-gray-600 mb-2'>
+                        {event.church}
+                      </Text>
+                      <View className='flex-row items-center gap-2'>
+                        <Calendar size={12} color='#6b7280' />
+                        <Text className='text-xs text-gray-500'>
                           {event.date} at {event.time}
                         </Text>
                       </View>
@@ -58,13 +55,15 @@ export function MyEventsScreen() {
 
         {/* Past Events */}
         <View>
-          <Text className="font-semibold text-gray-900 mb-3">Past Events</Text>
-          <Button variant="outline" className="w-full">
-            <Text className="text-gray-900 font-medium">View Event History</Text>
+          <Text className='font-semibold text-gray-900 mb-3'>Past Events</Text>
+          <Button variant='outline' className='w-full'>
+            <Text className='text-gray-900 font-medium'>
+              View Event History
+            </Text>
           </Button>
         </View>
 
-        <View className="h-8" />
+        <View className='h-8' />
       </ScrollView>
     </View>
   );

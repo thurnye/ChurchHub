@@ -2,24 +2,15 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft } from "lucide-react-native";
+import { HiddenScreensTopBar } from "../HiddenScreensTopBar";
 
 export function TermsPrivacyScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View className="flex-1 bg-white" style={{ paddingTop: insets.top }}>
+    <View className="flex-1 bg-white" >
       {/* Header */}
-      <View className="bg-white border-b border-gray-200 px-4 py-3">
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={() => router.back()}
-            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
-          >
-            <ArrowLeft size={20} color="#111827" />
-          </Pressable>
-          <Text className="font-semibold text-lg text-gray-900">Terms & Privacy</Text>
-        </View>
-      </View>
+       <HiddenScreensTopBar show={true} title='Terms & Privacy' />
 
       <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
         {/* Terms of Service */}

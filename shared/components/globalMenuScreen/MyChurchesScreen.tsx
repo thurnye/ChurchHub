@@ -1,11 +1,12 @@
-import { View, Text, ScrollView, Pressable } from "react-native";
-import { Image } from "expo-image";
-import { router } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ArrowLeft, Heart, Navigation, Clock } from "lucide-react-native";
+import { View, Text, ScrollView, Pressable } from 'react-native';
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ArrowLeft, Heart, Navigation, Clock } from 'lucide-react-native';
 
-import { Button, Card, CardContent, Badge } from "@/shared/components/ui";
-import { churches } from "@/data/mockData";
+import { Button, Card, CardContent, Badge } from '@/shared/components/ui';
+import { churches } from '@/data/mockData';
+import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
 
 export function MyChurchesScreen() {
   const insets = useSafeAreaInsets();
@@ -17,57 +18,57 @@ export function MyChurchesScreen() {
   };
 
   return (
-    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+    <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <View className="bg-white border-b border-gray-200 px-4 py-3">
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={() => router.back()}
-            className="w-10 h-10 items-center justify-center rounded-full active:bg-gray-100"
-          >
-            <ArrowLeft size={20} color="#111827" />
-          </Pressable>
-          <Text className="font-semibold text-lg text-gray-900">My Churches</Text>
-        </View>
-      </View>
+      <HiddenScreensTopBar show={true} title='My Churches' />
 
-      <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
-        <View className="gap-3">
+      <ScrollView className='flex-1 p-4' showsVerticalScrollIndicator={false}>
+        <View className='gap-3'>
           {followedChurches.map((church) => (
             <Card key={church.id}>
               <CardContent>
-                <View className="flex-row items-start gap-3 mb-3">
+                <View className='flex-row items-start gap-3 mb-3'>
                   <Image
                     source={{ uri: church.image }}
                     style={{ width: 80, height: 80, borderRadius: 8 }}
-                    contentFit="cover"
+                    contentFit='cover'
                   />
-                  <View className="flex-1">
-                    <Text className="font-semibold text-gray-900 mb-1">{church.name}</Text>
-                    <Badge variant="secondary" className="self-start mb-2">
-                      <Text className="text-xs text-gray-700">{church.denomination}</Text>
+                  <View className='flex-1'>
+                    <Text className='font-semibold text-gray-900 mb-1'>
+                      {church.name}
+                    </Text>
+                    <Badge variant='secondary' className='self-start mb-2'>
+                      <Text className='text-xs text-gray-700'>
+                        {church.denomination}
+                      </Text>
                     </Badge>
-                    <View className="flex-row items-center gap-1">
-                      <Clock size={14} color="#6b7280" />
-                      <Text className="text-sm text-gray-600">{church.nextService}</Text>
+                    <View className='flex-row items-center gap-1'>
+                      <Clock size={14} color='#6b7280' />
+                      <Text className='text-sm text-gray-600'>
+                        {church.nextService}
+                      </Text>
                     </View>
                   </View>
-                  <Pressable className="w-10 h-10 items-center justify-center">
-                    <Heart size={20} color="#dc2626" fill="#dc2626" />
+                  <Pressable className='w-10 h-10 items-center justify-center'>
+                    <Heart size={20} color='#dc2626' fill='#dc2626' />
                   </Pressable>
                 </View>
-                <View className="flex-row gap-2">
+                <View className='flex-row gap-2'>
                   <Button
-                    size="sm"
+                    size='sm'
                     onPress={() => handleNavigateToChurch(church.id)}
-                    className="flex-1"
+                    className='flex-1'
                   >
-                    <Text className="text-white text-sm font-medium">View Church</Text>
+                    <Text className='text-white text-sm font-medium'>
+                      View Church
+                    </Text>
                   </Button>
-                  <Button size="sm" variant="outline">
-                    <View className="flex-row items-center gap-1">
-                      <Navigation size={14} color="#111827" />
-                      <Text className="text-gray-900 text-sm font-medium">Directions</Text>
+                  <Button size='sm' variant='outline'>
+                    <View className='flex-row items-center gap-1'>
+                      <Navigation size={14} color='#111827' />
+                      <Text className='text-gray-900 text-sm font-medium'>
+                        Directions
+                      </Text>
                     </View>
                   </Button>
                 </View>
@@ -77,16 +78,16 @@ export function MyChurchesScreen() {
         </View>
 
         {followedChurches.length === 0 && (
-          <View className="items-center py-12">
-            <Heart size={48} color="#9ca3af" />
-            <Text className="text-gray-500 mt-4 text-center">
-              You haven't followed any churches yet.{"\n"}
+          <View className='items-center py-12'>
+            <Heart size={48} color='#9ca3af' />
+            <Text className='text-gray-500 mt-4 text-center'>
+              You haven't followed any churches yet.{'\n'}
               Tap the heart icon on a church to follow it.
             </Text>
           </View>
         )}
 
-        <View className="h-8" />
+        <View className='h-8' />
       </ScrollView>
     </View>
   );

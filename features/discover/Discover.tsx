@@ -41,8 +41,10 @@ export function Discover({  }: DiscoverProps) {
       <TopBar
         title='Find Churches'
           onSearchSubmit={(text) => {
-          console.log('Search submitted:', text); 
-          setSearchQuery(text);
+            if (text){
+              console.log('Search submitted:', text);
+              setSearchQuery(text);
+            }
         }}
         showSearch={true}
       />
