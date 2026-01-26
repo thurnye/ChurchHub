@@ -4,7 +4,7 @@ import { Menu, Search, Bell, X, ArrowLeft } from 'lucide-react-native';
 import { cn } from '@/shared/utils/cn';
 import { HamburgerMenu } from './HamburgerMenu';
 import { useCallback, useState } from 'react';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 
 interface HiddenScreensTopBarProps {
   title?: string;
@@ -23,13 +23,16 @@ export function HiddenScreensTopBar({
   className,
   navigateTo,
 }: HiddenScreensTopBarProps) {
+  const { from } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
+  const backNavigateTo = from ? (from as string) : navigateTo;
+
   const handleMenuNavigation = () => {
-    router.push((navigateTo || `/`) as any);
+    router.push((backNavigateTo || `/`) as any);
   };
 
   useFocusEffect(
@@ -76,7 +79,7 @@ export function HiddenScreensTopBar({
           )}
 
           <Pressable
-            onPress={() =>  router.push((`/`))}
+            onPress={() => router.push(`/`)}
             className='w-10 h-10 items-center justify-center rounded-full'
           >
             <Bell size={22} color='#374151' />

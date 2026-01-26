@@ -56,7 +56,10 @@ export function HomeScreen() {
         {/* Quick Actions */}
         <View className='px-4 py-4 bg-white border-t border-gray-100'>
           <View className='flex-row justify-around'>
-            <Pressable className='items-center gap-2 p-3'>
+            <Pressable
+              className='items-center gap-2 p-3'
+              onPress={() => router.push('/worship')}
+            >
               <View className='w-12 h-12 bg-red-100 rounded-full items-center justify-center'>
                 <Video size={24} color='#dc2626' />
               </View>
@@ -78,7 +81,17 @@ export function HomeScreen() {
                 Submit Prayer
               </Text>
             </Pressable>
-            <Pressable className='items-center gap-2 p-3'>
+            <Pressable
+              className='items-center gap-2 p-3'
+              onPress={() =>
+                router.push({
+                  pathname: '/global/global-events',
+                  params: {
+                    from: '/',
+                  },
+                })
+              }
+            >
               <View className='w-12 h-12 bg-green-100 rounded-full items-center justify-center'>
                 <Calendar size={24} color='#16a34a' />
               </View>
