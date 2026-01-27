@@ -70,76 +70,92 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Global menu screens */}
-        <Tabs.Screen
-          name='global/global-sermons'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/global-events'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/my-churches'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/my-events'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/my-donations'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/preferences'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/help'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/suggest-church'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/terms'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/report'
-          options={{
-          href: null,
-        }}
-        />
-        <Tabs.Screen
-          name='global/language'
-          options={{
-          href: null,
-        }}
-        />
 
-      
-      
+      {/* Church */}
+
+      {/* Community */}
+
+      {/* Events */}
+      <Tabs.Screen
+        name='events/global-events'
+        options={{
+          href: null,
+        }}
+      />
+
+
+      {/* Give/Donations */}
+      <Tabs.Screen
+        name='give/my-donations'
+        options={{
+          href: null,
+        }}
+      />
+
+      {/* Media-Player */}
+
+      {/* Notification */}
+
+      {/* Prayer */}
+
+      {/* Profile */}
+      <Tabs.Screen
+        name='profile/my-churches'
+        options={{
+          href: null,
+        }}
+      />
+
+      {/* Sermons */}
+      <Tabs.Screen
+        name='sermons/global-sermons'
+        options={{
+          href: null,
+        }}
+      />
+
+
+      {/* Settings */}
+      <Tabs.Screen
+        name='settings/suggest-church'
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name='settings/preferences'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='settings/help'
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name='settings/terms'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='settings/report'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='settings/language'
+        options={{
+          href: null,
+        }}
+      />
+
+      {/* Worship */}
     </Tabs>
   );
 }

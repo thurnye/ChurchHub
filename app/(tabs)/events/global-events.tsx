@@ -4,5 +4,5 @@ import { useRouter } from 'expo-router';
 export default function GlobalEventsRoute() {
   const router = useRouter();
 
-  return <GlobalEventsScreen onBack={() => router.back()} />;
+  return <GlobalEventsScreen />;
 }
