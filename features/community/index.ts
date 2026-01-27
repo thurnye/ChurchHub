@@ -1,1 +1,1 @@
-export { CommunityScreen } from "./CommunityScreen";
+export { CommunityScreen } from "./screens/CommunityScreen";

@@ -614,3 +614,370 @@ export const communityPrograms: CommunityProgram[] = [
     contact: "justice@community.org"
   }
 ];
+
+
+
+
+export interface ChurchGroup {
+  id: string;
+  name: string;
+  church: string;
+  description: string;
+  image: string;
+  leaders: { name: string; role: string; }[];
+  meetingSchedule: string;
+  memberCount: number;
+  category: string;
+}
+
+export const churchGroups: ChurchGroup[] = [
+  {
+    id: "1",
+    name: "Young Adults Fellowship",
+    church: "Grace Community Church",
+    description: "A community for young adults (18-35) to grow in faith together through fellowship, Bible study, and service.",
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800",
+    leaders: [
+      { name: "Sarah Mitchell", role: "Group Leader" },
+      { name: "David Chen", role: "Co-Leader" }
+    ],
+    meetingSchedule: "Fridays at 7:00 PM",
+    memberCount: 45,
+    category: "Young Adults"
+  },
+  {
+    id: "2",
+    name: "Women's Prayer Circle",
+    church: "Sacred Heart Catholic Church",
+    description: "Join us for weekly prayer, encouragement, and spiritual growth.",
+    image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=800",
+    leaders: [
+      { name: "Sister Maria Rodriguez", role: "Facilitator" }
+    ],
+    meetingSchedule: "Tuesdays at 10:00 AM",
+    memberCount: 28,
+    category: "Women's Ministry"
+  },
+  {
+    id: "3",
+    name: "Men's Breakfast Club",
+    church: "New Life Baptist Church",
+    description: "Men gathering for fellowship, food, and faith-building discussions.",
+    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800",
+    leaders: [
+      { name: "Pastor John Williams", role: "Leader" },
+      { name: "Michael Brown", role: "Coordinator" }
+    ],
+    meetingSchedule: "Saturdays at 8:00 AM",
+    memberCount: 32,
+    category: "Men's Ministry"
+  },
+  {
+    id: "4",
+    name: "Youth Worship Band",
+    church: "Grace Community Church",
+    description: "For teens passionate about worship and music ministry.",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+    leaders: [
+      { name: "Brother David Lee", role: "Youth Pastor" },
+      { name: "Emily Johnson", role: "Music Director" }
+    ],
+    meetingSchedule: "Wednesdays at 6:00 PM",
+    memberCount: 18,
+    category: "Youth & Music"
+  }
+];
+
+export interface Conference {
+  id: string;
+  title: string;
+  theme: string;
+  church: string;
+  dates: string;
+  location: string;
+  description: string;
+  image: string;
+  speakers: string[];
+  registrationFee: string;
+  accommodation: string;
+}
+
+export const conferences: Conference[] = [
+  {
+    id: "1",
+    title: "Spring Faith Conference 2026",
+    theme: "Renewed in Spirit",
+    church: "Grace Community Church",
+    dates: "March 14-16, 2026",
+    location: "Grace Community Center, Downtown",
+    description: "Three days of powerful worship, teaching, and fellowship to renew your faith.",
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800",
+    speakers: ["Rev. James Thompson", "Dr. Sarah Williams", "Pastor Michael Chen"],
+    registrationFee: "$75 (Early bird: $60)",
+    accommodation: "Hotel partnerships available. Contact for details."
+  },
+  {
+    id: "2",
+    title: "Youth Summer Retreat",
+    theme: "Called to Serve",
+    church: "New Life Baptist Church",
+    dates: "July 5-8, 2026",
+    location: "Lakeside Retreat Center",
+    description: "A transformative retreat for youth to encounter God in nature.",
+    image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800",
+    speakers: ["Brother David Lee", "Sister Rachel Anderson"],
+    registrationFee: "$125 (includes meals and lodging)",
+    accommodation: "Cabin-style lodging included in registration."
+  }
+];
+
+export interface VolunteerProgram {
+  id: string;
+  title: string;
+  church: string;
+  description: string;
+  image: string;
+  timeCommitment: string;
+  skillsNeeded: string[];
+  coordinator: string;
+  category: string;
+}
+
+export const volunteerPrograms: VolunteerProgram[] = [
+  {
+    id: "1",
+    title: "Sunday School Teacher",
+    church: "Grace Community Church",
+    description: "Teach children ages 5-10 about God's love through engaging lessons and activities.",
+    image: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800",
+    timeCommitment: "Sundays 9:00-10:30 AM",
+    skillsNeeded: ["Passion for children", "Patience", "Basic Bible knowledge"],
+    coordinator: "sarah.mitchell@gracecommunity.org",
+    category: "Children's Ministry"
+  },
+  {
+    id: "2",
+    title: "Worship Team Musician",
+    church: "Grace Community Church",
+    description: "Join our worship band and use your musical gifts to lead the congregation in praise.",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+    timeCommitment: "Sundays + Weekly practice",
+    skillsNeeded: ["Musical ability", "Team player", "Heart for worship"],
+    coordinator: "worship@gracecommunity.org",
+    category: "Music Ministry"
+  },
+  {
+    id: "3",
+    title: "Food Bank Coordinator",
+    church: "Sacred Heart Catholic Church",
+    description: "Help organize and distribute food to families in need.",
+    image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800",
+    timeCommitment: "Saturdays 9:00 AM - 1:00 PM",
+    skillsNeeded: ["Organization", "Compassion", "Physical ability"],
+    coordinator: "foodbank@sacredheart.org",
+    category: "Outreach"
+  }
+];
+
+export interface Career {
+  id: string;
+  title: string;
+  church: string;
+  department: string;
+  type: string;
+  description: string;
+  requirements: string[];
+  location: string;
+  postedDate: string;
+}
+
+export const careers: Career[] = [
+  {
+    id: "1",
+    title: "Youth Ministry Director",
+    church: "Grace Community Church",
+    department: "Youth Ministry",
+    type: "Full-time",
+    description: "Lead and develop our youth ministry program for ages 13-18, creating engaging events and discipleship opportunities.",
+    requirements: [
+      "Bachelor's degree in Theology or related field",
+      "3+ years youth ministry experience",
+      "Strong leadership and communication skills",
+      "Heart for reaching young people"
+    ],
+    location: "Downtown Campus",
+    postedDate: "Jan 15, 2026"
+  },
+  {
+    id: "2",
+    title: "Worship Leader (Part-time)",
+    church: "New Life Baptist Church",
+    department: "Worship Ministry",
+    type: "Part-time",
+    description: "Lead Sunday worship services and coordinate the worship team.",
+    requirements: [
+      "Strong vocal and instrumental skills",
+      "Experience leading worship",
+      "Team leadership ability",
+      "Commitment to spiritual growth"
+    ],
+    location: "Eastside Campus",
+    postedDate: "Jan 10, 2026"
+  }
+];
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  source: string;
+  sourceType: "church" | "pastor" | "group" | "event";
+  timestamp: string;
+  read: boolean;
+  actionType?: "view_event" | "watch" | "reply" | "rsvp";
+  actionLabel?: string;
+}
+
+export const notifications: Notification[] = [
+  {
+    id: "1",
+    title: "Sunday Service Reminder",
+    message: "Join us tomorrow at 11:30 AM for our main service. Rev. James Thompson will be preaching on 'Walking in Faith'.",
+    source: "Grace Community Church",
+    sourceType: "church",
+    timestamp: "2 hours ago",
+    read: false,
+    actionType: "view_event",
+    actionLabel: "View Details"
+  },
+  {
+    id: "2",
+    title: "New Sermon Available",
+    message: "Pastor John Williams' latest sermon 'The Power of Prayer' is now available to watch.",
+    source: "New Life Baptist Church",
+    sourceType: "pastor",
+    timestamp: "5 hours ago",
+    read: false,
+    actionType: "watch",
+    actionLabel: "Watch Now"
+  },
+  {
+    id: "3",
+    title: "Group Meeting Update",
+    message: "Our Young Adults Fellowship meeting has been moved to Friday 7:30 PM this week.",
+    source: "Young Adults Fellowship",
+    sourceType: "group",
+    timestamp: "1 day ago",
+    read: true
+  },
+  {
+    id: "4",
+    title: "Event Registration Confirmed",
+    message: "You're registered for the Spring Faith Conference 2026. See you there!",
+    source: "Grace Community Church",
+    sourceType: "event",
+    timestamp: "2 days ago",
+    read: true,
+    actionType: "view_event",
+    actionLabel: "View Event"
+  }
+];
+
+export interface PrayerRequest {
+  id: string;
+  title: string;
+  message: string;
+  submittedBy: string;
+  anonymous: boolean;
+  visibility: ("everyone" | "pastor_only" | "clergy" | "groups" | "church_units")[];
+  targetGroups?: string[];
+  targetClergy?: string[];
+  targetChurches?: string[];
+  status: "praying" | "answered";
+  timestamp: string;
+  responseCount: number;
+}
+
+export const prayerRequests: PrayerRequest[] = [
+  {
+    id: "1",
+    title: "Healing for My Mother",
+    message: "Please pray for my mother who is recovering from surgery. Pray for complete healing and strength.",
+    submittedBy: "Sarah M.",
+    anonymous: false,
+    visibility: ["everyone"],
+    status: "praying",
+    timestamp: "2 hours ago",
+    responseCount: 15
+  },
+  {
+    id: "2",
+    title: "Job Search Guidance",
+    message: "I'm seeking God's direction in my career path. Praying for doors to open.",
+    submittedBy: "Anonymous",
+    anonymous: true,
+    visibility: ["pastor_only", "clergy"],
+    targetClergy: ["Rev. James Thompson", "Sister Mary Johnson"],
+    status: "praying",
+    timestamp: "1 day ago",
+    responseCount: 3
+  },
+  {
+    id: "3",
+    title: "Thanksgiving for Answered Prayer",
+    message: "My family has been reunited after years apart. Thank you all for your prayers!",
+    submittedBy: "Michael B.",
+    anonymous: false,
+    visibility: ["everyone"],
+    status: "answered",
+    timestamp: "3 days ago",
+    responseCount: 42
+  }
+];
+
+export interface ExtendedDevotional {
+  id: string;
+  title: string;
+  date: string;
+  verse: string;
+  verseText: string;
+  reflection: string;
+  author: string;
+  audioUrl?: string;
+  category: string;
+}
+
+export const devotionals: ExtendedDevotional[] = [
+  {
+    id: "1",
+    title: "Strength in Weakness",
+    date: "January 26, 2026",
+    verse: "2 Corinthians 12:9",
+    verseText: "But he said to me, 'My grace is sufficient for you, for my power is made perfect in weakness.'",
+    reflection: "Today, remember that God's strength shines brightest in our moments of weakness. When we feel inadequate, His grace is more than enough. Embrace your weakness as an opportunity for God's power to be revealed.",
+    author: "Rev. James Thompson",
+    audioUrl: "https://example.com/audio/devotional-1.mp3",
+    category: "Faith"
+  },
+  {
+    id: "2",
+    title: "The Gift of Today",
+    date: "January 25, 2026",
+    verse: "Psalm 118:24",
+    verseText: "This is the day that the Lord has made; let us rejoice and be glad in it.",
+    reflection: "Each day is a precious gift from God. Instead of worrying about tomorrow or dwelling on yesterday, focus on the present moment. Find joy in the simple blessings around you today.",
+    author: "Sister Mary Johnson",
+    category: "Gratitude"
+  },
+  {
+    id: "3",
+    title: "Love Without Limits",
+    date: "January 24, 2026",
+    verse: "1 Corinthians 13:4-7",
+    verseText: "Love is patient, love is kind. It does not envy, it does not boast, it is not proud.",
+    reflection: "True love mirrors God's unconditional love for us. It requires patience, kindness, and selflessness. Today, ask God to help you love others the way He loves you.",
+    author: "Fr. David Martinez",
+    audioUrl: "https://example.com/audio/devotional-3.mp3",
+    category: "Love"
+  }
+];
