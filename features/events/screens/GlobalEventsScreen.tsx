@@ -4,10 +4,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Calendar, MapPin, Clock } from 'lucide-react-native';
 import { Button, Card, CardContent, Badge } from '@/shared/components/ui';
 import { events } from '@/data/mockData';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
+import { router } from 'expo-router';
 
-interface GlobalEventsScreenProps {
-}
+interface GlobalEventsScreenProps {}
 
 type FilterKey =
   | 'All'
@@ -41,10 +41,7 @@ export function GlobalEventsScreen({}: GlobalEventsScreenProps) {
   return (
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <HiddenScreensTopBar
-        show={true}
-        title='Events'
-      />
+      <HiddenScreensTopBar show={true} title='Events' />
 
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         {/* Filters */}
@@ -86,51 +83,63 @@ export function GlobalEventsScreen({}: GlobalEventsScreenProps) {
             <Card key={event.id}>
               <CardContent className='p-0'>
                 {/* Main row */}
-                <View className='flex-row gap-3 p-4'>
-                  <Image
-                    source={{ uri: event.image }}
-                    className='w-20 h-20 rounded-lg'
-                    resizeMode='cover'
-                  />
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: '/events/[eventId]',
+                      params: {
+                        eventId: event.id,
+                        from: 'events/global-events',
+                      },
+                    })
+                  }
+                >
+                  <View className='flex-row gap-3 p-4'>
+                    <Image
+                      source={{ uri: event.image }}
+                      className='w-20 h-20 rounded-lg'
+                      resizeMode='cover'
+                    />
 
-                  <View className='flex-1'>
-                    <Text
-                      className='font-semibold text-gray-900 mb-1'
-                      numberOfLines={1}
-                    >
-                      {event.title}
-                    </Text>
-
-                    <Text
-                      className='text-sm text-gray-600 mb-2'
-                      numberOfLines={1}
-                    >
-                      {event.church}
-                    </Text>
-
-                    <View className='flex-row items-center gap-2 mb-2'>
-                      <View className='flex-row items-center gap-1'>
-                        <Calendar size={12} color='#6b7280' />
-                        <Text className='text-xs text-gray-500'>
-                          {event.date}
-                        </Text>
-                      </View>
-
-                      <View className='flex-row items-center gap-1'>
-                        <Clock size={12} color='#6b7280' />
-                        <Text className='text-xs text-gray-500'>
-                          {event.time}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <Badge variant='secondary'>
-                      <Text className='text-xs text-gray-700'>
-                        {event.denomination}
+                    <View className='flex-1'>
+                      <Text
+                        className='font-semibold text-gray-900 mb-1'
+                        numberOfLines={1}
+                      >
+                        {event.title}
                       </Text>
-                    </Badge>
+
+                      <Text
+                        className='text-sm text-gray-600 mb-2'
+                        numberOfLines={1}
+                      >
+                        {event.church}
+                      </Text>
+
+                      <View className='flex-row items-center gap-2 mb-2'>
+                        <View className='flex-row items-center gap-1'>
+                          <Calendar size={12} color='#6b7280' />
+                          <Text className='text-xs text-gray-500'>
+                            {event.date}
+                          </Text>
+                        </View>
+
+                        <View className='flex-row items-center gap-1'>
+                          <Clock size={12} color='#6b7280' />
+                          <Text className='text-xs text-gray-500'>
+                            {event.time}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <Badge variant='secondary'>
+                        <Text className='text-xs text-gray-700'>
+                          {event.denomination}
+                        </Text>
+                      </Badge>
+                    </View>
                   </View>
-                </View>
+                </Pressable>
 
                 {/* Actions */}
                 <View className='border-t border-gray-100 p-3 flex-row gap-2'>

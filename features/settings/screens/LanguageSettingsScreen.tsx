@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Check } from 'lucide-react-native';
 
 import { Card, CardContent } from '@/shared/components/ui';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
 
 const languages = [
   { code: 'en', name: 'English', nativeName: 'English' },

@@ -6,7 +6,7 @@ import { ArrowLeft, Calendar, MapPin } from 'lucide-react-native';
 
 import { Button, Card, CardContent } from '@/shared/components/ui';
 import { events } from '@/data/mockData';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
 
 export function MyEventsScreen() {
   const insets = useSafeAreaInsets();

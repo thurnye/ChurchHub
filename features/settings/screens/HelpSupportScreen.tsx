@@ -12,7 +12,7 @@ import {
 } from 'lucide-react-native';
 
 import { Button, Card, CardContent } from '@/shared/components/ui';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
 
 const faqs = [
   {

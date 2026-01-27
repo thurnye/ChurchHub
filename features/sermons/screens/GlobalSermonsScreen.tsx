@@ -4,7 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Play, Video } from 'lucide-react-native';
 import { Button, Card, CardContent, Badge } from '@/shared/components/ui';
 import { sermons } from '@/data/mockData';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
+import { router } from 'expo-router';
 
 interface GlobalSermonsScreenProps {
   // optional: onPlay?: (sermonId: string) => void;
@@ -13,7 +14,7 @@ interface GlobalSermonsScreenProps {
 type FilterKey = 'All' | 'Video Only' | 'Audio Only' | 'Recent';
 const filters: FilterKey[] = ['All', 'Video Only', 'Audio Only', 'Recent'];
 
-export function GlobalSermonsScreen({  }: GlobalSermonsScreenProps) {
+export function GlobalSermonsScreen({}: GlobalSermonsScreenProps) {
   const insets = useSafeAreaInsets();
   const [activeFilter, setActiveFilter] = useState<FilterKey>('All');
 
@@ -39,10 +40,7 @@ export function GlobalSermonsScreen({  }: GlobalSermonsScreenProps) {
   return (
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <HiddenScreensTopBar
-        show={true}
-        title='Sermons and Podcasts'
-      />
+      <HiddenScreensTopBar show={true} title='Sermons and Podcasts' />
 
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         {/* Filters */}
@@ -85,53 +83,71 @@ export function GlobalSermonsScreen({  }: GlobalSermonsScreenProps) {
         <View className='p-4 gap-3'>
           {filteredSermons.map((sermon) => (
             <Card key={sermon.id} className='overflow-hidden'>
-              {/* Thumbnail */}
-              <View className='relative'>
-                <Image
-                  source={{ uri: sermon.thumbnail }}
-                  className='w-full h-40'
-                  resizeMode='cover'
-                />
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: '/sermons/[sermonId]',
+                    params: {
+                      sermonId: sermon.id,
+                      from: 'sermons/global-sermons',
+                    },
+                  })
+                }
+              >
+                {/* Thumbnail */}
+                <View className='relative'>
+                  <Image
+                    source={{ uri: sermon.thumbnail }}
+                    className='w-full h-40'
+                    resizeMode='cover'
+                  />
 
-                {sermon.isLive && (
-                  <View className='absolute top-2 left-2'>
-                    <Badge className='bg-red-600'>
-                      <Text className='text-white text-xs font-semibold'>
-                        LIVE
-                      </Text>
-                    </Badge>
-                  </View>
-                )}
+                  {sermon.isLive && (
+                    <View className='absolute top-2 left-2'>
+                      <Badge className='bg-red-600'>
+                        <Text className='text-white text-xs font-semibold'>
+                          LIVE
+                        </Text>
+                      </Badge>
+                    </View>
+                  )}
 
-                <Pressable className='absolute inset-0 items-center justify-center bg-black/30 active:bg-black/40'>
-                  <View className='w-14 h-14 bg-white/90 rounded-full items-center justify-center'>
-                    <Play size={22} color='#111827' />
-                  </View>
-                </Pressable>
-              </View>
-
-              {/* Details */}
-              <CardContent className='p-3'>
-                <Text
-                  className='font-medium text-gray-900 mb-1'
-                  numberOfLines={2}
-                >
-                  {sermon.title}
-                </Text>
-                <Text className='text-sm text-gray-600 mb-1' numberOfLines={1}>
-                  {sermon.speaker}
-                </Text>
-                <Text className='text-xs text-gray-500 mb-2' numberOfLines={1}>
-                  {sermon.church}
-                </Text>
-
-                <View className='flex-row items-center justify-between'>
-                  <Text className='text-xs text-gray-500'>{sermon.date}</Text>
-                  <Text className='text-xs text-gray-500'>
-                    {sermon.duration}
-                  </Text>
+                  <Pressable className='absolute inset-0 items-center justify-center bg-black/30 active:bg-black/40'>
+                    <View className='w-14 h-14 bg-white/90 rounded-full items-center justify-center'>
+                      <Play size={22} color='#111827' />
+                    </View>
+                  </Pressable>
                 </View>
-              </CardContent>
+
+                {/* Details */}
+                <CardContent className='p-3'>
+                  <Text
+                    className='font-medium text-gray-900 mb-1'
+                    numberOfLines={2}
+                  >
+                    {sermon.title}
+                  </Text>
+                  <Text
+                    className='text-sm text-gray-600 mb-1'
+                    numberOfLines={1}
+                  >
+                    {sermon.speaker}
+                  </Text>
+                  <Text
+                    className='text-xs text-gray-500 mb-2'
+                    numberOfLines={1}
+                  >
+                    {sermon.church}
+                  </Text>
+
+                  <View className='flex-row items-center justify-between'>
+                    <Text className='text-xs text-gray-500'>{sermon.date}</Text>
+                    <Text className='text-xs text-gray-500'>
+                      {sermon.duration}
+                    </Text>
+                  </View>
+                </CardContent>
+              </Pressable>
             </Card>
           ))}
         </View>

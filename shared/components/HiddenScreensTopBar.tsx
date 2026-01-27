@@ -32,7 +32,12 @@ export function HiddenScreensTopBar({
   const backNavigateTo = from ? (from as string) : navigateTo;
 
   const handleMenuNavigation = () => {
-    router.push((backNavigateTo || `/`) as any);
+    if(backNavigateTo){
+      router.push((backNavigateTo) as any);
+    }
+    if(!backNavigateTo){
+      router.back();
+    }
   };
 
   useFocusEffect(

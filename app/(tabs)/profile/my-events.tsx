@@ -1,4 +1,5 @@
-import { MyEventsScreen } from "@/shared/components/globalMenuScreen";
+import { MyEventsScreen } from "@/features/profile/screens/MyEventsScreen";
+
 
 export default function MyEventsRoute() {
   return <MyEventsScreen />;

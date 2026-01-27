@@ -1,4 +1,5 @@
-import { MyChurchesScreen } from "@/shared/components/globalMenuScreen";
+import { MyChurchesScreen } from "@/features/profile/screens/MyChurchesScreen";
+
 
 export default function MyChurchesRoute() {
   return <MyChurchesScreen />;

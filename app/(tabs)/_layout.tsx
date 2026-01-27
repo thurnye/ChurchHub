@@ -56,6 +56,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
+      
       {/* Hidden screens - still in tabs for tab bar visibility but not shown as tabs */}
       <Tabs.Screen
         name='church/[id]'
@@ -70,10 +71,16 @@ export default function TabLayout() {
         }}
       />
 
-
       {/* Church */}
 
+
       {/* Community */}
+      <Tabs.Screen
+        name='community/[id]'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
 
       {/* Events */}
       <Tabs.Screen
@@ -82,23 +89,41 @@ export default function TabLayout() {
           href: null,
         }}
       />
-
-
-      {/* Give/Donations */}
       <Tabs.Screen
-        name='give/my-donations'
+        name='events/[eventId]'
         options={{
           href: null,
         }}
       />
 
+
+      {/* Give/Donations */}
+
       {/* Media-Player */}
+       <Tabs.Screen
+        name='media-player/[id]'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
 
       {/* Notification */}
 
       {/* Prayer */}
 
       {/* Profile */}
+      <Tabs.Screen
+        name='profile/my-donations'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='profile/my-events'
+        options={{
+          href: null,
+        }}
+      />
       <Tabs.Screen
         name='profile/my-churches'
         options={{
@@ -109,6 +134,12 @@ export default function TabLayout() {
       {/* Sermons */}
       <Tabs.Screen
         name='sermons/global-sermons'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='sermons/[sermonId]'
         options={{
           href: null,
         }}

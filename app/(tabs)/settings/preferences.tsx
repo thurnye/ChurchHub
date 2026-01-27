@@ -1,4 +1,5 @@
-import { PreferencesScreen } from "@/shared/components/globalMenuScreen";
+import { PreferencesScreen } from "@/features/settings/screens/PreferencesScreen";
+
 
 export default function PreferencesRoute() {
   return <PreferencesScreen />;

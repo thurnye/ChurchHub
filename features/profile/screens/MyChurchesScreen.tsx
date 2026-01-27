@@ -6,7 +6,7 @@ import { ArrowLeft, Heart, Navigation, Clock } from 'lucide-react-native';
 
 import { Button, Card, CardContent, Badge } from '@/shared/components/ui';
 import { churches } from '@/data/mockData';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
 
 export function MyChurchesScreen() {
   const insets = useSafeAreaInsets();

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Download, DollarSign } from 'lucide-react-native';
 
 import { Button, Card, CardContent } from '@/shared/components/ui';
-import { HiddenScreensTopBar } from '../HiddenScreensTopBar';
+import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
 
 const donations = [
   {

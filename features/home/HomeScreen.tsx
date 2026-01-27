@@ -85,7 +85,7 @@ export function HomeScreen() {
               className='items-center gap-2 p-3'
               onPress={() =>
                 router.push({
-                  pathname: '/global/global-events',
+                  pathname: '/events/global-events',
                   params: {
                     from: '/',
                   },
@@ -155,16 +155,40 @@ export function HomeScreen() {
                 <CardContent>
                   <View className='flex-row items-start gap-3'>
                     <View className='overflow-hidden rounded-lg'>
-                      <Image
-                        source={{ uri: church.image }}
-                        style={{ width: 64, height: 64 }}
-                        contentFit='cover'
-                      />
+                      <Pressable
+                        onPress={() =>
+                          router.push({
+                            pathname: '/church/[id]',
+                            params: {
+                              id: church.id,
+                              from: '/',
+                            },
+                          })
+                        }
+                      >
+                        <Image
+                          source={{ uri: church.image }}
+                          style={{ width: 64, height: 64 }}
+                          contentFit='cover'
+                        />
+                      </Pressable>
                     </View>
                     <View className='flex-1'>
-                      <Text className='font-semibold text-gray-900 mb-1'>
-                        {church.name}
-                      </Text>
+                      <Pressable
+                        onPress={() =>
+                          router.push({
+                            pathname: '/church/[id]',
+                            params: {
+                              id: church.id,
+                              from: '/',
+                            },
+                          })
+                        }
+                      >
+                        <Text className='font-semibold text-gray-900 mb-1'>
+                          {church.name}
+                        </Text>
+                      </Pressable>
                       <View className='flex-row items-center gap-2 mb-2'>
                         <Badge variant='secondary'>
                           <Text className='text-xs text-gray-700'>
@@ -217,14 +241,16 @@ export function HomeScreen() {
             <Text className='font-semibold text-lg text-gray-900'>
               Upcoming Events
             </Text>
-            <Pressable onPress={() =>
+            <Pressable
+              onPress={() =>
                 router.push({
-                  pathname: '/global/global-events',
+                  pathname: '/events/global-events',
                   params: {
                     from: '/',
                   },
                 })
-              }>
+              }
+            >
               <Text className='text-sm text-indigo-600 font-medium'>
                 View All
               </Text>

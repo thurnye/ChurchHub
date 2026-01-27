@@ -1,4 +1,5 @@
-import { GlobalSermonsScreen } from '@/shared/components/globalMenuScreen';
+
+import { GlobalSermonsScreen } from '@/features/sermons/screens/GlobalSermonsScreen';
 import { useRouter } from 'expo-router';
 
 export default function GlobalSermonsRoute() {
