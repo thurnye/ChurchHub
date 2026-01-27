@@ -1,14 +1,17 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Heart, Navigation, Clock } from 'lucide-react-native';
 
 import { Button, Card, CardContent, Badge } from '@/shared/components/ui';
 import { churches } from '@/data/mockData';
-import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
+import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
 
 export function MyChurchesScreen() {
+  const { from } = useLocalSearchParams<{
+    from: string;
+  }>();
   const insets = useSafeAreaInsets();
   // Mock: User follows first 3 churches
   const followedChurches = churches.slice(0, 3);
@@ -20,7 +23,7 @@ export function MyChurchesScreen() {
   return (
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <HiddenScreensTopBar show={true} title='My Churches' />
+      <HiddenScreensTopBar show={true} title='My Churches' navigateTo={from} />
 
       <ScrollView className='flex-1 p-4' showsVerticalScrollIndicator={false}>
         <View className='gap-3'>

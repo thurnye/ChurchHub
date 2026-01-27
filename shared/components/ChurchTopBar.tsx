@@ -49,7 +49,8 @@ export function ChurchTopBar({
         {/* Right side - Actions */}
         <View className='flex-row items-center gap-1'>
           <Pressable
-            onPress={() => router.push(`/`)}
+            onPress={() =>router.push({ pathname: '/notifications/app-notification-list' })
+            }
             className='w-10 h-10 items-center justify-center rounded-full'
           >
             <Bell size={18} color='#374151' />

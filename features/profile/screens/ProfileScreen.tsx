@@ -31,32 +31,32 @@ const activityItems: MenuItem[] = [
     icon: Heart,
     label: 'My Churches',
     value: '3',
-    action: 'global/my-churches',
+    action: '/profile/my-churches',
   },
   {
     icon: Calendar,
     label: 'My Events',
     value: '2',
-    action: 'global/my-events',
+    action: '/profile/my-events',
   },
   {
     icon: DollarSign,
     label: 'My Donations',
     value: '$120',
-    action: 'global/my-donations',
+    action: '/profile/my-donations',
   },
   {
     icon: MessageCircle,
     label: 'Prayer Requests',
     value: '5',
-    action: 'global/my-prayers',
+    action: '/profile/my-prayer-list',
   },
 ];
 
 const settingsItems: MenuItem[] = [
   { icon: Bell, label: 'Notifications', action: 'notifications' },
-  { icon: Settings, label: 'Preferences', action: '/global/preferences' },
-  { icon: HelpCircle, label: 'Help & Support', action: '/global/help' },
+  { icon: Settings, label: 'Preferences', action: '/settings/preferences' },
+  { icon: HelpCircle, label: 'Help & Support', action: '/settings/help' },
 ];
 
 export function ProfileScreen() {

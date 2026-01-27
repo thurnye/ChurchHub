@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Calendar, MapPin } from 'lucide-react-native';
 
@@ -9,12 +9,14 @@ import { events } from '@/data/mockData';
 import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
 
 export function MyEventsScreen() {
-  const insets = useSafeAreaInsets();
+  const { from } = useLocalSearchParams<{
+        from: string;
+      }>();
 
   return (
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <HiddenScreensTopBar show={true} title='My Events' />
+      <HiddenScreensTopBar show={true} title='My Events' navigateTo={from}/>
 
       <ScrollView className='flex-1 p-4' showsVerticalScrollIndicator={false}>
         {/* Upcoming RSVPs */}

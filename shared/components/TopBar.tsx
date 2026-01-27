@@ -11,7 +11,6 @@ interface TopBarProps {
   showLogo?: boolean;
   show?: boolean;
   showSearch?: boolean;
-  onNotificationPress?: () => void;
   className?: string;
   onSearchSubmit?: (text: string) => void;
 }
@@ -21,7 +20,6 @@ export function TopBar({
   showLogo = false,
   showSearch = false,
   show = true,
-  onNotificationPress,
   onSearchSubmit,
   className,
 }: TopBarProps) {
@@ -90,7 +88,11 @@ export function TopBar({
           )}
 
           <Pressable
-            onPress={onNotificationPress}
+            onPress={() =>
+              router.push({
+                pathname: '/notifications/app-notification-list',
+              })
+            }
             className='w-10 h-10 items-center justify-center rounded-full'
           >
             <Bell size={22} color='#374151' />
@@ -117,8 +119,8 @@ export function TopBar({
                 flex: 1,
                 marginLeft: 8,
                 fontSize: 14,
-                color: '#111827', 
-                paddingVertical: 0, 
+                color: '#111827',
+                paddingVertical: 0,
               }}
               cursorColor='#111827'
               selectionColor='#111827'

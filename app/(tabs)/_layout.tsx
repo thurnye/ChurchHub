@@ -98,6 +98,18 @@ export default function TabLayout() {
 
 
       {/* Give/Donations */}
+       <Tabs.Screen
+        name='give/give-quick-link'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+       <Tabs.Screen
+        name='give/give-quick-link-donation'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
 
       {/* Media-Player */}
        <Tabs.Screen
@@ -107,9 +119,26 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Notification */}
-
       {/* Prayer */}
+      <Tabs.Screen
+        name='prayer/request-prayer'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='prayer/prayer-list'
+        options={{
+          href: null,
+        }}
+      />
+      
+      <Tabs.Screen
+        name='prayer/prayer-details'
+        options={{
+          href: null,
+        }}
+      />
 
       {/* Profile */}
       <Tabs.Screen
@@ -126,6 +155,12 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name='profile/my-churches'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='profile/my-prayer-list'
         options={{
           href: null,
         }}

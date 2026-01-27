@@ -1,11 +1,5 @@
-// RequestPrayerScreen.tsx (React Native + NativeWind)
-// ✅ No Button/Input/Textarea/Checkbox/Badge components — uses Pressable + TextInput + simple checkbox
-// ✅ lucide-react-native icons
-// ✅ Same UX: header, info banner, title, message, anonymous, visibility + nested selections, fixed submit
-
 import React, { useMemo, useState } from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   Pressable,
@@ -15,10 +9,11 @@ import {
 } from "react-native";
 import { ArrowLeft, Info, X } from "lucide-react-native";
 import { churchGroups, churches } from "@/data/mockData";
+import { HiddenScreensTopBar } from "@/shared/components/HiddenScreensTopBar";
+import { useLocalSearchParams } from "expo-router";
 
 interface RequestPrayerScreenProps {
-  onBack: () => void;
-  onSubmit?: () => void;
+
 }
 
 type VisibilityKey = "everyone" | "pastorOnly" | "clergy" | "groups" | "churchUnits";
@@ -61,7 +56,10 @@ function Chip({
   );
 }
 
-export function RequestPrayerScreen({ onBack, onSubmit }: RequestPrayerScreenProps) {
+export function RequestPrayerScreen({ }: RequestPrayerScreenProps) {
+  const {from } = useLocalSearchParams<{
+      from: string;
+    }>();
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [anonymous, setAnonymous] = useState(false);
@@ -119,27 +117,17 @@ export function RequestPrayerScreen({ onBack, onSubmit }: RequestPrayerScreenPro
       return;
     }
 
-    onSubmit?.();
+    // onSubmit?.();
   };
 
   const charCount = message.length;
   const canSubmit = title.trim().length > 0 && message.trim().length > 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-white border-b border-gray-200 px-4 py-3">
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={onBack}
-            className="h-10 w-10 rounded-xl items-center justify-center"
-            style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
-          >
-            <ArrowLeft size={20} color="#111827" />
-          </Pressable>
-          <Text className="font-semibold text-lg text-gray-900">Request Prayer</Text>
-        </View>
-      </View>
+      <HiddenScreensTopBar show={true} title={'Prayer Request'} navigateTo={from} />
+
 
       <ScrollView contentContainerClassName="p-4 pb-28">
         {/* Info Banner */}
@@ -413,6 +401,6 @@ export function RequestPrayerScreen({ onBack, onSubmit }: RequestPrayerScreenPro
           <Text className="text-white font-semibold">Submit Prayer Request</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

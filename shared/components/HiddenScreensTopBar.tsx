@@ -23,19 +23,20 @@ export function HiddenScreensTopBar({
   className,
   navigateTo,
 }: HiddenScreensTopBarProps) {
-  const { from } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
-
-  const backNavigateTo = from ? (from as string) : navigateTo;
+  
+  const { from } = useLocalSearchParams();
+  const backNavigateTo = from ? from : navigateTo;
 
   const handleMenuNavigation = () => {
-    if(backNavigateTo){
-      router.push((backNavigateTo) as any);
-    }
-    if(!backNavigateTo){
+    console.log('backNavigateTo::', backNavigateTo)
+    if (backNavigateTo) {
+      router.push(backNavigateTo as any);
+    }else{
+      console.log('going back')
       router.back();
     }
   };
@@ -84,7 +85,15 @@ export function HiddenScreensTopBar({
           )}
 
           <Pressable
-            onPress={() => router.push(`/`)}
+            onPress={() => router.push({ pathname: '/notifications/app-notification-list' })
+
+              // router.push({
+              //   pathname: '/notifications/app-notification-list',
+              //   // params: {
+              //   //   from: '',
+              //   // },
+              // })
+            }
             className='w-10 h-10 items-center justify-center rounded-full'
           >
             <Bell size={22} color='#374151' />

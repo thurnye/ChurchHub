@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Download, DollarSign } from 'lucide-react-native';
 
@@ -32,11 +32,14 @@ const donations = [
 
 export function MyDonationsScreen() {
   const insets = useSafeAreaInsets();
+  const { from } = useLocalSearchParams<{
+        from: string;
+      }>();
 
   return (
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <HiddenScreensTopBar show={true} title='My Donations' />
+      <HiddenScreensTopBar show={true} title='My Donations' navigateTo={from}/>
 
       <ScrollView className='flex-1 p-4' showsVerticalScrollIndicator={false}>
         {/* Total Giving Card */}

@@ -78,6 +78,21 @@ function RootLayoutNav() {
             animation: 'slide_from_right',
           }}
         />
+        <Stack.Screen
+          name='(modals)/notifications/app-notification-list'
+          options={{
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
+
+        <Stack.Screen
+          name='(modals)/notifications/app-notification-detail'
+          options={{
+            presentation: 'modal',
+            animation: 'slide_from_right',
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

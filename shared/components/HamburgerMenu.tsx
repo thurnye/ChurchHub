@@ -50,6 +50,7 @@ const menuSections: MenuSection[] = [
       { icon: Heart, label: 'My Churches', action: 'my-churches' },
       { icon: Calendar, label: 'My Events', action: 'my-events' },
       { icon: DollarSign, label: 'My Donations', action: 'my-donations' },
+      { icon: DollarSign, label: 'My Prayer Requests', action: 'my-prayer-request' },
     ],
   },
   {
@@ -116,6 +117,9 @@ export function HamburgerMenu({
         break;
       case 'my-donations':
         router.push('/profile/my-donations');
+        break;
+      case 'my-prayer-request':
+        router.push('/profile/my-prayer-list');
         break;
       case 'preferences':
         router.push('/settings/preferences');

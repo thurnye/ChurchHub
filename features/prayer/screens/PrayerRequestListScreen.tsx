@@ -1,28 +1,26 @@
-// PrayerRequestListScreen.tsx (React Native + NativeWind)
-// ✅ No Button/Badge components — uses Pressable + Text
-// ✅ lucide-react-native icons
-// ✅ Same UX: header + filters + list cards + empty state + FAB
+import React, { useMemo, useState } from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import { ArrowLeft, Heart, Check, Plus } from 'lucide-react-native';
+import { prayerRequests } from '@/data/mockData';
+import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
+import { router, useLocalSearchParams } from 'expo-router';
 
-import React, { useMemo, useState } from "react";
-import { SafeAreaView, View, Text, Pressable, ScrollView } from "react-native";
-import { ArrowLeft, Heart, Check, Plus } from "lucide-react-native";
-import { prayerRequests } from "@/data/mockData";
+interface PrayerRequestListScreenProps {}
 
-interface PrayerRequestListScreenProps {
-  onBack: () => void;
-  onViewPrayer: (prayerId: string) => void;
-  onCreatePrayer: () => void;
-}
-
-type Filter = "all" | "praying" | "answered";
-type VisibilityKey = "everyone" | "pastor_only" | "clergy" | "groups" | "church_units";
+type Filter = 'all' | 'praying' | 'answered';
+type VisibilityKey =
+  | 'everyone'
+  | 'pastor_only'
+  | 'clergy'
+  | 'groups'
+  | 'church_units';
 
 const visibilityShortLabels: Record<VisibilityKey, string> = {
-  everyone: "Everyone",
-  pastor_only: "Pastor Only",
-  clergy: "Clergy",
-  groups: "Groups",
-  church_units: "Church Units",
+  everyone: 'Everyone',
+  pastor_only: 'Pastor Only',
+  clergy: 'Clergy',
+  groups: 'Groups',
+  church_units: 'Church Units',
 };
 
 function Chip({
@@ -38,10 +36,12 @@ function Chip({
     <Pressable
       onPress={onPress}
       className={`px-4 py-2 rounded-full ${
-        active ? "bg-indigo-600" : "bg-gray-100"
+        active ? 'bg-indigo-600' : 'bg-gray-100'
       }`}
     >
-      <Text className={`text-sm font-medium ${active ? "text-white" : "text-gray-700"}`}>
+      <Text
+        className={`text-sm font-medium ${active ? 'text-white' : 'text-gray-700'}`}
+      >
         {label}
       </Text>
     </Pressable>
@@ -50,96 +50,113 @@ function Chip({
 
 function OutlineBadge({ text }: { text: string }) {
   return (
-    <View className="px-3 py-1.5 rounded-full border border-gray-200 bg-white">
-      <Text className="text-xs text-gray-700">{text}</Text>
+    <View className='px-3 py-1.5 rounded-full border border-gray-200 bg-white'>
+      <Text className='text-xs text-gray-700'>{text}</Text>
     </View>
   );
 }
 
 function SuccessBadge() {
   return (
-    <View className="flex-row items-center px-3 py-1.5 rounded-full bg-green-100">
-      <Check size={14} color="#15803d" />
-      <Text className="ml-2 text-xs font-medium text-green-700">Answered</Text>
+    <View className='flex-row items-center px-3 py-1.5 rounded-full bg-green-100'>
+      <Check size={14} color='#15803d' />
+      <Text className='ml-2 text-xs font-medium text-green-700'>Answered</Text>
     </View>
   );
 }
 
-export function PrayerRequestListScreen({
-  onBack,
-  onViewPrayer,
-  onCreatePrayer,
-}: PrayerRequestListScreenProps) {
-  const [filter, setFilter] = useState<Filter>("all");
+export function PrayerRequestListScreen({}: PrayerRequestListScreenProps) {
+  const { from } = useLocalSearchParams<{
+    from: string;
+  }>();
+  const [filter, setFilter] = useState<Filter>('all');
 
   const filteredPrayers = useMemo(() => {
     return prayerRequests.filter((prayer) => {
-      if (filter === "all") return true;
+      if (filter === 'all') return true;
       return prayer.status === filter;
     });
   }, [filter]);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <View className='flex-1 bg-gray-50'>
       {/* Header */}
-      <View className="bg-white border-b border-gray-200 px-4 py-3">
-        <View className="flex-row items-center justify-between mb-3">
-          <View className="flex-row items-center gap-3">
-            <Pressable
-              onPress={onBack}
-              className="h-10 w-10 rounded-xl items-center justify-center"
-              style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
-            >
-              <ArrowLeft size={20} color="#111827" />
-            </Pressable>
-
-            <Text className="font-semibold text-lg text-gray-900">
-              Prayer Requests
-            </Text>
-          </View>
-
+      <HiddenScreensTopBar
+        show={true}
+        title={`My Prayer Requests`}
+        navigateTo={from}
+      />
+      <View className='bg-white border-b border-gray-200 px-4 py-3'>
+        {/* <View className='flex-row items-center justify-between mb-3'>
           <Pressable
-            onPress={onCreatePrayer}
-            className="px-4 py-2 rounded-xl bg-indigo-600 flex-row items-center"
+            onPress={() =>
+              router.push({
+                pathname: '/prayer/request-prayer',
+                params: {
+                  from: '/prayer/prayer-list',
+                },
+              })
+            }
+            className='px-4 py-2 rounded-xl bg-indigo-600 flex-row items-center'
           >
-            <Plus size={16} color="#ffffff" />
-            <Text className="text-white font-semibold ml-2">New</Text>
+            <Plus size={16} color='#ffffff' />
+            <Text className='text-white font-semibold ml-2'>New</Text>
           </Pressable>
-        </View>
+        </View> */}
 
         {/* Filters */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerClassName="gap-2"
+          contentContainerClassName='gap-2'
         >
-          <Chip label="All Requests" active={filter === "all"} onPress={() => setFilter("all")} />
-          <Chip label="Praying" active={filter === "praying"} onPress={() => setFilter("praying")} />
-          <Chip label="Answered" active={filter === "answered"} onPress={() => setFilter("answered")} />
+          <Chip
+            label='All Requests'
+            active={filter === 'all'}
+            onPress={() => setFilter('all')}
+          />
+          <Chip
+            label='Praying'
+            active={filter === 'praying'}
+            onPress={() => setFilter('praying')}
+          />
+          <Chip
+            label='Answered'
+            active={filter === 'answered'}
+            onPress={() => setFilter('answered')}
+          />
         </ScrollView>
       </View>
 
       {/* List */}
       {filteredPrayers.length > 0 ? (
-        <ScrollView contentContainerClassName="p-4 pb-28">
-          <View className="gap-3">
+        <ScrollView contentContainerClassName='p-4 pb-28'>
+          <View className='gap-3'>
             {filteredPrayers.map((prayer) => {
-              const answered = prayer.status === "answered";
+              const answered = prayer.status === 'answered';
 
               return (
                 <Pressable
                   key={prayer.id}
-                  onPress={() => onViewPrayer(prayer.id)}
-                  className="bg-white rounded-2xl p-4 shadow-sm"
+                  onPress={() =>
+                    router.push({
+                      pathname: '/prayer/prayer-details',
+                      params: {
+                        prayerId: prayer.id,
+                        from: '/prayer/prayer-list',
+                      },
+                    })
+                  }
+                  className='bg-white rounded-2xl p-4 shadow-sm'
                 >
-                  <View className="flex-row items-start justify-between mb-2">
-                    <View className="flex-1 pr-3">
-                      <Text className="font-semibold text-gray-900 mb-1">
+                  <View className='flex-row items-start justify-between mb-2'>
+                    <View className='flex-1 pr-3'>
+                      <Text className='font-semibold text-gray-900 mb-1'>
                         {prayer.title}
                       </Text>
 
                       <Text
-                        className="text-sm text-gray-600 mb-2"
+                        className='text-sm text-gray-600 mb-2'
                         numberOfLines={2}
                       >
                         {prayer.message}
@@ -149,23 +166,27 @@ export function PrayerRequestListScreen({
                     {answered && <SuccessBadge />}
                   </View>
 
-                  <View className="flex-row items-center justify-between">
-                    <View className="flex-row items-center flex-wrap">
-                      <Text className="text-xs text-gray-500">{prayer.submittedBy}</Text>
-                      <Text className="text-xs text-gray-500"> • </Text>
-                      <Text className="text-xs text-gray-500">{prayer.timestamp}</Text>
+                  <View className='flex-row items-center justify-between'>
+                    <View className='flex-row items-center flex-wrap'>
+                      <Text className='text-xs text-gray-500'>
+                        {prayer.submittedBy}
+                      </Text>
+                      <Text className='text-xs text-gray-500'> • </Text>
+                      <Text className='text-xs text-gray-500'>
+                        {prayer.timestamp}
+                      </Text>
                     </View>
 
-                    <View className="flex-row items-center gap-1">
-                      <Heart size={14} color="#4f46e5" fill="#4f46e5" />
-                      <Text className="text-xs text-gray-500">
+                    <View className='flex-row items-center gap-1'>
+                      <Heart size={14} color='#4f46e5' fill='#4f46e5' />
+                      <Text className='text-xs text-gray-500'>
                         {prayer.responseCount} praying
                       </Text>
                     </View>
                   </View>
 
                   {/* Visibility indicators */}
-                  <View className="mt-3 flex-row flex-wrap gap-2">
+                  <View className='mt-3 flex-row flex-wrap gap-2'>
                     {(prayer.visibility as VisibilityKey[]).map((v, index) => (
                       <OutlineBadge
                         key={`${v}-${index}`}
@@ -179,41 +200,52 @@ export function PrayerRequestListScreen({
           </View>
         </ScrollView>
       ) : (
-        <ScrollView contentContainerClassName="flex-1 items-center justify-center py-12 px-4 pb-28">
-          <View className="w-16 h-16 rounded-full bg-gray-100 items-center justify-center mb-4">
-            <Heart size={32} color="#9ca3af" />
+        <ScrollView contentContainerClassName='flex-1 items-center justify-center py-12 px-4 pb-28'>
+          <View className='w-16 h-16 rounded-full bg-gray-100 items-center justify-center mb-4'>
+            <Heart size={32} color='#9ca3af' />
           </View>
-          <Text className="text-gray-500 text-center mb-2">No prayer requests</Text>
-          <Text className="text-sm text-gray-400 text-center mb-4">
+          <Text className='text-gray-500 text-center mb-2'>
+            No prayer requests
+          </Text>
+          <Text className='text-sm text-gray-400 text-center mb-4'>
             Be the first to share a prayer request
           </Text>
 
           <Pressable
-            onPress={onCreatePrayer}
-            className="px-5 py-3 rounded-2xl bg-indigo-600 flex-row items-center"
+            onPress={() => console.log('prayer sent')}
+            className='px-5 py-3 rounded-2xl bg-indigo-600 flex-row items-center'
           >
-            <Plus size={18} color="#ffffff" />
-            <Text className="text-white font-semibold ml-2">Submit Prayer Request</Text>
+            <Plus size={18} color='#ffffff' />
+            <Text className='text-white font-semibold ml-2'>
+              Submit Prayer Request
+            </Text>
           </Pressable>
         </ScrollView>
       )}
 
       {/* FAB */}
-      <View className="absolute bottom-6 right-4">
+      <View className='absolute bottom-6 right-4'>
         <Pressable
-          onPress={onCreatePrayer}
-          className="w-14 h-14 rounded-full bg-indigo-600 items-center justify-center"
+          onPress={() =>
+            router.push({
+              pathname: '/prayer/request-prayer',
+              params: {
+                from: '/prayer/prayer-list',
+              },
+            })
+          }
+          className='w-14 h-14 rounded-full bg-indigo-600 items-center justify-center'
           style={{
-            shadowColor: "#000",
+            shadowColor: '#000',
             shadowOpacity: 0.15,
             shadowRadius: 10,
             shadowOffset: { width: 0, height: 6 },
             elevation: 6,
           }}
         >
-          <Plus size={24} color="#ffffff" />
+          <Plus size={24} color='#ffffff' />
         </Pressable>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

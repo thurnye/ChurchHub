@@ -18,6 +18,7 @@ import { churches, events, sermons } from '@/data/mockData';
 
 export function HomeScreen() {
   const currentHour = new Date().getHours();
+
   const greeting =
     currentHour < 12
       ? 'Good morning'
@@ -35,11 +36,7 @@ export function HomeScreen() {
 
   return (
     <View className='flex-1 bg-gray-50'>
-      <TopBar
-        showLogo
-        show={true}
-        onNotificationPress={() => console.log('Notifications')}
-      />
+      <TopBar showLogo show={true} />
 
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         {/* Greeting Section */}
@@ -67,13 +64,35 @@ export function HomeScreen() {
                 Watch Online
               </Text>
             </Pressable>
-            <Pressable className='items-center gap-2 p-3'>
+            <Pressable
+              className='items-center gap-2 p-3'
+              onPress={() =>
+                router.push({
+                  pathname: '/give/give-quick-link',
+                  params: {
+                    from: '/',
+                  },
+                })
+              }
+            >
               <View className='w-12 h-12 bg-purple-100 rounded-full items-center justify-center'>
                 <DollarSign size={24} color='#9333ea' />
               </View>
               <Text className='text-xs font-medium text-gray-900'>Give</Text>
             </Pressable>
-            <Pressable className='items-center gap-2 p-3'>
+
+            {/* Request Prayer */}
+            <Pressable
+              className='items-center gap-2 p-3'
+              onPress={() =>
+                router.push({
+                  pathname: '/prayer/request-prayer',
+                  params: {
+                    from: '/',
+                  },
+                })
+              }
+            >
               <View className='w-12 h-12 bg-blue-100 rounded-full items-center justify-center'>
                 <MessageCircle size={24} color='#2563eb' />
               </View>
@@ -124,21 +143,46 @@ export function HomeScreen() {
                       </View>
                     </Badge>
                   </View>
-                  <Pressable className='absolute inset-0 items-center justify-center bg-black/30'>
+                  <Pressable
+                    onPress={() =>
+                      router.push({
+                        pathname: '/media-player/[id]',
+                        params: {
+                          id: sermon.id,
+                          from: `/`,
+                        },
+                      })
+                    }
+                    className='absolute inset-0 items-center justify-center bg-black/30'
+                  >
                     <View className='w-16 h-16 bg-white/90 rounded-full items-center justify-center'>
                       <Play size={32} color='#111827' fill='#111827' />
                     </View>
                   </Pressable>
                 </View>
-                <CardContent>
-                  <Text className='font-semibold text-gray-900 mb-1'>
-                    {sermon.title}
-                  </Text>
-                  <Text className='text-sm text-gray-600'>{sermon.church}</Text>
-                  <Text className='text-sm text-gray-500'>
-                    {sermon.speaker}
-                  </Text>
-                </CardContent>
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: '/media-player/[id]',
+                      params: {
+                        id: sermon.id,
+                        from: `worship`,
+                      },
+                    })
+                  }
+                >
+                  <CardContent>
+                    <Text className='font-semibold text-gray-900 mb-1'>
+                      {sermon.title}
+                    </Text>
+                    <Text className='text-sm text-gray-600'>
+                      {sermon.church}
+                    </Text>
+                    <Text className='text-sm text-gray-500'>
+                      {sermon.speaker}
+                    </Text>
+                  </CardContent>
+                </Pressable>
               </Card>
             ))}
           </View>
@@ -260,32 +304,44 @@ export function HomeScreen() {
             {upcomingEvents.map((event) => (
               <Card key={event.id}>
                 <CardContent>
-                  <View className='flex-row items-start gap-3'>
-                    <View className='overflow-hidden rounded-lg'>
-                      <Image
-                        source={{ uri: event.image }}
-                        style={{ width: 80, height: 80 }}
-                        contentFit='cover'
-                      />
-                    </View>
-                    <View className='flex-1'>
-                      <Text className='font-semibold text-gray-900 mb-1'>
-                        {event.title}
-                      </Text>
-                      <Text className='text-sm text-gray-600 mb-1'>
-                        {event.church}
-                      </Text>
-                      <View className='flex-row items-center gap-3'>
-                        <Text className='text-sm text-gray-500'>
-                          {event.date}
+                  <Pressable
+                    onPress={() =>
+                      router.push({
+                        pathname: '/events/[eventId]',
+                        params: {
+                          eventId: event.id,
+                          from: '/',
+                        },
+                      })
+                    }
+                  >
+                    <View className='flex-row items-start gap-3'>
+                      <View className='overflow-hidden rounded-lg'>
+                        <Image
+                          source={{ uri: event.image }}
+                          style={{ width: 80, height: 80 }}
+                          contentFit='cover'
+                        />
+                      </View>
+                      <View className='flex-1'>
+                        <Text className='font-semibold text-gray-900 mb-1'>
+                          {event.title}
                         </Text>
-                        <Text className='text-gray-400'>•</Text>
-                        <Text className='text-sm text-gray-500'>
-                          {event.time}
+                        <Text className='text-sm text-gray-600 mb-1'>
+                          {event.church}
                         </Text>
+                        <View className='flex-row items-center gap-3'>
+                          <Text className='text-sm text-gray-500'>
+                            {event.date}
+                          </Text>
+                          <Text className='text-gray-400'>•</Text>
+                          <Text className='text-sm text-gray-500'>
+                            {event.time}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
+                  </Pressable>
                 </CardContent>
               </Card>
             ))}
