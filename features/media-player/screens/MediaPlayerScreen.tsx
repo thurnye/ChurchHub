@@ -20,7 +20,7 @@ import { sermons } from '@/data/mockData';
 import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { UpNextModal } from '../components/UpNextModal';
-import { MediaOptionsModal } from '../components/mediaOptionsModal';
+import { MediaOptionsModal } from '../components/MediaOptionsModal';
 
 export function MediaPlayerScreen() {
   const insets = useSafeAreaInsets();
