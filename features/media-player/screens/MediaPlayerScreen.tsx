@@ -1,104 +1,99 @@
-// MediaPlayerScreen.tsx (React Native + NativeWind)
-// ✅ No Button component
-// ✅ Uses Pressable
-// ✅ Uses @react-native-community/slider (install if needed)
-// ✅ Uses lucide-react-native icons
-// ✅ Keeps your UI/flow: live badge, progress (non-live), volume, up-next
+// MediaPlayerScreen.tsx
 
 import React, { useMemo, useState } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Image,
-  Pressable,
-  ScrollView,
-} from 'react-native';
+import { View, Text, Image, Pressable, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { cn } from '@/shared/utils/cn';
 import {
-  ArrowLeft,
   Play,
   Pause,
   SkipBack,
   SkipForward,
-  Volume2,
-  Share2,
-  Bookmark,
   MessageCircle,
   Users,
+  Ellipsis,
+  ChevronDown,
+  List,
 } from 'lucide-react-native';
 
 import { sermons } from '@/data/mockData';
-import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { UpNextModal } from '../components/UpNextModal';
+import { MediaOptionsModal } from '../components/mediaOptionsModal';
 
-interface MediaPlayerScreenProps {
+export function MediaPlayerScreen() {
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const pathname = usePathname();
 
-}
+  const { id, from } = useLocalSearchParams<{ id: string; from?: string }>();
 
-export function MediaPlayerScreen({
-
-}: MediaPlayerScreenProps) {
-  const { id, from } = useLocalSearchParams<{
-      id: string;
-      from: string;
-    }>();
   const sermon = useMemo(
     () => sermons.find((s) => s.id === id) || sermons[0],
     [id],
   );
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(12); // percent
-  const [volume, setVolume] = useState(0.75); // 0..1
+  const [progress, setProgress] = useState(12);
+
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [queueOpen, setQueueOpen] = useState(false);
 
   const isLive = !!sermon.isLive;
   const viewerCount = isLive ? 342 : undefined;
 
-  const related = useMemo(
-    () => sermons.filter((s) => s.id !== sermon.id).slice(0, 3),
-    [sermon.id],
-  );
+  const closePlayer = () => {
+    try {
+      // @ts-ignore
+      if (router.canDismiss?.()) {
+        // @ts-ignore
+        router.dismiss();
+        return;
+      }
+    } catch {}
+    router.replace(from as any);
+  };
+
+  // when user taps an Up Next item, replace the route param
+  const handleSelectNext = (nextId: string) => {
+    setQueueOpen(false);
+
+    // optional: reset progress / autoplay
+    setProgress(0);
+    setIsPlaying(true);
+
+    router.setParams({ id: nextId });
+  };
 
   return (
     <View className='flex-1 bg-gray-900'>
-      <HiddenScreensTopBar
-        show={true}
-        title={sermon.title}
-        navigateTo={from}
-      />
-      <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
-        <View className='absolute top-0 left-0 right-0 z-20 px-4 pt-3 pb-3'>
-          <View className='max-w-md mx-auto flex-row items-center justify-between'>
-            {/* <Pressable
-              onPress={onBack}
-              className='h-10 w-10 rounded-xl items-center justify-center'
-              style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
-            >
-              <ArrowLeft size={20} color='#fff' />
-            </Pressable> */}
+      <View style={{ paddingTop: insets.top }} className={cn('bg-gray-900')}>
+        <View className='flex-row items-center justify-between px-4 h-14'>
+          <Pressable
+            onPress={closePlayer}
+            className='w-10 h-10 rounded-full items-center justify-center'
+            accessibilityRole='button'
+            accessibilityLabel='Close player'
+          >
+            <ChevronDown size={22} color='#d1d5db' />
+          </Pressable>
 
-            <View className='flex-row gap-2'>
-              <Pressable
-                onPress={() => {}}
-                className='h-10 w-10 rounded-xl items-center justify-center'
-                style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
-              >
-                <Share2 size={20} color='#fff' />
-              </Pressable>
-              <Pressable
-                onPress={() => {}}
-                className='h-10 w-10 rounded-xl items-center justify-center'
-                style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
-              >
-                <Bookmark size={20} color='#fff' />
-              </Pressable>
-            </View>
+          <View className='flex-row items-center gap-1'>
+            <Pressable
+              onPress={() => setActionsOpen(true)}
+              className='w-10 h-10 items-center justify-center rounded-full'
+              accessibilityRole='button'
+              accessibilityLabel='More options'
+            >
+              <Ellipsis size={22} color='#d1d5db' />
+            </Pressable>
           </View>
         </View>
+      </View>
 
+      <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         <ScrollView contentContainerClassName='pb-10'>
-          {/* Player area */}
           <View className='relative h-[60vh] bg-black items-center justify-center'>
             <Image
               source={{ uri: sermon.thumbnail }}
@@ -106,13 +101,10 @@ export function MediaPlayerScreen({
               resizeMode='cover'
             />
 
-            {/* Live badges */}
             {isLive && (
-              <View className='absolute top-16 left-4 flex-row gap-3'>
+              <View className='absolute top-2 left-2 flex-row gap-3'>
                 <View className='px-3 py-1 rounded-full bg-red-600'>
-                  <Text className='text-white font-semibold text-xs'>
-                    🔴 LIVE
-                  </Text>
+                  <Text className='text-white font-semibold text-xs'>🔴 LIVE</Text>
                 </View>
 
                 {!!viewerCount && (
@@ -129,11 +121,12 @@ export function MediaPlayerScreen({
               </View>
             )}
 
-            {/* Big play/pause */}
             <Pressable
               onPress={() => setIsPlaying((p) => !p)}
               className='w-20 h-20 rounded-full items-center justify-center'
               style={{ backgroundColor: 'rgba(255,255,255,0.92)' }}
+              accessibilityRole='button'
+              accessibilityLabel={isPlaying ? 'Pause' : 'Play'}
             >
               {isPlaying ? (
                 <Pause size={40} color='#4f46e5' />
@@ -145,13 +138,23 @@ export function MediaPlayerScreen({
             </Pressable>
           </View>
 
-          {/* Controls section */}
-          <View className='max-w-md mx-auto px-4 pt-6'>
-            {/* Title */}
+          <View className='max-w-md px-6 pt-6'>
             <View className='mb-6'>
-              <Text className='text-white text-xl font-bold mb-2'>
-                {sermon.title}
-              </Text>
+              <View className='flex-row items-center justify-between'>
+                <Text className='text-white text-xl font-bold mb-2 flex-1 pr-3'>
+                  {sermon.title}
+                </Text>
+
+                <Pressable
+                  onPress={() => setQueueOpen(true)}
+                  className='w-10 h-10 items-center justify-center rounded-full'
+                  accessibilityRole='button'
+                  accessibilityLabel='Open Up Next'
+                >
+                  <List size={22} color='#d1d5db' />
+                </Pressable>
+              </View>
+
               <View className='flex-row items-center gap-2'>
                 <Text className='text-gray-300 text-sm'>{sermon.speaker}</Text>
                 <Text className='text-gray-400 text-sm'>•</Text>
@@ -159,7 +162,6 @@ export function MediaPlayerScreen({
               </View>
             </View>
 
-            {/* Progress (not live) */}
             {!isLive && (
               <View className='mb-6'>
                 <Slider
@@ -174,14 +176,11 @@ export function MediaPlayerScreen({
                 />
                 <View className='flex-row justify-between mt-2'>
                   <Text className='text-gray-400 text-xs'>12:34</Text>
-                  <Text className='text-gray-400 text-xs'>
-                    {sermon.duration}
-                  </Text>
+                  <Text className='text-gray-400 text-xs'>{sermon.duration}</Text>
                 </View>
               </View>
             )}
 
-            {/* Playback buttons */}
             <View className='flex-row items-center justify-center gap-6 mb-6'>
               <Pressable
                 disabled={isLive}
@@ -201,13 +200,7 @@ export function MediaPlayerScreen({
                 onPress={() => setIsPlaying((p) => !p)}
                 className='h-14 w-14 rounded-full items-center justify-center bg-indigo-600'
               >
-                {isPlaying ? (
-                  <Pause size={24} color='#fff' />
-                ) : (
-                  <View className='ml-0.5'>
-                    <Play size={24} color='#fff' />
-                  </View>
-                )}
+                {isPlaying ? <Pause size={24} color='#fff' /> : <Play size={24} color='#fff' />}
               </Pressable>
 
               <Pressable
@@ -225,26 +218,6 @@ export function MediaPlayerScreen({
               </Pressable>
             </View>
 
-            {/* Volume */}
-            <View className='mb-6'>
-              <View className='flex-row items-center gap-3'>
-                <Volume2 size={20} color='#9ca3af' />
-                <View className='flex-1'>
-                  <Slider
-                    value={volume}
-                    onValueChange={setVolume}
-                    minimumValue={0}
-                    maximumValue={1}
-                    step={0.01}
-                    minimumTrackTintColor='#ffffff'
-                    maximumTrackTintColor='#374151'
-                    thumbTintColor='#ffffff'
-                  />
-                </View>
-              </View>
-            </View>
-
-            {/* Live chat */}
             {isLive && (
               <View className='mb-6'>
                 <Pressable
@@ -252,50 +225,21 @@ export function MediaPlayerScreen({
                   className='w-full h-12 rounded-xl border border-gray-600 items-center justify-center flex-row'
                 >
                   <MessageCircle size={18} color='#fff' />
-                  <Text className='text-white font-semibold ml-2'>
-                    Open Live Chat
-                  </Text>
+                  <Text className='text-white font-semibold ml-2'>Open Live Chat</Text>
                 </Pressable>
               </View>
             )}
-
-            {/* Up next */}
-            <View className='mb-10'>
-              <Text className='text-white font-semibold mb-3'>Up Next</Text>
-
-              <View className='gap-3'>
-                {related.map((r) => (
-                  <Pressable
-                    key={r.id}
-                    onPress={() => {}}
-                    className='flex-row gap-3 p-3 rounded-2xl'
-                    style={{ backgroundColor: '#1f2937' }} // gray-800
-                  >
-                    <Image
-                      source={{ uri: r.thumbnail }}
-                      className='w-20 h-20 rounded-xl'
-                      resizeMode='cover'
-                    />
-                    <View className='flex-1'>
-                      <Text
-                        className='text-white font-medium text-sm mb-1'
-                        numberOfLines={2}
-                      >
-                        {r.title}
-                      </Text>
-                      <Text className='text-gray-400 text-xs'>{r.speaker}</Text>
-                      <Text className='text-gray-400 text-xs'>
-                        {r.duration}
-                      </Text>
-                    </View>
-                  </Pressable>
-                ))}
-              </View>
-            </View>
           </View>
         </ScrollView>
       </ScrollView>
-      {/* Header overlay */}
+
+      <MediaOptionsModal actionsOpen={actionsOpen} setActionsOpen={setActionsOpen} />
+
+      <UpNextModal
+        queueOpen={queueOpen}
+        setQueueOpen={setQueueOpen}
+        onSelect={handleSelectNext}
+      />
     </View>
   );
 }
