@@ -1,5 +1,5 @@
 import { useAuth } from '@/shared/context/AuthContext';
-import { router } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 import {
   Calendar,
   ChevronRight,
@@ -50,7 +50,11 @@ const menuSections: MenuSection[] = [
       { icon: Heart, label: 'My Churches', action: 'my-churches' },
       { icon: Calendar, label: 'My Events', action: 'my-events' },
       { icon: DollarSign, label: 'My Donations', action: 'my-donations' },
-      { icon: DollarSign, label: 'My Prayer Requests', action: 'my-prayer-request' },
+      {
+        icon: DollarSign,
+        label: 'My Prayer Requests',
+        action: 'my-prayer-request',
+      },
     ],
   },
   {
@@ -69,17 +73,18 @@ const menuSections: MenuSection[] = [
 interface HamburgerMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate: (action: string) => void;
+  // onNavigate: (action: string) => void;
 }
 
 export function HamburgerMenu({
   isOpen,
   onClose,
-  onNavigate,
+  // onNavigate,
 }: HamburgerMenuProps) {
   const insets = useSafeAreaInsets();
   const translateX = useSharedValue(300);
   const { logout } = useAuth();
+  const pathname = usePathname();
 
   useEffect(() => {
     translateX.value = withTiming(isOpen ? 0 : 300, { duration: 250 });
@@ -96,51 +101,70 @@ export function HamburgerMenu({
       logout();
       return;
     }
-    console.log;
+    const returnTo = pathname;
 
     // Navigate to screens based on action
     switch (action) {
       case 'nearby-churches':
-        router.push('/discover');
+        router.push({ pathname: '/discover', params: { returnTo } });
         break;
       case 'global-events':
-        router.push('/events/global-events');
+        router.push({
+          pathname: '/events/global-events',
+          params: { returnTo },
+        });
         break;
       case 'global-sermons':
-        router.push('/sermons/global-sermons');
+        router.push({
+          pathname: '/sermons/global-sermons',
+          params: { returnTo },
+        });
         break;
       case 'my-churches':
-        router.push('/profile/my-churches');
+        router.push({ pathname: '/profile/my-churches', params: { returnTo } });
         break;
       case 'my-events':
-        router.push('/profile/my-events');
+        router.push({ pathname: '/profile/my-events', params: { returnTo } });
         break;
       case 'my-donations':
-        router.push('/profile/my-donations');
+        router.push({
+          pathname: '/profile/my-donations',
+          params: { returnTo },
+        });
         break;
       case 'my-prayer-request':
-        router.push('/profile/my-prayer-list');
+        router.push({
+          pathname: '/profile/my-prayer-list',
+          params: { returnTo },
+        });
         break;
       case 'preferences':
-        router.push('/settings/preferences');
+        router.push({
+          pathname: '/settings/preferences',
+          params: { returnTo },
+        });
         break;
       case 'report':
-        router.push('/settings/report');
+        router.push({ pathname: '/settings/report', params: { returnTo } });
         break;
       case 'suggest-church':
-        router.push('/settings/suggest-church');
+        router.push({
+          pathname: '/settings/suggest-church',
+          params: { returnTo },
+        });
         break;
       case 'terms':
-        router.push('/settings/terms');
+        router.push({ pathname: '/settings/terms', params: { returnTo } });
         break;
       case 'language':
-        router.push('/settings/language');
+        router.push({ pathname: '/settings/language', params: { returnTo } });
         break;
       case 'help':
-        router.push('/settings/help');
+        router.push({ pathname: '/settings/help', params: { returnTo } });
         break;
       default:
-        onNavigate(action);
+        return;
+        // onNavigate(action);
     }
   };
 

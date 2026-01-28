@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Heart, Users, Mail, ChevronRight } from 'lucide-react-native';
 
 import { TopBar } from '@/shared/components/TopBar';
-import { HamburgerMenu } from '@/shared/components/HamburgerMenu';
 import { Card, CardContent, Badge, Button } from '@/shared/components/ui';
 import { communityPrograms } from '@/data/mockData';
 import { router } from 'expo-router';
@@ -171,12 +170,6 @@ export function CommunityScreen() {
           </Card>
         </View>
       </ScrollView>
-
-      <HamburgerMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onNavigate={(action) => console.log(action)}
-      />
     </View>
   );
 }

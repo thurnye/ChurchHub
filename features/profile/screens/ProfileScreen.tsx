@@ -1,7 +1,6 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { useState } from 'react';
 import {
-  User,
   Heart,
   Calendar,
   DollarSign,
@@ -14,8 +13,7 @@ import {
 } from 'lucide-react-native';
 
 import { TopBar } from '@/shared/components/TopBar';
-import { HamburgerMenu } from '@/shared/components/HamburgerMenu';
-import { Card, CardContent, Avatar, Badge } from '@/shared/components/ui';
+import { Card, Avatar, Badge } from '@/shared/components/ui';
 import { useAuth } from '@/shared/context/AuthContext';
 import { router } from 'expo-router';
 
@@ -202,12 +200,6 @@ export function ProfileScreen() {
           </Card>
         </View>
       </ScrollView>
-
-      <HamburgerMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onNavigate={(action) => console.log(action)}
-      />
     </View>
   );
 }

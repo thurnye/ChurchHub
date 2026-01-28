@@ -27,10 +27,7 @@ export function TopBar({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const handleMenuNavigation = () => {
-    router.push(`/`);
-  };
-
+  
   useFocusEffect(
     useCallback(() => {
       setIsSearchOpen(false);
@@ -132,7 +129,6 @@ export function TopBar({
       <HamburgerMenu
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        onNavigate={handleMenuNavigation}
       />
     </View>
   );

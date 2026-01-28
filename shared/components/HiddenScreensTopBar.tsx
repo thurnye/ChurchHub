@@ -27,18 +27,20 @@ export function HiddenScreensTopBar({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
-  
-  const { from } = useLocalSearchParams();
+
+  const { from, returnTo } = useLocalSearchParams();
   const backNavigateTo = from ? from : navigateTo;
 
   const handleMenuNavigation = () => {
-    console.log('backNavigateTo::', backNavigateTo)
     if (backNavigateTo) {
       router.push(backNavigateTo as any);
-    }else{
-      console.log('going back')
-      router.back();
+      return;
     }
+    if (returnTo && typeof returnTo === 'string') {
+      router.push(returnTo as any);
+      return;
+    }
+    router.back();
   };
 
   useFocusEffect(
@@ -85,7 +87,11 @@ export function HiddenScreensTopBar({
           )}
 
           <Pressable
-            onPress={() => router.push({ pathname: '/notifications/app-notification-list' })
+            onPress={
+              () =>
+                router.push({
+                  pathname: '/notifications/app-notification-list',
+                })
 
               // router.push({
               //   pathname: '/notifications/app-notification-list',
@@ -138,11 +144,7 @@ export function HiddenScreensTopBar({
         </View>
       )}
 
-      <HamburgerMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onNavigate={handleMenuNavigation}
-      />
+      <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </View>
   );
 }

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Play, Clock, Book, Radio } from 'lucide-react-native';
 
 import { TopBar } from '@/shared/components/TopBar';
-import { HamburgerMenu } from '@/shared/components/HamburgerMenu';
 import { Card, CardContent, Badge } from '@/shared/components/ui';
 import { sermons, devotional } from '@/data/mockData';
 import { router } from 'expo-router';
@@ -230,12 +229,6 @@ export function WorshipScreen() {
           </View>
         </View>
       </ScrollView>
-
-      <HamburgerMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onNavigate={(action) => console.log(action)}
-      />
     </View>
   );
 }
