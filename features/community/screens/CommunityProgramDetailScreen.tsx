@@ -82,6 +82,7 @@ export function CommunityProgramDetailScreen({}: CommunityProgramDetailScreenPro
     () => communityPrograms.find((p) => p.id === id) || communityPrograms[0],
     [id],
   );
+  console.log('from:::', from)
 
   return (
     <View className='flex-1 bg-gray-50'>
@@ -89,7 +90,7 @@ export function CommunityProgramDetailScreen({}: CommunityProgramDetailScreenPro
       <HiddenScreensTopBar
         show={true}
         title={program.title}
-        navigateTo={'community'}
+        navigateTo={from}
       />
       <View className='relative'>
         <Image

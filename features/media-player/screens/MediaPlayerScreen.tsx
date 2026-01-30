@@ -34,7 +34,7 @@ export function MediaPlayerScreen() {
     [id],
   );
 
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(12);
 
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -97,7 +97,7 @@ export function MediaPlayerScreen() {
           <View className='relative h-[60vh] bg-black items-center justify-center'>
             <Image
               source={{ uri: sermon.thumbnail }}
-              className='absolute inset-0 w-full h-full opacity-40'
+              className={`absolute inset-0 w-full h-full ${ !isPlaying && "opacity-40"}`}
               resizeMode='cover'
             />
 
@@ -121,24 +121,22 @@ export function MediaPlayerScreen() {
               </View>
             )}
 
-            <Pressable
+            {!isPlaying && (
+              <Pressable
               onPress={() => setIsPlaying((p) => !p)}
               className='w-20 h-20 rounded-full items-center justify-center'
               style={{ backgroundColor: 'rgba(255,255,255,0.92)' }}
               accessibilityRole='button'
               accessibilityLabel={isPlaying ? 'Pause' : 'Play'}
-            >
-              {isPlaying ? (
-                <Pause size={40} color='#4f46e5' />
-              ) : (
-                <View className='ml-1'>
-                  <Play size={40} color='#4f46e5' />
-                </View>
-              )}
-            </Pressable>
+              >
+              <View className='ml-1'>
+                <Play size={40} color='#4f46e5' />
+              </View>
+              </Pressable>
+            )}
           </View>
 
-          <View className='max-w-md px-6 pt-6'>
+          <View className='w-full  px-6 pt-6'>
             <View className='mb-6'>
               <View className='flex-row items-center justify-between'>
                 <Text className='text-white text-xl font-bold mb-2 flex-1 pr-3'>
@@ -147,7 +145,7 @@ export function MediaPlayerScreen() {
 
                 <Pressable
                   onPress={() => setQueueOpen(true)}
-                  className='w-10 h-10 items-center justify-center rounded-full'
+                  className='w-10 h-10  rounded-full'
                   accessibilityRole='button'
                   accessibilityLabel='Open Up Next'
                 >

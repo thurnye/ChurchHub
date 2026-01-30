@@ -91,11 +91,7 @@ export function SermonDetailScreen({ onPlayMedia }: SermonDetailScreenProps) {
 
   return (
     <View className='flex-1 bg-gray-50'>
-      <HiddenScreensTopBar
-        show={true}
-        title={sermon.title}
-        navigateTo={from}
-      />
+      <HiddenScreensTopBar show={true} title={sermon.title} navigateTo={from} />
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         <View className='flex-1'>
           <ScrollView contentContainerClassName='pb-28'>
@@ -248,16 +244,15 @@ export function SermonDetailScreen({ onPlayMedia }: SermonDetailScreenProps) {
                     related.map((rs) => (
                       <Pressable
                         key={rs.id}
-                        // onPress={() => onPlayMedia?.(rs.id)}
                         onPress={() =>
-                    router.push({
-                      pathname: '/media-player/[id]',
-                      params: {
-                        id: rs.id,
-                        from: 'sermons/global-sermons',
-                      },
-                    })
-                  }
+                          router.push({
+                            pathname: '/media-player/[id]',
+                            params: {
+                              id: rs.id,
+                              from: 'sermons/global-sermons',
+                            },
+                          })
+                        }
                         className='flex-row gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-200'
                       >
                         <Image
@@ -293,7 +288,15 @@ export function SermonDetailScreen({ onPlayMedia }: SermonDetailScreenProps) {
               </IconButton>
 
               <Pressable
-                onPress={() => onPlayMedia?.(sermon.id)}
+                 onPress={() =>
+                          router.push({
+                            pathname: '/media-player/[id]',
+                            params: {
+                              id: sermon.id,
+                              from: 'sermons/global-sermons',
+                            },
+                          })
+                        }
                 className='flex-1 h-12 rounded-2xl bg-indigo-600 items-center justify-center flex-row'
               >
                 <Play size={18} color='#ffffff' />

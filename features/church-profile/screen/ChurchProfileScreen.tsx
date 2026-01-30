@@ -15,7 +15,7 @@ import {
   Share2,
   Video,
 } from 'lucide-react-native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Linking,
   Pressable,
@@ -47,7 +47,7 @@ import {
   ChurchStaffScreen,
   ChurchStructureScreen,
   ChurchWhoWeAreScreen,
-} from '../components/AboutMenuSectionScreens';
+} from './AboutMenuSectionScreens';
 // WORSHIP
 import {
   ChurchBaptismWeddingsScreen,
@@ -69,7 +69,7 @@ import {
   ChurchMembershipScreen,
   ChurchPastoralCareScreen,
   ChurchYouthFamilyScreen,
-} from '../components/MinistriesMenuSectionScreens';
+} from './MinistriesMenuSectionScreens';
 
 // GIVE
 import {
@@ -123,7 +123,11 @@ export type ChurchScreenComponent = React.ComponentType<{
 }>;
 
 export function ChurchProfileScreen() {
-  const { id, from } = useLocalSearchParams<{ id: string; from: string }>();
+  const { id, from, tab } = useLocalSearchParams<{
+    id: string;
+    from: string;
+    tab: string;
+  }>();
   const insets = useSafeAreaInsets();
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState('Overview');
@@ -150,6 +154,14 @@ export function ChurchProfileScreen() {
       setActiveMenuAction(null);
     }, []),
   );
+
+  //if the tab is true, then setActiveTab to tab
+  useEffect(() => {
+    console.log('Tab:::', tab)
+    if (tab) {
+      handleMenuNavigation(tab);
+    }
+  }, [tab]);
 
   const menuScreenRegistry: Partial<Record<string, ChurchScreenComponent>> = {
     // About

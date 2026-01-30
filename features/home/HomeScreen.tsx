@@ -1,382 +1,318 @@
-import { View, Text, ScrollView, Pressable } from 'react-native';
-import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import {
-  Video,
-  MapPin,
-  Calendar,
-  DollarSign,
-  Play,
-  Navigation,
-  Clock,
-  MessageCircle,
-} from 'lucide-react-native';
+  View,
+  FlatList,
+  Dimensions,
+  PanResponder,
+  Animated,
+  StatusBar,
+} from 'react-native';
+import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { TopBar } from '@/shared/components/TopBar';
-import { Button, Card, CardContent, Badge } from '@/shared/components/ui';
-import { churches, events, sermons } from '@/data/mockData';
+import {
+  type Story,
+  type FeedItem,
+  FeedItems,
+  Stories,
+  FeedSourceType,
+} from '@/data/mockData';
+import {
+  StoriesRow,
+  FeedCard,
+  StoryViewerModal,
+  QuickActionsModal,
+} from './components';
+
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
+const STORIES_HEIGHT = 120;
+const TAB_BAR_HEIGHT = 80;
 
 export function HomeScreen() {
-  const currentHour = new Date().getHours();
+  const insets = useSafeAreaInsets();
+  const FEED_HEIGHT =
+    SCREEN_HEIGHT - (STORIES_HEIGHT + insets.top) - TAB_BAR_HEIGHT;
 
-  const greeting =
-    currentHour < 12
-      ? 'Good morning'
-      : currentHour < 18
-        ? 'Good afternoon'
-        : 'Good evening';
+  const [storyViewerVisible, setStoryViewerVisible] = useState(false);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+  const [quickActionsVisible, setQuickActionsVisible] = useState(false);
+  const [selectedFeedItem, setSelectedFeedItem] = useState<FeedItem | null>(
+    null,
+  );
+  const [mutedItems, setMutedItems] = useState<Set<string>>(
+    new Set(FeedItems.map((i) => i.id)),
+  );
+  const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
+  const [savedItems, setSavedItems] = useState<Set<string>>(new Set());
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
-  const todayServices = churches.filter((c) => c.nextService.includes('Today'));
-  const upcomingEvents = events.slice(0, 3);
-  const liveSermons = sermons.filter((s) => s.isLive);
+  const flatListRef = useRef<FlatList>(null);
+  const swipeX = useRef(new Animated.Value(0)).current;
+  const lastTapRef = useRef<{ [key: string]: number }>({});
+  const singleTapTimeoutRef = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
-  const handleNavigateToChurch = (churchId: string) => {
-    router.push(`/church/${churchId}`);
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponderCapture: (_, gestureState) => {
+          // Capture horizontal swipes before FlatList
+          const isHorizontal =
+            Math.abs(gestureState.dx) > 12 &&
+            Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+
+          if (isHorizontal) {
+            setScrollEnabled(false);
+          }
+
+          return isHorizontal;
+        },
+        onPanResponderTerminationRequest: () => false,
+        onPanResponderMove: (_, gestureState) => {
+          if (gestureState.dx > 0) {
+            swipeX.setValue(gestureState.dx);
+          }
+        },
+        onPanResponderRelease: (_, gestureState) => {
+          if (gestureState.dx < 100) {
+            // Swipe right detected - navigate to profile
+            if (selectedFeedItem) {
+              handleSwipeRight(selectedFeedItem);
+            }
+          }
+          Animated.spring(swipeX, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+          setScrollEnabled(true);
+        },
+        onPanResponderTerminate: () => {
+          Animated.spring(swipeX, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+          setScrollEnabled(true);
+        },
+      }),
+    [selectedFeedItem],
+  );
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(singleTapTimeoutRef.current).forEach((timeout) => {
+        clearTimeout(timeout);
+      });
+    };
+  }, []);
+
+  const handleSwipeRight = (item: FeedItem) => {
+    router.push({
+      pathname: `/profile/[id]`,
+      params: { 
+        id:item.sourceId,
+        from: '/',
+        sourceType: item.sourceType
+       },
+    });
+  };
+
+  const handleLongPress = (item: FeedItem) => {
+    // Clear any pending single tap
+    if (singleTapTimeoutRef.current[item.id]) {
+      clearTimeout(singleTapTimeoutRef.current[item.id]);
+      delete singleTapTimeoutRef.current[item.id];
+    }
+    setSelectedFeedItem(item);
+    setQuickActionsVisible(true);
+  };
+
+  const handleTap = (item: FeedItem) => {
+    const DOUBLE_TAP_DELAY = 250;
+    const now = Date.now();
+    const lastTap = lastTapRef.current[item.id];
+
+    // Clear any existing timeout for this item
+    if (singleTapTimeoutRef.current[item.id]) {
+      clearTimeout(singleTapTimeoutRef.current[item.id]);
+      delete singleTapTimeoutRef.current[item.id];
+    }
+
+    if (lastTap && now - lastTap < DOUBLE_TAP_DELAY) {
+      // Double tap detected
+      lastTapRef.current[item.id] = 0; // Reset
+      toggleLike(item.id);
+    } else {
+      // Potential single tap - wait to confirm
+      lastTapRef.current[item.id] = now;
+      singleTapTimeoutRef.current[item.id] = setTimeout(() => {
+        // Single tap confirmed
+        if(item.sourceType === FeedSourceType.Event){
+          router.push(item.primaryRoute as any);
+          delete singleTapTimeoutRef.current[item.id];
+        }
+      }, DOUBLE_TAP_DELAY) as unknown as NodeJS.Timeout;
+    }
+  };
+
+  const toggleLike = (itemId: string) => {
+    setLikedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleSave = (itemId: string) => {
+    setSavedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleMute = (itemId: string) => {
+    setMutedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleExpand = (itemId: string) => {
+    setExpandedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
+  const renderFeedItem = useCallback(
+    ({ item, index }: { item: FeedItem; index: number }) => {
+      const isLiked = likedItems.has(item.id);
+      const isSaved = savedItems.has(item.id);
+      const isMuted = mutedItems.has(item.id);
+      const isExpanded = expandedItems.has(item.id);
+
+      return (
+        <FeedCard
+          item={item}
+          height={FEED_HEIGHT}
+          isLiked={isLiked}
+          isSaved={isSaved}
+          isMuted={isMuted}
+          isExpanded={isExpanded}
+          panResponder={panResponder}
+          onTap={() => handleTap(item)}
+          onLongPress={() => handleLongPress(item)}
+          onPressIn={() => setSelectedFeedItem(item)}
+          onToggleLike={() => toggleLike(item.id)}
+          onToggleSave={() => toggleSave(item.id)}
+          onToggleMute={() => toggleMute(item.id)}
+          onToggleExpand={() => toggleExpand(item.id)}
+        />
+      );
+    },
+    [likedItems, savedItems, mutedItems, expandedItems, panResponder],
+  );
+
+  const handleStoryPress = (index: number) => {
+    setCurrentStoryIndex(index);
+    setStoryViewerVisible(true);
+  };
+
+  const handleStoryClose = () => {
+    setStoryViewerVisible(false);
+  };
+
+  const handleStoryPrevious = () => {
+    if (currentStoryIndex > 0) {
+      setCurrentStoryIndex(currentStoryIndex - 1);
+    } else {
+      setStoryViewerVisible(false);
+    }
+  };
+
+  const handleStoryNext = () => {
+    if (currentStoryIndex < Stories.length - 1) {
+      setCurrentStoryIndex(currentStoryIndex + 1);
+    } else {
+      setStoryViewerVisible(false);
+    }
   };
 
   return (
-    <View className='flex-1 bg-gray-50'>
-      <TopBar showLogo show={true} />
+    <View className='flex-1 bg-black'>
+      <StatusBar barStyle='dark-content' />
 
-      <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
-        {/* Greeting Section */}
-        <View className='bg-white px-4 pt-4 pb-6'>
-          <Text className='text-2xl font-semibold text-gray-900 mb-1'>
-            {greeting}, Daniel
-          </Text>
-          <View className='flex-row items-center gap-1'>
-            <MapPin size={16} color='#6b7280' />
-            <Text className='text-sm text-gray-600'>Churches near you</Text>
-          </View>
-        </View>
+      {/* Fixed Stories Row */}
+      <StoriesRow
+        stories={Stories}
+        height={STORIES_HEIGHT}
+        topInset={insets.top}
+        onStoryPress={handleStoryPress}
+      />
 
-        {/* Quick Actions */}
-        <View className='px-4 py-4 bg-white border-t border-gray-100'>
-          <View className='flex-row justify-around'>
-            <Pressable
-              className='items-center gap-2 p-3'
-              onPress={() => router.push('/worship')}
-            >
-              <View className='w-12 h-12 bg-red-100 rounded-full items-center justify-center'>
-                <Video size={24} color='#dc2626' />
-              </View>
-              <Text className='text-xs font-medium text-gray-900'>
-                Watch Online
-              </Text>
-            </Pressable>
-            <Pressable
-              className='items-center gap-2 p-3'
-              onPress={() =>
-                router.push({
-                  pathname: '/give/give-quick-link',
-                  params: {
-                    from: '/',
-                  },
-                })
-              }
-            >
-              <View className='w-12 h-12 bg-purple-100 rounded-full items-center justify-center'>
-                <DollarSign size={24} color='#9333ea' />
-              </View>
-              <Text className='text-xs font-medium text-gray-900'>Give</Text>
-            </Pressable>
+      {/* Vertical Swipe Feed */}
+      <FlatList
+        ref={flatListRef}
+        data={FeedItems}
+        renderItem={renderFeedItem}
+        keyExtractor={(item) => item.id}
+        pagingEnabled
+        scrollEnabled={scrollEnabled}
+        showsVerticalScrollIndicator={false}
+        snapToInterval={FEED_HEIGHT}
+        decelerationRate='fast'
+        getItemLayout={(_, index) => ({
+          length: FEED_HEIGHT,
+          offset: FEED_HEIGHT * index,
+          index,
+        })}
+        removeClippedSubviews
+        maxToRenderPerBatch={3}
+        windowSize={3}
+        initialNumToRender={2}
+      />
 
-            {/* Request Prayer */}
-            <Pressable
-              className='items-center gap-2 p-3'
-              onPress={() =>
-                router.push({
-                  pathname: '/prayer/request-prayer',
-                  params: {
-                    from: '/',
-                  },
-                })
-              }
-            >
-              <View className='w-12 h-12 bg-blue-100 rounded-full items-center justify-center'>
-                <MessageCircle size={24} color='#2563eb' />
-              </View>
-              <Text className='text-xs font-medium text-gray-900'>
-                Submit Prayer
-              </Text>
-            </Pressable>
-            <Pressable
-              className='items-center gap-2 p-3'
-              onPress={() =>
-                router.push({
-                  pathname: '/events/global-events',
-                  params: {
-                    from: '/',
-                  },
-                })
-              }
-            >
-              <View className='w-12 h-12 bg-green-100 rounded-full items-center justify-center'>
-                <Calendar size={24} color='#16a34a' />
-              </View>
-              <Text className='text-xs font-medium text-gray-900'>Events</Text>
-            </Pressable>
-          </View>
-        </View>
+      {/* Story Viewer Modal */}
+      <StoryViewerModal
+        visible={storyViewerVisible}
+        story={Stories[currentStoryIndex] || null}
+        progress={0.6}
+        onClose={handleStoryClose}
+        onPrevious={handleStoryPrevious}
+        onNext={handleStoryNext}
+      />
 
-        {/* Live Now Section */}
-        {liveSermons.length > 0 && (
-          <View className='mt-4 px-4'>
-            <Text className='font-semibold text-lg text-gray-900 mb-3'>
-              Live Now
-            </Text>
-            {liveSermons.map((sermon) => (
-              <Card key={sermon.id} className='mb-3'>
-                <View className='relative'>
-                  <Image
-                    source={{ uri: sermon.thumbnail }}
-                    style={{ width: '100%', height: 192 }}
-                    contentFit='cover'
-                  />
-                  <View className='absolute top-3 left-3'>
-                    <Badge className='bg-red-600'>
-                      <View className='flex-row items-center'>
-                        <View className='w-2 h-2 bg-white rounded-full mr-1.5' />
-                        <Text className='text-white text-xs font-medium'>
-                          LIVE
-                        </Text>
-                      </View>
-                    </Badge>
-                  </View>
-                  <Pressable
-                    onPress={() =>
-                      router.push({
-                        pathname: '/media-player/[id]',
-                        params: {
-                          id: sermon.id,
-                          from: `/`,
-                        },
-                      })
-                    }
-                    className='absolute inset-0 items-center justify-center bg-black/30'
-                  >
-                    <View className='w-16 h-16 bg-white/90 rounded-full items-center justify-center'>
-                      <Play size={32} color='#111827' fill='#111827' />
-                    </View>
-                  </Pressable>
-                </View>
-                <Pressable
-                  onPress={() =>
-                    router.push({
-                      pathname: '/media-player/[id]',
-                      params: {
-                        id: sermon.id,
-                        from: `worship`,
-                      },
-                    })
-                  }
-                >
-                  <CardContent>
-                    <Text className='font-semibold text-gray-900 mb-1'>
-                      {sermon.title}
-                    </Text>
-                    <Text className='text-sm text-gray-600'>
-                      {sermon.church}
-                    </Text>
-                    <Text className='text-sm text-gray-500'>
-                      {sermon.speaker}
-                    </Text>
-                  </CardContent>
-                </Pressable>
-              </Card>
-            ))}
-          </View>
-        )}
-
-        {/* Today Section */}
-        <View className='mt-4 px-4'>
-          <Text className='font-semibold text-lg text-gray-900 mb-3'>
-            Today
-          </Text>
-          <View className='gap-3'>
-            {todayServices.map((church) => (
-              <Card key={church.id}>
-                <CardContent>
-                  <View className='flex-row items-start gap-3'>
-                    <View className='overflow-hidden rounded-lg'>
-                      <Pressable
-                        onPress={() =>
-                          router.push({
-                            pathname: '/church/[id]',
-                            params: {
-                              id: church.id,
-                              from: '/',
-                            },
-                          })
-                        }
-                      >
-                        <Image
-                          source={{ uri: church.image }}
-                          style={{ width: 64, height: 64 }}
-                          contentFit='cover'
-                        />
-                      </Pressable>
-                    </View>
-                    <View className='flex-1'>
-                      <Pressable
-                        onPress={() =>
-                          router.push({
-                            pathname: '/church/[id]',
-                            params: {
-                              id: church.id,
-                              from: '/',
-                            },
-                          })
-                        }
-                      >
-                        <Text className='font-semibold text-gray-900 mb-1'>
-                          {church.name}
-                        </Text>
-                      </Pressable>
-                      <View className='flex-row items-center gap-2 mb-2'>
-                        <Badge variant='secondary'>
-                          <Text className='text-xs text-gray-700'>
-                            {church.denomination}
-                          </Text>
-                        </Badge>
-                      </View>
-                      <View className='flex-row items-center gap-1 mb-3'>
-                        <Clock size={16} color='#6b7280' />
-                        <Text className='text-sm text-gray-600'>
-                          {church.nextService}
-                        </Text>
-                      </View>
-                      <View className='flex-row gap-2'>
-                        {church.hasLivestream && (
-                          <Button size='sm' className='flex-1'>
-                            <View className='flex-row items-center gap-1'>
-                              <Video size={16} color='#ffffff' />
-                              <Text className='text-white text-sm font-medium'>
-                                Join Online
-                              </Text>
-                            </View>
-                          </Button>
-                        )}
-                        <Button
-                          size='sm'
-                          variant='outline'
-                          className='flex-1'
-                          onPress={() => handleNavigateToChurch(church.id)}
-                        >
-                          <View className='flex-row items-center gap-1'>
-                            <Navigation size={16} color='#111827' />
-                            <Text className='text-gray-900 text-sm font-medium'>
-                              Directions
-                            </Text>
-                          </View>
-                        </Button>
-                      </View>
-                    </View>
-                  </View>
-                </CardContent>
-              </Card>
-            ))}
-          </View>
-        </View>
-
-        {/* Upcoming Events Section */}
-        <View className='mt-6 px-4'>
-          <View className='flex-row items-center justify-between mb-3'>
-            <Text className='font-semibold text-lg text-gray-900'>
-              Upcoming Events
-            </Text>
-            <Pressable
-              onPress={() =>
-                router.push({
-                  pathname: '/events/global-events',
-                  params: {
-                    from: '/',
-                  },
-                })
-              }
-            >
-              <Text className='text-sm text-indigo-600 font-medium'>
-                View All
-              </Text>
-            </Pressable>
-          </View>
-          <View className='gap-3'>
-            {upcomingEvents.map((event) => (
-              <Card key={event.id}>
-                <CardContent>
-                  <Pressable
-                    onPress={() =>
-                      router.push({
-                        pathname: '/events/[eventId]',
-                        params: {
-                          eventId: event.id,
-                          from: '/',
-                        },
-                      })
-                    }
-                  >
-                    <View className='flex-row items-start gap-3'>
-                      <View className='overflow-hidden rounded-lg'>
-                        <Image
-                          source={{ uri: event.image }}
-                          style={{ width: 80, height: 80 }}
-                          contentFit='cover'
-                        />
-                      </View>
-                      <View className='flex-1'>
-                        <Text className='font-semibold text-gray-900 mb-1'>
-                          {event.title}
-                        </Text>
-                        <Text className='text-sm text-gray-600 mb-1'>
-                          {event.church}
-                        </Text>
-                        <View className='flex-row items-center gap-3'>
-                          <Text className='text-sm text-gray-500'>
-                            {event.date}
-                          </Text>
-                          <Text className='text-gray-400'>•</Text>
-                          <Text className='text-sm text-gray-500'>
-                            {event.time}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </Pressable>
-                </CardContent>
-              </Card>
-            ))}
-          </View>
-        </View>
-
-        {/* Updates Section */}
-        <View className='mt-6 px-4 pb-6'>
-          <Text className='font-semibold text-lg text-gray-900 mb-3'>
-            Updates
-          </Text>
-          <Card>
-            <CardContent>
-              <View className='flex-row items-start gap-3'>
-                <View className='w-10 h-10 bg-indigo-100 rounded-full items-center justify-center'>
-                  <Calendar size={20} color='#4f46e5' />
-                </View>
-                <View className='flex-1'>
-                  <Text className='text-sm font-medium text-gray-900 mb-1'>
-                    Grace Community Church shared an announcement
-                  </Text>
-                  <Text className='text-sm text-gray-600 mb-2'>
-                    Join us for our annual Youth Revival starting this Friday!
-                    Special guest speakers and worship leaders.
-                  </Text>
-                  <Text className='text-xs text-gray-500'>2 hours ago</Text>
-                </View>
-              </View>
-            </CardContent>
-          </Card>
-        </View>
-
-        {/* Bottom padding for tab bar */}
-        <View className='h-4' />
-      </ScrollView>
+      {/* Quick Actions Modal */}
+      <QuickActionsModal
+        visible={quickActionsVisible}
+        item={selectedFeedItem}
+        isSaved={selectedFeedItem ? savedItems.has(selectedFeedItem.id) : false}
+        onClose={() => setQuickActionsVisible(false)}
+        onToggleSave={() => {
+          if (selectedFeedItem) {
+            toggleSave(selectedFeedItem.id);
+          }
+        }}
+      />
     </View>
   );
 }

@@ -72,7 +72,12 @@ export default function TabLayout() {
       />
 
       {/* Church */}
-
+        <Tabs.Screen
+        name='church/group-detail'
+        options={{
+          href: null,
+        }}
+      />
 
       {/* Community */}
       <Tabs.Screen
@@ -161,6 +166,12 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name='profile/my-prayer-list'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='profile/[id]'
         options={{
           href: null,
         }}
