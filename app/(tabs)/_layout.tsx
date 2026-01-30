@@ -1,24 +1,44 @@
 import { Tabs } from 'expo-router';
 import { Home, Church, Radio, Users, User } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function TabLayout() {
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: '#4f46e5',
-        tabBarInactiveTintColor: '#6b7280',
-        tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopColor: '#f3f4f6',
-          height: 70,
-          paddingBottom: 8,
-          paddingTop: 8,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: '500',
-        },
-        headerShown: false,
+      screenOptions={({ route }) => {
+        const isHomeScreen = route.name === 'index';
+
+        return {
+          tabBarActiveTintColor: isHomeScreen ? '#ffffff' : '#4f46e5',
+          tabBarInactiveTintColor: isHomeScreen ? 'rgba(255, 255, 255, 0.6)' : '#6b7280',
+          tabBarStyle: {
+            backgroundColor: isHomeScreen ? 'transparent' : '#ffffff',
+            borderTopColor: isHomeScreen ? 'transparent' : '#f3f4f6',
+            height: 70,
+            paddingBottom: 8,
+            paddingTop: 8,
+            position: isHomeScreen ? 'absolute' : 'relative',
+            elevation: isHomeScreen ? 0 : undefined,
+          },
+          tabBarBackground: isHomeScreen ? () => (
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.8)']}
+              locations={[0, 0.5, 1]}
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+              }}
+            />
+          ) : undefined,
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: '500',
+          },
+          headerShown: false,
+        };
       }}
     >
       <Tabs.Screen

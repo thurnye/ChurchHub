@@ -8,6 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { router } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -26,12 +27,10 @@ import {
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 const STORIES_HEIGHT = 120;
-const TAB_BAR_HEIGHT = 80;
 
 export function HomeScreen() {
   const insets = useSafeAreaInsets();
-  const FEED_HEIGHT =
-    SCREEN_HEIGHT - (STORIES_HEIGHT + insets.top) - TAB_BAR_HEIGHT;
+  const FEED_HEIGHT = SCREEN_HEIGHT; // Full screen height
 
   const [storyViewerVisible, setStoryViewerVisible] = useState(false);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -39,47 +38,94 @@ export function HomeScreen() {
   const [selectedFeedItem, setSelectedFeedItem] = useState<FeedItem | null>(
     null,
   );
-  const [mutedItems, setMutedItems] = useState<Set<string>>(
-    new Set(FeedItems.map((i) => i.id)),
-  );
+  const [isGloballyMuted, setIsGloballyMuted] = useState(false); // Global mute state - unmuted by default
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
   const [savedItems, setSavedItems] = useState<Set<string>>(new Set());
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [scrollEnabled, setScrollEnabled] = useState(true);
+  const [currentVisibleIndex, setCurrentVisibleIndex] = useState(0);
+  const [isFocused, setIsFocused] = useState(true);
+
+  // Track screen focus
+  useFocusEffect(
+    useCallback(() => {
+      setIsFocused(true);
+      return () => {
+        setIsFocused(false);
+      };
+    }, [])
+  );
 
   const flatListRef = useRef<FlatList>(null);
   const swipeX = useRef(new Animated.Value(0)).current;
   const lastTapRef = useRef<{ [key: string]: number }>({});
-  const singleTapTimeoutRef = useRef<{ [key: string]: NodeJS.Timeout }>({});
+  const singleTapTimeoutRef = useRef<{ [key: string]: number }>({});
+  const gestureStartTimeRef = useRef(0);
+  const longPressTimerRef = useRef<number | null>(null);
 
   const panResponder = useMemo(
     () =>
       PanResponder.create({
-        onMoveShouldSetPanResponderCapture: (_, gestureState) => {
-          // Capture horizontal swipes before FlatList
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: (_, gestureState) => {
+          // Only capture if there's significant movement
+          return Math.abs(gestureState.dx) > 5 || Math.abs(gestureState.dy) > 5;
+        },
+        onPanResponderTerminationRequest: () => false,
+        onPanResponderGrant: () => {
+          gestureStartTimeRef.current = Date.now();
+
+          // Start long press timer
+          if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+          }
+          longPressTimerRef.current = setTimeout(() => {
+            if (selectedFeedItem) {
+              handleLongPress(selectedFeedItem);
+            }
+          }, 500) as unknown as number;
+        },
+        onPanResponderMove: (_, gestureState) => {
+          // Clear long press if moved too much
+          if (Math.abs(gestureState.dx) > 10 || Math.abs(gestureState.dy) > 10) {
+            if (longPressTimerRef.current) {
+              clearTimeout(longPressTimerRef.current);
+              longPressTimerRef.current = null;
+            }
+          }
+
+          // Handle horizontal swipe
           const isHorizontal =
             Math.abs(gestureState.dx) > 12 &&
             Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
 
           if (isHorizontal) {
             setScrollEnabled(false);
-          }
-
-          return isHorizontal;
-        },
-        onPanResponderTerminationRequest: () => false,
-        onPanResponderMove: (_, gestureState) => {
-          if (gestureState.dx > 0) {
-            swipeX.setValue(gestureState.dx);
+            if (gestureState.dx < 0) {
+              swipeX.setValue(gestureState.dx);
+            }
           }
         },
         onPanResponderRelease: (_, gestureState) => {
-          if (gestureState.dx < 100) {
-            // Swipe right detected - navigate to profile
-            if (selectedFeedItem) {
-              handleSwipeRight(selectedFeedItem);
-            }
+          // Clear long press timer
+          if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
           }
+
+          const pressDuration = Date.now() - gestureStartTimeRef.current;
+          const isTap = Math.abs(gestureState.dx) < 10 && Math.abs(gestureState.dy) < 10 && pressDuration < 500;
+
+          if (gestureState.dx < -100) {
+            // Swipe left detected - navigate to profile
+            if (selectedFeedItem) {
+              handleSwipeLeft(selectedFeedItem);
+            }
+          } else if (isTap && selectedFeedItem) {
+            // Handle tap
+            handleTap(selectedFeedItem);
+          }
+
           Animated.spring(swipeX, {
             toValue: 0,
             useNativeDriver: true,
@@ -87,6 +133,10 @@ export function HomeScreen() {
           setScrollEnabled(true);
         },
         onPanResponderTerminate: () => {
+          if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+          }
           Animated.spring(swipeX, {
             toValue: 0,
             useNativeDriver: true,
@@ -103,10 +153,13 @@ export function HomeScreen() {
       Object.values(singleTapTimeoutRef.current).forEach((timeout) => {
         clearTimeout(timeout);
       });
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+      }
     };
   }, []);
 
-  const handleSwipeRight = (item: FeedItem) => {
+  const handleSwipeLeft = (item: FeedItem) => {
     router.push({
       pathname: `/profile/[id]`,
       params: { 
@@ -151,7 +204,7 @@ export function HomeScreen() {
           router.push(item.primaryRoute as any);
           delete singleTapTimeoutRef.current[item.id];
         }
-      }, DOUBLE_TAP_DELAY) as unknown as NodeJS.Timeout;
+      }, DOUBLE_TAP_DELAY) as unknown as number;
     }
   };
 
@@ -179,16 +232,8 @@ export function HomeScreen() {
     });
   };
 
-  const toggleMute = (itemId: string) => {
-    setMutedItems((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
-        newSet.add(itemId);
-      }
-      return newSet;
-    });
+  const toggleMute = () => {
+    setIsGloballyMuted((prev) => !prev); // Toggle global mute for all items
   };
 
   const toggleExpand = (itemId: string) => {
@@ -207,8 +252,9 @@ export function HomeScreen() {
     ({ item, index }: { item: FeedItem; index: number }) => {
       const isLiked = likedItems.has(item.id);
       const isSaved = savedItems.has(item.id);
-      const isMuted = mutedItems.has(item.id);
+      const isMuted = isGloballyMuted; // Use global mute state for all items
       const isExpanded = expandedItems.has(item.id);
+      const isVisible = index === currentVisibleIndex && isFocused; // Check if this item is currently visible AND screen is focused
 
       return (
         <FeedCard
@@ -218,18 +264,19 @@ export function HomeScreen() {
           isSaved={isSaved}
           isMuted={isMuted}
           isExpanded={isExpanded}
+          isVisible={isVisible}
           panResponder={panResponder}
           onTap={() => handleTap(item)}
           onLongPress={() => handleLongPress(item)}
           onPressIn={() => setSelectedFeedItem(item)}
           onToggleLike={() => toggleLike(item.id)}
           onToggleSave={() => toggleSave(item.id)}
-          onToggleMute={() => toggleMute(item.id)}
+          onToggleMute={toggleMute} // No need to pass item.id since it's global
           onToggleExpand={() => toggleExpand(item.id)}
         />
       );
     },
-    [likedItems, savedItems, mutedItems, expandedItems, panResponder],
+    [likedItems, savedItems, isGloballyMuted, expandedItems, panResponder, currentVisibleIndex, isFocused],
   );
 
   const handleStoryPress = (index: number) => {
@@ -245,7 +292,8 @@ export function HomeScreen() {
     if (currentStoryIndex > 0) {
       setCurrentStoryIndex(currentStoryIndex - 1);
     } else {
-      setStoryViewerVisible(false);
+      return;
+      // setStoryViewerVisible(false);
     }
   };
 
@@ -253,23 +301,26 @@ export function HomeScreen() {
     if (currentStoryIndex < Stories.length - 1) {
       setCurrentStoryIndex(currentStoryIndex + 1);
     } else {
-      setStoryViewerVisible(false);
+      return;
+      // setStoryViewerVisible(false);
     }
   };
 
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      setCurrentVisibleIndex(viewableItems[0].index || 0);
+    }
+  }).current;
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50, // Item is considered visible when 50% is visible
+  }).current;
+
   return (
     <View className='flex-1 bg-black'>
-      <StatusBar barStyle='dark-content' />
+      <StatusBar barStyle='light-content' />
 
-      {/* Fixed Stories Row */}
-      <StoriesRow
-        stories={Stories}
-        height={STORIES_HEIGHT}
-        topInset={insets.top}
-        onStoryPress={handleStoryPress}
-      />
-
-      {/* Vertical Swipe Feed */}
+      {/* Vertical Swipe Feed - Full Screen */}
       <FlatList
         ref={flatListRef}
         data={FeedItems}
@@ -285,11 +336,23 @@ export function HomeScreen() {
           offset: FEED_HEIGHT * index,
           index,
         })}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         removeClippedSubviews
         maxToRenderPerBatch={3}
         windowSize={3}
         initialNumToRender={2}
       />
+
+      {/* Transparent Stories Row Overlay */}
+      <View className='absolute top-0 left-0 right-0' style={{ zIndex: 10 }}>
+        <StoriesRow
+          stories={Stories}
+          height={STORIES_HEIGHT}
+          topInset={insets.top}
+          onStoryPress={handleStoryPress}
+        />
+      </View>
 
       {/* Story Viewer Modal */}
       <StoryViewerModal

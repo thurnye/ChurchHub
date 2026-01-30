@@ -1227,6 +1227,7 @@ export interface FeedItem {
   id: string;
   kind: 'video' | 'image' | 'live' | 'quote';
   thumbnail: string;
+  videoUrl?: string;
   postOwner: string;
   denomination?: string;
   title?: string;
@@ -1246,6 +1247,7 @@ export const FeedItems: FeedItem[] = [
     hasAudio: true,
     id: 'sermon-5',
     kind: 'video',
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     postOwner: "St. Mary's Anglican Church",
     primaryRoute: { params: [Object], pathname: '/media-player/[id]' },
     sourceId: '2',
@@ -1286,6 +1288,7 @@ export const FeedItems: FeedItem[] = [
     hasAudio: true,
     id: 'sermon-3',
     kind: 'video',
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     postOwner: 'Sacred Heart Catholic Church',
     primaryRoute: { params: [Object], pathname: '/media-player/[id]' },
     sourceId: '3',
@@ -1301,6 +1304,7 @@ export const FeedItems: FeedItem[] = [
     id: 'sermon-1',
     isLive: true,
     kind: 'live',
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     postOwner: 'Grace Community Church',
     primaryRoute: { params: [Object], pathname: '/profile' },
     sourceId: '1',
@@ -1396,7 +1400,7 @@ export const FeedItems: FeedItem[] = [
     title: 'The Power of Prayer',
   },
   {
-    id: 'post-101-1',
+    id:'post-101-3',
     kind: 'quote',
     thumbnail:
       'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
@@ -1468,6 +1472,7 @@ export interface IPost {
   id: string;
   type: 'image' | 'video';
   thumbnail: string;
+  videoUrl?: string;
   likesCount: number;
   commentsCount: number;
   viewsCount?: number;
@@ -1482,7 +1487,7 @@ export interface IPost {
 const Posts = [
   {
     commentsCount: 50,
-    description: 'Today’s devotional hit differently. 📖✨',
+    description: "Today's devotional hit differently. 📖✨",
     id: 'user-102-post-1',
     isLive: false,
     likesCount: 150,
@@ -1491,6 +1496,7 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1520974735194-6f64a33d6b49?w=1200',
     type: 'video' as const,
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     viewsCount: 7775,
   },
   {
@@ -1504,6 +1510,7 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1520975916090-3105956dac38?w=1200',
     type: 'video' as const,
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     viewsCount: 3695,
   },
   {
@@ -1556,6 +1563,7 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200',
     type: 'video' as const,
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     viewsCount: 1299,
   },
   {
@@ -1621,6 +1629,7 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200',
     type: 'video' as const,
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     viewsCount: 3664,
   },
   {

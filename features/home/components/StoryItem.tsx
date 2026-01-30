@@ -27,16 +27,10 @@ export function StoryItem({ item, onPress }: StoryItemProps) {
         </View>
       </View>
       <Text
-        className="text-xs text-gray-800 mt-1.5 w-16 text-center font-medium"
+        className="text-xs text-white mt-1.5 w-16 text-center font-medium"
         numberOfLines={1}
       >
         {item.churchName.split(' ')[0]}
-      </Text>
-      <Text
-        className="text-[10px] text-gray-500 w-16 text-center"
-        numberOfLines={1}
-      >
-        {item.timestamp}
       </Text>
     </Pressable>
   );
