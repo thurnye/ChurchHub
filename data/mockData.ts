@@ -714,6 +714,48 @@ export const communityPrograms: CommunityProgram[] = [
     contact: 'justice@community.org',
   },
 ];
+export const churchCommunityPrograms: CommunityProgram[] = [
+  {
+    id: 'program-1',
+    title: 'Literacy Program',
+    category: 'Education',
+    description:
+      'A community-focused literacy initiative aimed at improving reading and writing skills for children and adults through guided learning, tutoring, and faith-based education support.',
+    image:
+      'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200',
+    contact: 'literacy@churchhub.org',
+  },
+  {
+    id: 'program-2',
+    title: 'After School Care',
+    category: 'Youth & Family',
+    description:
+      'A safe and nurturing after-school environment for children, offering homework assistance, creative activities, mentorship, and spiritual growth programs.',
+    image:
+      'https://images.unsplash.com/photo-1522661067900-ab829854a57f?w=1200',
+    contact: 'afterschool@churchhub.org',
+  },
+  {
+    id: 'program-3',
+    title: 'Senior Support',
+    category: 'Community Care',
+    description:
+      'A compassionate support program for seniors, providing regular check-ins, companionship, transportation assistance, wellness activities, and access to community resources.',
+    image:
+      'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=1200',
+    contact: 'seniors@churchhub.org',
+  },
+  {
+    id: 'program-4',
+    title: 'Job Training',
+    category: 'Career Development',
+    description:
+      'A practical job training and skills development program designed to equip participants with employability skills, career guidance, resume support, and interview preparation.',
+    image:
+      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200',
+    contact: 'jobs@churchhub.org',
+  },
+];
 
 export interface ChurchGroup {
   id: string;
@@ -882,6 +924,104 @@ export const volunteerPrograms: VolunteerProgram[] = [
     skillsNeeded: ['Organization', 'Compassion', 'Physical ability'],
     coordinator: 'foodbank@sacredheart.org',
     category: 'Outreach',
+  },
+  {
+    id: 'volunteer-1',
+    title: 'Worship Team',
+    church: 'Grace Community Church',
+    category: 'Worship & Arts',
+    description:
+      'Serve in leading the congregation into meaningful worship through music, vocals, and instrumental support. This team works closely with pastors and service leaders to create an atmosphere of praise and spiritual reflection.',
+    image:
+      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200',
+    timeCommitment: 'Weekly rehearsals + Sunday services',
+    skillsNeeded: [
+      'Singing',
+      'Instrumental skills',
+      'Team collaboration',
+      'Musical timing',
+    ],
+    coordinator: 'Michael Johnson',
+  },
+  {
+    id: 'volunteer-2',
+    title: "Children's Ministry",
+    church: 'Grace Community Church',
+    category: 'Children & Youth',
+    description:
+      'Support the spiritual and personal growth of children by assisting with lessons, activities, and care during services and events in a safe, nurturing environment.',
+    image:
+      'https://images.unsplash.com/photo-1503457574465-8f947a8faec8?w=1200',
+    timeCommitment: 'Bi-weekly or weekly during services',
+    skillsNeeded: ['Patience', 'Teaching', 'Child care', 'Communication'],
+    coordinator: 'Sarah Williams',
+  },
+  {
+    id: 'volunteer-3',
+    title: 'Hospitality',
+    church: 'Grace Community Church',
+    category: 'Service & Care',
+    description:
+      'Create a welcoming experience for members and visitors by greeting guests, assisting with seating, providing information, and helping foster a warm church atmosphere.',
+    image:
+      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200',
+    timeCommitment: 'Flexible — before and after services',
+    skillsNeeded: [
+      'Friendliness',
+      'Organization',
+      'Customer service',
+      'Teamwork',
+    ],
+    coordinator: 'Daniel Okoye',
+  },
+  {
+    id: 'volunteer-4',
+    title: 'Media Team',
+    church: 'Grace Community Church',
+    category: 'Technology & Media',
+    description:
+      'Help manage audio, video, live streaming, photography, and visual presentations to support worship services and church events both in-person and online.',
+    image:
+      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200',
+    timeCommitment: 'Weekly services + occasional events',
+    skillsNeeded: [
+      'Audio/Visual equipment',
+      'Live streaming',
+      'Photography',
+      'Basic editing',
+    ],
+    coordinator: 'Joshua Lee',
+  },
+  {
+    id: 'volunteer-5',
+    title: 'Outreach',
+    church: 'Grace Community Church',
+    category: 'Community Engagement',
+    description:
+      'Serve the wider community through outreach initiatives such as food drives, neighborhood support programs, evangelism events, and partnerships with local organizations.',
+    image:
+      'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1200',
+    timeCommitment: 'Monthly events + planning sessions',
+    skillsNeeded: ['Compassion', 'Event coordination', 'Public engagement'],
+    coordinator: 'Rebecca Martinez',
+  },
+  {
+    id: 'volunteer-6',
+    title: 'Prayer Ministry',
+    church: 'Grace Community Church',
+    category: 'Spiritual Care',
+    description:
+      'Provide prayer support to individuals and families through confidential prayer sessions, follow-ups, and intercessory prayer during services and throughout the week.',
+    image:
+      'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1200',
+    timeCommitment: 'Flexible — as needed or scheduled times',
+    skillsNeeded: [
+      'Listening',
+      'Empathy',
+      'Spiritual discernment',
+      'Confidentiality',
+    ],
+    coordinator: 'Pastor Emmanuel Adeyemi',
   },
 ];
 
@@ -1247,7 +1387,8 @@ export const FeedItems: FeedItem[] = [
     hasAudio: true,
     id: 'sermon-5',
     kind: 'video',
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     postOwner: "St. Mary's Anglican Church",
     primaryRoute: { params: [Object], pathname: '/media-player/[id]' },
     sourceId: '2',
@@ -1288,7 +1429,8 @@ export const FeedItems: FeedItem[] = [
     hasAudio: true,
     id: 'sermon-3',
     kind: 'video',
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     postOwner: 'Sacred Heart Catholic Church',
     primaryRoute: { params: [Object], pathname: '/media-player/[id]' },
     sourceId: '3',
@@ -1304,7 +1446,8 @@ export const FeedItems: FeedItem[] = [
     id: 'sermon-1',
     isLive: true,
     kind: 'live',
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     postOwner: 'Grace Community Church',
     primaryRoute: { params: [Object], pathname: '/profile' },
     sourceId: '1',
@@ -1322,9 +1465,8 @@ export const FeedItems: FeedItem[] = [
     kind: 'image',
     postOwner: 'Grace Community Church',
     primaryRoute: {
-      params: {from: '/'},
+      params: { from: '/' },
       pathname: '/events/[eventId]',
-      
     },
     sourceId: '1',
     sourceType: FeedSourceType.Event,
@@ -1338,7 +1480,7 @@ export const FeedItems: FeedItem[] = [
     id: 'event-3',
     kind: 'image',
     postOwner: "St. Mary's Anglican Church",
-    primaryRoute: { params: {from: '/'}, pathname: '/events/[eventId]' },
+    primaryRoute: { params: { from: '/' }, pathname: '/events/[eventId]' },
     sourceId: '3',
     sourceType: FeedSourceType.Event,
     thumbnail:
@@ -1400,7 +1542,7 @@ export const FeedItems: FeedItem[] = [
     title: 'The Power of Prayer',
   },
   {
-    id:'post-101-3',
+    id: 'post-101-3',
     kind: 'quote',
     thumbnail:
       'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
@@ -1445,7 +1587,7 @@ export const FeedItems: FeedItem[] = [
     id: 'event-2',
     kind: 'image',
     postOwner: 'Sacred Heart Catholic Church',
-    primaryRoute: { params: {from: '/'}, pathname: '/events/[eventId]' },
+    primaryRoute: { params: { from: '/' }, pathname: '/events/[eventId]' },
     sourceId: '2',
     sourceType: FeedSourceType.Event,
     thumbnail:
@@ -1496,7 +1638,8 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1520974735194-6f64a33d6b49?w=1200',
     type: 'video' as const,
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     viewsCount: 7775,
   },
   {
@@ -1510,7 +1653,8 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1520975916090-3105956dac38?w=1200',
     type: 'video' as const,
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     viewsCount: 3695,
   },
   {
@@ -1563,7 +1707,8 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200',
     type: 'video' as const,
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     viewsCount: 1299,
   },
   {
@@ -1629,7 +1774,8 @@ const Posts = [
     thumbnail:
       'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200',
     type: 'video' as const,
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     viewsCount: 3664,
   },
   {

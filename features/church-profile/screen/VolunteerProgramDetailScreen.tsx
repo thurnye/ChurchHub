@@ -6,6 +6,8 @@ import { ArrowLeft, Clock } from 'lucide-react-native';
 
 import { Badge } from '@/shared/components/ui';
 import { volunteerPrograms } from '@/data/mockData';
+import { useLocalSearchParams } from 'expo-router';
+import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
 
 /** Small reusable Pressable button */
 function AppPressable({
@@ -69,33 +71,39 @@ function IconBtn({
 // Volunteer Program Detail Screen
 // -------------------------
 interface VolunteerProgramDetailScreenProps {
-  programId: string;
-  onBack: () => void;
+  
 }
 
-export function VolunteerProgramDetailScreen({
-  programId,
-  onBack,
-}: VolunteerProgramDetailScreenProps) {
+export function VolunteerProgramDetailScreen({}: VolunteerProgramDetailScreenProps) {
+  const { volunteerId, from } = useLocalSearchParams<{
+    volunteerId: string;
+    from: string;
+  }>();
   const program = useMemo(
     () =>
-      volunteerPrograms.find((p) => p.id === programId) || volunteerPrograms[0],
-    [programId],
+      volunteerPrograms.find((p) => p.id === volunteerId) ||
+      volunteerPrograms[0],
+    [volunteerId],
   );
 
   return (
     <View className='flex-1 bg-gray-50'>
+      <HiddenScreensTopBar
+        show={true}
+        title={program.title}
+        navigateTo={'community'}
+      />
       <View className='relative'>
         <Image
           source={{ uri: program.image }}
           className='w-full h-56'
           resizeMode='cover'
         />
-        <View className='absolute top-4 left-4'>
+        {/* <View className='absolute top-4 left-4'>
           <IconBtn onPress={onBack} className='bg-white/90'>
             <ArrowLeft size={20} color='#111827' />
           </IconBtn>
-        </View>
+        </View> */}
       </View>
 
       <ScrollView contentContainerClassName='pb-28' className='-mt-6'>

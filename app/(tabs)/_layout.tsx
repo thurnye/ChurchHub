@@ -106,6 +106,12 @@ export default function TabLayout() {
           href: null, // Hide from tab bar
         }}
       />
+      <Tabs.Screen
+        name='community/volunteer/[volunteerId]'
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
 
       {/* Events */}
       <Tabs.Screen

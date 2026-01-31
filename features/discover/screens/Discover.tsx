@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Pressable, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Pressable, ScrollView, Image, Platform } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import {
   MapPin,
   Clock,
@@ -21,6 +22,8 @@ export function Discover({  }: DiscoverProps) {
     string | null
   >(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedChurchId, setSelectedChurchId] = useState<string | null>(null);
+  const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
     if (searchQuery) {
@@ -32,6 +35,14 @@ export function Discover({  }: DiscoverProps) {
     ? churches.filter((c) => c.denomination === selectedDenomination)
     : churches;
 
+  // Calculate initial region based on churches
+  const initialRegion = {
+    latitude: churches[0]?.lat || 40.7128,
+    longitude: churches[0]?.lng || -74.006,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
+
   const handleNavigateToChurch = (churchId: string) => {
      router.push({
       pathname: '/church/[id]',
@@ -40,6 +51,19 @@ export function Discover({  }: DiscoverProps) {
         from: 'discover',
       },
     });
+  };
+
+  const handleMarkerPress = (churchId: string) => {
+    setSelectedChurchId(churchId);
+    const church = churches.find((c) => c.id === churchId);
+    if (church && mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: church.lat,
+        longitude: church.lng,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      }, 500);
+    }
   };
 
   return (
@@ -56,34 +80,41 @@ export function Discover({  }: DiscoverProps) {
       />
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         {/* Map View */}
-        <View className='relative h-64 bg-indigo-100'>
-          <View className='absolute inset-0 items-center justify-center'>
-            <View className='items-center'>
-              <MapPin size={48} color='#4f46e5' />
-              <Text className='mt-2 text-sm text-gray-600'>Map view</Text>
-              <Text className='text-xs text-gray-500'>
-                {churches.length} churches nearby
-              </Text>
-            </View>
-          </View>
+        <View className='relative h-64'>
+          <MapView
+            ref={mapRef}
+            provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+            style={{ width: '100%', height: '100%' }}
+            initialRegion={initialRegion}
+            showsUserLocation
+            showsMyLocationButton
+          >
+            {filteredChurches.map((church) => (
+              <Marker
+                key={church.id}
+                coordinate={{
+                  latitude: church.lat,
+                  longitude: church.lng,
+                }}
+                title={church.name}
+                description={`${church.denomination} • ${church.distance}`}
+                onPress={() => handleMarkerPress(church.id)}
+                pinColor={selectedChurchId === church.id ? '#4f46e5' : '#ef4444'}
+              >
+                <View className={`w-10 h-10 rounded-full border-4 border-white shadow-lg items-center justify-center ${
+                  selectedChurchId === church.id ? 'bg-indigo-600' : 'bg-red-500'
+                }`}>
+                  <Church size={20} color='#ffffff' />
+                </View>
+              </Marker>
+            ))}
+          </MapView>
 
-          {/* Map pins (simplified representation) */}
-          <View className='absolute top-12 left-16'>
-            <View className='w-8 h-8 bg-red-500 rounded-full border-4 border-white shadow items-center justify-center'>
-              <Church size={16} color='#ffffff' />
-            </View>
-          </View>
-
-          <View className='absolute top-20 right-20'>
-            <View className='w-8 h-8 bg-blue-500 rounded-full border-4 border-white shadow items-center justify-center'>
-              <Church size={16} color='#ffffff' />
-            </View>
-          </View>
-
-          <View className='absolute bottom-16 left-1/3'>
-            <View className='w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow items-center justify-center'>
-              <Church size={16} color='#ffffff' />
-            </View>
+          {/* Church count overlay */}
+          <View className='absolute top-3 left-3 bg-white/95 px-3 py-2 rounded-full shadow-md'>
+            <Text className='text-xs font-semibold text-gray-700'>
+              {filteredChurches.length} churches nearby
+            </Text>
           </View>
         </View>
 
