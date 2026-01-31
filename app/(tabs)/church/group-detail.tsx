@@ -1,4 +1,4 @@
-import { ChurchGroupDetailScreen } from "@/features/church-profile/components/ChurchGroupDetailScreen";
+import { ChurchGroupDetailScreen } from "@/features/church/components/ChurchGroupDetailScreen";
 
 export default function ChurchGroupDetailScreenRoute() {
   return <ChurchGroupDetailScreen />;

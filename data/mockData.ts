@@ -622,15 +622,6 @@ export const ministries = [
   'Discipleship',
 ];
 
-export const devotional = {
-  title: 'Strength in Weakness',
-  verse: '2 Corinthians 12:9',
-  text: "But he said to me, 'My grace is sufficient for you, for my power is made perfect in weakness.'",
-  reflection:
-    "Today, remember that God's strength shines brightest in our moments of weakness. When we feel inadequate, His grace is more than enough.",
-  date: 'January 24, 2026',
-};
-
 export interface CommunityProgram {
   id: string;
   title: string;
@@ -1275,7 +1266,9 @@ export const prayerRequests: PrayerRequest[] = [
   },
 ];
 
-export interface ExtendedDevotional {
+
+
+export interface IDevotional {
   id: string;
   title: string;
   date: string;
@@ -1287,7 +1280,7 @@ export interface ExtendedDevotional {
   category: string;
 }
 
-export const devotionals: ExtendedDevotional[] = [
+export const devotionals: IDevotional[] = [
   {
     id: '1',
     title: 'Strength in Weakness',

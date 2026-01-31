@@ -1,4 +1,4 @@
-import { VolunteerProgramDetailScreen } from "@/features/church-profile/screen/VolunteerProgramDetailScreen";
+import { VolunteerProgramDetailScreen } from "@/features/church/screen/VolunteerProgramDetailScreen";
 
 
 export default function VolunteerProgramDetailScreenRoute() {

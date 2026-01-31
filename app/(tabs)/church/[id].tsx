@@ -1,4 +1,4 @@
-import { ChurchProfileScreen } from "@/features/church-profile";
+import { ChurchProfileScreen } from "@/features/church";
 
 export default function ChurchProfileRoute() {
   return <ChurchProfileScreen />;

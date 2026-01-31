@@ -1,4 +1,4 @@
-import { ConferenceDetailScreen } from "@/features/church-profile/screen/ConferenceDetailScreen";
+import { ConferenceDetailScreen } from "@/features/church/screen/ConferenceDetailScreen";
 
 export default function ConferenceDetailScreenRoute() {
   return <ConferenceDetailScreen />;

@@ -108,6 +108,12 @@ export default function TabLayout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name='church/devotion/[devotionalId]'
+        options={{
+          href: null,
+        }}
+      />
 
       {/* Community */}
       <Tabs.Screen
