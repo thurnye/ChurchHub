@@ -10,7 +10,9 @@ export default function TabLayout() {
 
         return {
           tabBarActiveTintColor: isHomeScreen ? '#ffffff' : '#4f46e5',
-          tabBarInactiveTintColor: isHomeScreen ? 'rgba(255, 255, 255, 0.6)' : '#6b7280',
+          tabBarInactiveTintColor: isHomeScreen
+            ? 'rgba(255, 255, 255, 0.6)'
+            : '#6b7280',
           tabBarStyle: {
             backgroundColor: isHomeScreen ? 'transparent' : '#ffffff',
             borderTopColor: isHomeScreen ? 'transparent' : '#f3f4f6',
@@ -20,19 +22,21 @@ export default function TabLayout() {
             position: isHomeScreen ? 'absolute' : 'relative',
             elevation: isHomeScreen ? 0 : undefined,
           },
-          tabBarBackground: isHomeScreen ? () => (
-            <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.8)']}
-              locations={[0, 0.5, 1]}
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-              }}
-            />
-          ) : undefined,
+          tabBarBackground: isHomeScreen
+            ? () => (
+                <LinearGradient
+                  colors={['transparent', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.8)']}
+                  locations={[0, 0.5, 1]}
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                  }}
+                />
+              )
+            : undefined,
           tabBarLabelStyle: {
             fontSize: 11,
             fontWeight: '500',
@@ -76,7 +80,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
-      
+
       {/* Hidden screens - still in tabs for tab bar visibility but not shown as tabs */}
       <Tabs.Screen
         name='church/[id]'
@@ -92,8 +96,14 @@ export default function TabLayout() {
       />
 
       {/* Church */}
-        <Tabs.Screen
+      <Tabs.Screen
         name='church/group-detail'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='church/conference/[conferenceId]'
         options={{
           href: null,
         }}
@@ -127,15 +137,14 @@ export default function TabLayout() {
         }}
       />
 
-
       {/* Give/Donations */}
-       <Tabs.Screen
+      <Tabs.Screen
         name='give/give-quick-link'
         options={{
           href: null, // Hide from tab bar
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name='give/give-quick-link-donation'
         options={{
           href: null, // Hide from tab bar
@@ -143,7 +152,7 @@ export default function TabLayout() {
       />
 
       {/* Media-Player */}
-       <Tabs.Screen
+      <Tabs.Screen
         name='media-player/[id]'
         options={{
           href: null, // Hide from tab bar
@@ -163,7 +172,7 @@ export default function TabLayout() {
           href: null,
         }}
       />
-      
+
       <Tabs.Screen
         name='prayer/prayer-details'
         options={{
@@ -216,7 +225,6 @@ export default function TabLayout() {
           href: null,
         }}
       />
-
 
       {/* Settings */}
       <Tabs.Screen

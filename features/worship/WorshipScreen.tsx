@@ -19,7 +19,6 @@ const topics = [
 ];
 
 export function WorshipScreen() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string>('All');
 
   const filteredSermons =

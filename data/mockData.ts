@@ -875,6 +875,45 @@ export const conferences: Conference[] = [
     registrationFee: '$125 (includes meals and lodging)',
     accommodation: 'Cabin-style lodging included in registration.',
   },
+  {
+    id: 'conf-1',
+    title: 'Annual Leadership Retreat',
+    theme: 'Leading with Purpose & Faith',
+    church: 'Grace Community Church',
+    dates: 'March 15–17, 2026',
+    location: 'Mountain View Conference Center',
+    description:
+      'A three-day leadership retreat designed to equip church leaders, ministry heads, and volunteers with spiritual insight, practical leadership tools, and time for reflection and renewal.',
+    image:
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200',
+    speakers: [
+      'Pastor John Matthews',
+      'Dr. Lisa Coleman',
+      'Bishop Samuel Adebola',
+    ],
+    registrationFee: '$250',
+    accommodation:
+      'On-site lodging included with shared and private room options.',
+  },
+  {
+    id: 'conf-2',
+    title: "Women's Retreat",
+    theme: 'Renewed, Restored & Empowered',
+    church: 'Grace Community Church',
+    dates: 'May 10–12, 2026',
+    location: 'Lakeside Retreat Center',
+    description:
+      'A peaceful and empowering retreat for women focused on spiritual growth, fellowship, healing, and personal renewal through worship sessions, workshops, and guided reflection.',
+    image:
+      'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200',
+    speakers: [
+      'Pastor Rachel Thompson',
+      'Minister Grace Okafor',
+      'Guest Speaker: Naomi Fields',
+    ],
+    registrationFee: '$180',
+    accommodation: 'Lakeside cabins with full meals and amenities included.',
+  },
 ];
 
 export interface VolunteerProgram {

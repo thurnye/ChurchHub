@@ -157,7 +157,7 @@ export function ChurchProfileScreen() {
 
   //if the tab is true, then setActiveTab to tab
   useEffect(() => {
-    console.log('Tab:::', tab)
+    console.log('Tab:::', tab);
     if (tab) {
       handleMenuNavigation(tab);
     }
@@ -748,14 +748,19 @@ export function ChurchProfileScreen() {
                       </CardContent>
                     </Card>
 
-                    <Button className='w-full' size='lg'>
+                    <Pressable
+                      onPress={() => {
+                        // handle donation submit
+                      }}
+                      className='w-full h-12 bg-black rounded-xl items-center justify-center active:opacity-80'
+                    >
                       <View className='flex-row items-center justify-center gap-2'>
                         <DollarSign size={18} color='#ffffff' />
                         <Text className='text-white font-semibold'>
                           Give ${donations.amount}
                         </Text>
                       </View>
-                    </Button>
+                    </Pressable>
 
                     <Pressable className='items-center'>
                       <Text className='text-sm text-indigo-600'>
