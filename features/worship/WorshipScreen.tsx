@@ -5,7 +5,7 @@ import { Play, Clock, Book, Radio } from 'lucide-react-native';
 
 import { TopBar } from '@/shared/components/TopBar';
 import { Card, CardContent, Badge } from '@/shared/components/ui';
-import { sermons, devotional } from '@/data/mockData';
+import { sermons, devotionals } from '@/data/mockData';
 import { router } from 'expo-router';
 
 const topics = [
@@ -114,18 +114,32 @@ export function WorshipScreen() {
             </Text>
           </View>
           <Card className='bg-indigo-50 border-indigo-100'>
-            <CardContent>
-              <Text className='text-xs text-indigo-600 font-medium mb-1'>
-                {devotional.verse}
-              </Text>
-              <Text className='text-base text-gray-900 italic mb-3'>
-                "{devotional.text}"
-              </Text>
-              <Text className='text-sm text-gray-600 mb-2'>
-                {devotional.reflection}
-              </Text>
-              <Text className='text-xs text-gray-500'>{devotional.date}</Text>
-            </CardContent>
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: '/church/devotion/[devotionalId]',
+                  params: {
+                    devotionalId: devotionals[0].id,
+                    from: 'worship',
+                  },
+                })
+              }
+            >
+              <CardContent>
+                <Text className='text-xs text-indigo-600 font-medium mb-1'>
+                  {devotionals[0].verse}
+                </Text>
+                <Text className='text-base text-gray-900 italic mb-3'>
+                  "{devotionals[0].verseText}"
+                </Text>
+                <Text className='text-sm text-gray-600 mb-2'>
+                  {devotionals[0].reflection}
+                </Text>
+                <Text className='text-xs text-gray-500'>
+                  {devotionals[0].date}
+                </Text>
+              </CardContent>
+            </Pressable>
           </Card>
         </View>
 
