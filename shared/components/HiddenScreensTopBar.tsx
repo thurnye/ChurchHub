@@ -13,6 +13,7 @@ interface HiddenScreensTopBarProps {
   className?: string;
   onSearchSubmit?: (text: string) => void;
   navigateTo?: string;
+  showNotification?:boolean;
 }
 
 export function HiddenScreensTopBar({
@@ -22,6 +23,7 @@ export function HiddenScreensTopBar({
   onSearchSubmit,
   className,
   navigateTo,
+  showNotification = true
 }: HiddenScreensTopBarProps) {
   const insets = useSafeAreaInsets();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -86,24 +88,17 @@ export function HiddenScreensTopBar({
             </Pressable>
           )}
 
-          <Pressable
+          {showNotification && <Pressable
             onPress={
               () =>
                 router.push({
                   pathname: '/notifications/app-notification-list',
                 })
-
-              // router.push({
-              //   pathname: '/notifications/app-notification-list',
-              //   // params: {
-              //   //   from: '',
-              //   // },
-              // })
             }
             className='w-10 h-10 items-center justify-center rounded-full'
           >
             <Bell size={22} color='#374151' />
-          </Pressable>
+          </Pressable>}
           {show && (
             <Pressable
               onPress={() => setIsMenuOpen(true)}

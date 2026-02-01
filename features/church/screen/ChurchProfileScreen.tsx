@@ -44,7 +44,7 @@ import {
   ChurchGlobalChurchNewsScreen,
   ChurchHistoryScreen,
   ChurchMissionScreen,
-  ChurchStaffScreen,
+  // ChurchStaffScreen,
   ChurchStructureScreen,
   ChurchWhoWeAreScreen,
 } from './AboutMenuSectionScreens';
@@ -52,11 +52,10 @@ import {
 import {
   ChurchBaptismWeddingsScreen,
   ChurchMusicMinistryScreen,
-  ChurchNewslettersScreen,
   ChurchSacramentsScreen,
   ChurchSermonsScreen,
   ChurchStewardshipScreen,
-  ChurchSundayServicesScreen,
+  // ChurchSundayServicesScreen,
   ChurchWeekdayServicesScreen,
   ChurchWorshipOnlineScreen,
 } from './WorshipMenuSectionScreens';
@@ -68,24 +67,25 @@ import {
   ChurchGroupsScreen,
   ChurchMembershipScreen,
   ChurchPastoralCareScreen,
-  ChurchYouthFamilyScreen,
+  // ChurchYouthFamilyScreen,
 } from './MinistriesMenuSectionScreens';
 
 // GIVE
 import {
-  ChurchHowToGiveScreen,
-  ChurchOnlineGivingScreen,
+  ChurchAboutGiving,
+  // ChurchHowToGiveScreen,
+  // ChurchOnlineGivingScreen,
   ChurchPledgesScreen,
   ChurchReceiptsScreen,
-  ChurchWhyGiveScreen,
+  // ChurchWhyGiveScreen,
 } from './GiveMenuSectionScreens';
 
 // EVENTS
 import {
   ChurchConferencesScreen,
-  ChurchEventsScreen,
+  ChurchCalendarScreen,
   ChurchLecturesScreen,
-  ChurchPastEventsScreen,
+  // ChurchPastEventsScreen,
   ChurchSpecialServicesScreen,
 } from './EventMenuSectionScreens';
 
@@ -114,6 +114,7 @@ import {
 } from './ContactMenuSectionScreens';
 
 import { ChurchTopBar } from '@/shared/components/ChurchTopBar';
+import GiveFormScreen from '../components/GiveFormScreen';
 
 const tabs = ['Overview', 'Services', 'Clergy', 'Events', 'Give', 'Contact'];
 
@@ -172,42 +173,41 @@ export function ChurchProfileScreen() {
     structure: ChurchStructureScreen,
     architecture: ChurchArchitectureScreen,
     clergy: ChurchClergyScreen,
-    staff: ChurchStaffScreen,
+    // staff: ChurchStaffScreen,
     'global-church-news': ChurchGlobalChurchNewsScreen,
     careers: ChurchCareersScreen,
 
     // Worship
-    'sunday-services': ChurchSundayServicesScreen,
+    // 'sunday-services': ChurchSundayServicesScreen,
     'weekday-services': ChurchWeekdayServicesScreen,
-    'worship-online': ChurchWorshipOnlineScreen,
+    // 'worship-online': ChurchWorshipOnlineScreen,
     sermons: ChurchSermonsScreen,
     music: ChurchMusicMinistryScreen,
     'baptism-weddings': ChurchBaptismWeddingsScreen,
     stewardship: ChurchStewardshipScreen,
     sacraments: ChurchSacramentsScreen,
-    newsletters: ChurchNewslettersScreen,
 
     // Ministries
     'faith-formation': ChurchFaithFormationScreen,
     'bible-study': ChurchBibleStudyScreen,
-    'youth-family': ChurchYouthFamilyScreen,
+    // 'youth-family': ChurchYouthFamilyScreen,
     groups: ChurchGroupsScreen,
     'pastoral-care': ChurchPastoralCareScreen,
     membership: ChurchMembershipScreen,
 
     // Give
-    'why-give': ChurchWhyGiveScreen,
-    'how-to-give': ChurchHowToGiveScreen,
-    'online-giving': ChurchOnlineGivingScreen,
+    // 'why-give': ChurchWhyGiveScreen,
+    // 'how-to-give': ChurchHowToGiveScreen,
+    'about-giving': ChurchAboutGiving,
     pledges: ChurchPledgesScreen,
     receipts: ChurchReceiptsScreen,
 
     // Events
-    events: ChurchEventsScreen,
+    'church-calendar': ChurchCalendarScreen,
     'special-services': ChurchSpecialServicesScreen,
     conferences: ChurchConferencesScreen,
     lectures: ChurchLecturesScreen,
-    'past-events': ChurchPastEventsScreen,
+    // 'past-events': ChurchPastEventsScreen,
 
     // Community
     'community-programs': ChurchCommunityProgramsScreen,
@@ -268,24 +268,24 @@ export function ChurchProfileScreen() {
       // Ministries
       'faith-formation': 'Services',
       'bible-study': 'Services',
-      'youth-family': 'Services',
+      // 'youth-family': 'Services',
       groups: 'Services',
       'pastoral-care': 'Services',
       membership: 'Services',
 
       // Give
-      'why-give': 'Give',
-      'how-to-give': 'Give',
-      'online-giving': 'Give',
+      'about-giving': 'Give',
+      // 'how-to-give': 'Give',
+      // 'online-giving': 'Give',
       pledges: 'Give',
       receipts: 'Give',
 
       // Events
-      events: 'Events',
+      'church-calendar': 'Events',
       'special-services': 'Events',
       conferences: 'Events',
       lectures: 'Events',
-      'past-events': 'Events',
+      // 'past-events': 'Events',
 
       // Community
       'community-programs': 'Overview',
@@ -538,6 +538,7 @@ export function ChurchProfileScreen() {
                       </CardContent>
                     </Card>
                   ))}
+                  <ChurchWorshipOnlineScreen church={church}/>
 
                   <Card>
                     <CardContent>
@@ -636,139 +637,7 @@ export function ChurchProfileScreen() {
               )}
 
               {activeTab === 'Give' && (
-                <View className='gap-4'>
-                  <Card>
-                    <CardContent>
-                      <View className='items-center py-4'>
-                        <View className='w-16 h-16 bg-green-100 rounded-full items-center justify-center mb-4'>
-                          <DollarSign size={32} color='#16a34a' />
-                        </View>
-                        <Text className='font-semibold text-gray-900 text-lg mb-2'>
-                          Support Our Ministry
-                        </Text>
-                        <Text className='text-sm text-gray-600 text-center mb-4'>
-                          Your generous giving helps us continue serving our
-                          community, supporting missions, and spreading the
-                          gospel. Every contribution makes a lasting impact.
-                        </Text>
-                      </View>
-                    </CardContent>
-                  </Card>
-                  <View className='gap-4'>
-                    <Card>
-                      <CardContent>
-                        <Text className='text-sm font-medium text-gray-900 mb-3'>
-                          Select Donation Type
-                        </Text>
-
-                        <View className='flex-row flex-wrap mb-4 -mx-1'>
-                          {[
-                            'Tithe',
-                            'Offering',
-                            'Missions',
-                            'Building Fund',
-                            'Stewardship',
-                            'Pledge',
-                          ].map((type) => {
-                            const active = donations.type === type;
-                            return (
-                              <View key={type} className='w-1/2 px-1 mb-2'>
-                                <Pressable
-                                  onPress={() =>
-                                    setDonations({ ...donations, type: type })
-                                  }
-                                  className={`flex-1 py-2 rounded-lg border-2 items-center ${
-                                    active
-                                      ? 'border-indigo-600 bg-indigo-50'
-                                      : 'border-gray-200'
-                                  }`}
-                                >
-                                  <Text className='text-sm text-gray-900 font-medium'>
-                                    {type}
-                                  </Text>
-                                </Pressable>
-                              </View>
-                            );
-                          })}
-                        </View>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardContent>
-                        <Text className='text-sm font-medium text-gray-900 mb-3'>
-                          Amount
-                        </Text>
-
-                        <View className='flex-row gap-2 mb-3'>
-                          {[25, 50, 100, 250].map((amt) => {
-                            const active = donations.amount === amt;
-                            return (
-                              <Pressable
-                                key={amt}
-                                onPress={() =>
-                                  setDonations({ ...donations, amount: amt })
-                                }
-                                className={`flex-1 py-2 rounded-lg border-2 items-center ${
-                                  active
-                                    ? 'border-indigo-600 bg-indigo-50'
-                                    : 'border-gray-200'
-                                }`}
-                              >
-                                <Text
-                                  className={`font-medium ${active ? 'text-indigo-600' : 'text-gray-900'}`}
-                                >
-                                  ${amt}
-                                </Text>
-                              </Pressable>
-                            );
-                          })}
-                        </View>
-
-                        {/* NOTE: Use your existing Input component if you have one.
-                      If not, swap this with TextInput and NativeWind className. */}
-                        <View className='border border-gray-200 rounded-lg px-3 py-2'>
-                          <TextInput
-                            value={`$${String(donations.amount)}`}
-                            onChangeText={(text) => {
-                              const num = parseInt(
-                                text.replace(/[^0-9]/g, ''),
-                                10,
-                              );
-                              setDonations({
-                                ...donations,
-                                amount: isNaN(num) ? 0 : num,
-                              });
-                            }}
-                            keyboardType='numeric'
-                            className='text-sm text-gray-900'
-                            placeholder='Custom Amount'
-                          />
-                        </View>
-                      </CardContent>
-                    </Card>
-
-                    <Pressable
-                      onPress={() => {
-                        // handle donation submit
-                      }}
-                      className='w-full h-12 bg-black rounded-xl items-center justify-center active:opacity-80'
-                    >
-                      <View className='flex-row items-center justify-center gap-2'>
-                        <DollarSign size={18} color='#ffffff' />
-                        <Text className='text-white font-semibold'>
-                          Give ${donations.amount}
-                        </Text>
-                      </View>
-                    </Pressable>
-
-                    <Pressable className='items-center'>
-                      <Text className='text-sm text-indigo-600'>
-                        View Donation Receipt History
-                      </Text>
-                    </Pressable>
-                  </View>
-                </View>
+                <GiveFormScreen/>
               )}
 
               {activeTab === 'Contact' && (

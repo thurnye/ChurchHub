@@ -9,12 +9,11 @@ import { AppPressable } from '../../components/AppPressable';
 
 interface ChurchWorshipOnlineScreenProps {
   church: Church;
-  onBack: () => void;
 }
 
 export function ChurchWorshipOnlineScreen({ church }: ChurchWorshipOnlineScreenProps) {
   return (
-    <ChurchScreenTemplate church={church} title='Worship Online' icon={Video}>
+    <ChurchScreenTemplate church={church} title='Online Services' icon={Video}>
       <Card className='mb-4'>
         <CardContent className='p-4'>
           <Text className='font-semibold text-gray-900 mb-2'>

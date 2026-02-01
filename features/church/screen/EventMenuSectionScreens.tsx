@@ -1,8 +1,8 @@
 // Re-export all Event section screens from organized subdirectory
 export {
-  ChurchEventsScreen,
+  ChurchCalendarScreen,
   ChurchSpecialServicesScreen,
   ChurchConferencesScreen,
   ChurchLecturesScreen,
-  ChurchPastEventsScreen,
+  // ChurchPastEventsScreen,
 } from './events';

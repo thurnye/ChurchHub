@@ -1,4 +1,4 @@
-export { ChurchSundayServicesScreen } from './ChurchSundayServicesScreen';
+// export { ChurchSundayServicesScreen } from './ChurchSundayServicesScreen';
 export { ChurchWeekdayServicesScreen } from './ChurchWeekdayServicesScreen';
 export { ChurchWorshipOnlineScreen } from './ChurchWorshipOnlineScreen';
 export { ChurchSermonsScreen } from './ChurchSermonsScreen';

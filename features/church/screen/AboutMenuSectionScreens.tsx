@@ -7,7 +7,7 @@ export {
   ChurchStructureScreen,
   ChurchArchitectureScreen,
   ChurchClergyScreen,
-  ChurchStaffScreen,
+  // ChurchStaffScreen,
   ChurchGlobalChurchNewsScreen,
   ChurchCareersScreen,
 } from './about';

@@ -6,12 +6,12 @@ import { Church } from '@/data/mockData';
 import { ChurchScreenTemplate } from '../../components/ChurchScreenTemplate';
 import { Card, CardContent, Button } from '@/shared/components/ui';
 
-interface ChurchEventsScreenProps {
+interface ChurchCalendarScreenProps {
   church: Church;
   onBack: () => void;
 }
 
-export function ChurchEventsScreen({ church }: ChurchEventsScreenProps) {
+export function ChurchCalendarScreen({ church }: ChurchCalendarScreenProps) {
   const items = [
     { title: 'Youth Revival', date: 'Jan 28, 2026', time: '6:00 PM' },
     { title: "Women's Conference", date: 'Feb 5, 2026', time: '10:00 AM' },

@@ -15,6 +15,7 @@ import {
   MapPin,
   Radio,
   Settings,
+  User,
   X,
 } from 'lucide-react-native';
 import { useEffect } from 'react';
@@ -47,6 +48,7 @@ const menuSections: MenuSection[] = [
   {
     title: 'My Activity',
     items: [
+      { icon: User, label: 'Profile', action: '/profile/my-profile' },
       { icon: Heart, label: 'My Churches', action: 'my-churches' },
       { icon: Calendar, label: 'My Events', action: 'my-events' },
       { icon: DollarSign, label: 'My Donations', action: 'my-donations' },
@@ -119,6 +121,9 @@ export function HamburgerMenu({
           pathname: '/sermons/global-sermons',
           params: { returnTo },
         });
+        break;
+      case 'profile':
+        router.push({ pathname: '/profile/my-profile', params: { returnTo } });
         break;
       case 'my-churches':
         router.push({ pathname: '/profile/my-churches', params: { returnTo } });

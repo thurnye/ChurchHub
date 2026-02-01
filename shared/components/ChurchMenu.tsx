@@ -122,8 +122,8 @@ const menuSections: MenuSection[] = [
         action: 'architecture',
       },
       { icon: Users, label: 'Clergy & Leadership', action: 'clergy' },
-      { icon: Briefcase, label: 'Staff & Lay Leaders', action: 'staff' },
-      { icon: Globe, label: 'Global Church News', action: 'global-church-news' },
+      // { icon: Briefcase, label: 'Staff & Lay Leaders', action: 'staff' },
+      { icon: Globe, label: 'Church News', action: 'global-church-news' },
       { icon: Briefcase, label: 'Careers', action: 'careers' },
     ],
   },
@@ -132,13 +132,13 @@ const menuSections: MenuSection[] = [
     title: 'Worship',
     icon: Church,
     items: [
-      { icon: Church, label: 'Sunday Services', action: 'sunday-services' },
+      // { icon: Church, label: 'Sunday Services', action: 'sunday-services' },
       {
         icon: Calendar,
         label: 'Weekday & Special Services',
         action: 'weekday-services',
       },
-      { icon: Workflow, label: 'Worship Online', action: 'worship-online' },
+      // { icon: Workflow, label: 'Worship Online', action: 'worship-online' },
       { icon: FileText, label: 'Sermons & Homilies', action: 'sermons' },
       { icon: Music, label: 'Music Ministry', action: 'music' },
       {
@@ -152,7 +152,7 @@ const menuSections: MenuSection[] = [
         label: 'Sacraments / Ordinances',
         action: 'sacraments',
       },
-      { icon: Newspaper, label: 'Newsletters', action: 'newsletters' },
+      // { icon: Newspaper, label: 'Newsletters', action: 'newsletters' },
     ],
   },
 
@@ -171,11 +171,11 @@ const menuSections: MenuSection[] = [
         label: 'Bible Study / Catechism',
         action: 'bible-study',
       },
-      {
-        icon: Users,
-        label: 'Children, Youth & Family',
-        action: 'youth-family',
-      },
+      // {
+      //   icon: Users,
+      //   label: 'Children, Youth & Family',
+      //   action: 'youth-family',
+      // },
       { icon: Boxes, label: 'Church Groups / Bodies', action: 'groups' },
       { icon: Cross, label: 'Pastoral Care', action: 'pastoral-care' },
       {
@@ -190,9 +190,9 @@ const menuSections: MenuSection[] = [
     title: 'Give / Donate',
     icon: DollarSign,
     items: [
-      { icon: HandHeart, label: 'Why We Give', action: 'why-give' },
-      { icon: HandCoins, label: 'How to Give', action: 'how-to-give' },
-      { icon: DollarSign, label: 'Online Giving', action: 'online-giving' },
+      // { icon: HandHeart, label: 'Why We Give', action: 'why-give' },
+      { icon: HandCoins, label: 'About Giving', action: 'about-giving' },
+      // { icon: DollarSign, label: 'Online Giving', action: 'online-giving' },
       { icon: Banknote, label: 'Pledges', action: 'pledges' },
       { icon: ReceiptText, label: 'Receipts', action: 'receipts' },
     ],
@@ -202,15 +202,15 @@ const menuSections: MenuSection[] = [
     title: 'Events',
     icon: Calendar,
     items: [
-      { icon: Calendar, label: "What's On", action: 'events' },
-      { icon: Church, label: 'Special Services', action: 'special-services' },
+      // { icon: Calendar, label: "What's On", action: 'events' },
+      { icon: Calendar, label: 'Church Calendar', action: 'church-calendar' },
       {
         icon: Calendar,
         label: 'Conferences / Retreats',
         action: 'conferences',
       },
       { icon: Music, label: 'Lectures / Recitals', action: 'lectures' },
-      { icon: FileText, label: 'Past Events Archive', action: 'past-events' },
+      // { icon: FileText, label: 'Past Events Archive', action: 'past-events' },
     ],
   },
   // Community Section

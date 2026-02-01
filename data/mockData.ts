@@ -8,7 +8,15 @@ export enum FeedSourceType {
   Individual = 'individual',
   Community = 'community',
 }
-
+export interface ChurchLeader {
+  id: string;
+  name: string;
+  role: string;
+  photo: string;
+  email: string; // clergy might have email
+  bio: string;   // pastor might have bio
+  phone: string;
+}
 export interface Church {
   id: string;
   name: string;
@@ -26,18 +34,12 @@ export interface Church {
   lat: number;
   lng: number;
   hasLivestream: boolean;
-  pastor: {
-    name: string;
-    role: string;
-    photo: string;
-    bio: string;
+  leadership: {
+    [key: string]: ChurchLeader[];
   };
-  clergy: {
-    name: string;
-    role: string;
-    photo: string;
-    email: string;
-  }[];
+  pastor:ChurchLeader;
+  clergy: ChurchLeader[];
+
   serviceTimes: {
     day: string;
     time: string;
@@ -105,29 +107,90 @@ export const churches: Church[] = [
     lat: 40.7128,
     lng: -74.006,
     hasLivestream: true,
+
     pastor: {
+      id: 'leader-1-pastor-1',
       name: 'Rev. James Thompson',
       role: 'Senior Pastor',
       photo:
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-      bio: 'Rev. James Thompson has been serving as the Senior Pastor of Grace Community Church for over 10 years. He is known for his dynamic preaching and commitment to building a strong, faith-based community.',
+      bio: 'Rev. James Thompson has been serving as the Senior Pastor of Grace Community Church for over 10 years. He is known for dynamic preaching and deep community care.',
+      email: 'james.thompson@gracecommunity.org',
+      phone: '+1 (555) 111-2222',
     },
+
     clergy: [
       {
+        id: 'leader-1-clergy-1',
         name: 'Sister Mary Johnson',
         role: 'Associate Pastor',
         photo:
           'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+        bio: 'Mary supports discipleship, counseling, and women’s ministry initiatives across the church.',
         email: 'mary.johnson@gracecommunity.org',
+        phone: '+1 (555) 222-3333',
       },
       {
+        id: 'leader-1-clergy-2',
         name: 'Brother David Lee',
         role: 'Youth Pastor',
         photo:
           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        bio: 'David leads youth worship nights, mentoring programs, and weekly Bible study groups.',
         email: 'david.lee@gracecommunity.org',
+        phone: '+1 (555) 333-4444',
       },
     ],
+
+    leadership: {
+      pastors: [
+        {
+          id: 'leader-1-pastor-1',
+          name: 'Rev. James Thompson',
+          role: 'Senior Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+          bio: 'Rev. James Thompson has been serving as the Senior Pastor of Grace Community Church for over 10 years. He is known for dynamic preaching and deep community care.',
+          email: 'james.thompson@gracecommunity.org',
+          phone: '+1 (555) 111-2222',
+        },
+      ],
+      clergy: [
+        {
+          id: 'leader-1-clergy-1',
+          name: 'Sister Mary Johnson',
+          role: 'Associate Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+          bio: 'Mary supports discipleship, counseling, and women’s ministry initiatives across the church.',
+          email: 'mary.johnson@gracecommunity.org',
+          phone: '+1 (555) 222-3333',
+        },
+        {
+          id: 'leader-1-clergy-2',
+          name: 'Brother David Lee',
+          role: 'Youth Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'David leads youth worship nights, mentoring programs, and weekly Bible study groups.',
+          email: 'david.lee@gracecommunity.org',
+          phone: '+1 (555) 333-4444',
+        },
+      ],
+      elders: [
+        {
+          id: 'leader-1-elder-1',
+          name: 'Elder Ruth Carter',
+          role: 'Elder',
+          photo:
+            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
+          bio: 'Ruth supports pastoral care, prayer ministry, and church direction through wisdom and counsel.',
+          email: 'ruth.carter@gracecommunity.org',
+          phone: '+1 (555) 444-5555',
+        },
+      ],
+    },
+
     serviceTimes: [
       { day: 'Sunday', time: '9:00 AM', type: 'Morning Worship' },
       { day: 'Sunday', time: '11:30 AM', type: 'Main Service' },
@@ -138,11 +201,12 @@ export const churches: Church[] = [
     parkingInfo: 'Free parking available in the rear of the building.',
     accessibilityInfo: 'Wheelchair accessible entrance and restrooms.',
     officeHours: 'Monday-Friday, 9:00 AM - 5:00 PM',
-    postsCount: Math.floor(Math.random() * 200),
-    membersCount: Math.floor(Math.random() * 20000) + 5000,
-    memberCount: Math.floor(Math.random() * 200) + 50,
+    postsCount: 127,
+    membersCount: 18420,
+    memberCount: 132,
     isVerified: true,
   },
+
   {
     id: '2',
     name: "St. Mary's Anglican Church",
@@ -163,22 +227,70 @@ export const churches: Church[] = [
     lat: 40.758,
     lng: -73.9855,
     hasLivestream: false,
+
     pastor: {
+      id: 'leader-2-pastor-1',
       name: 'Fr. Michael Roberts',
       role: 'Vicar',
       photo:
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-      bio: "Fr. Michael Roberts has been serving as the Vicar of St. Mary's Anglican Church for 5 years. He is dedicated to fostering a community of faith and service.",
+      bio: "Fr. Michael Roberts has served as Vicar for 5 years, focusing on liturgy, pastoral care, and community outreach.",
+      email: 'michael.roberts@stmarys.org',
+      phone: '+1 (555) 555-1002',
     },
+
     clergy: [
       {
+        id: 'leader-2-clergy-1',
         name: 'Sister Jane Smith',
         role: 'Deaconess',
         photo:
           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        bio: 'Jane supports service programs, visitation, and prayer initiatives for families and seniors.',
         email: 'jane.smith@stmarys.org',
+        phone: '+1 (555) 555-2002',
       },
     ],
+
+    leadership: {
+      pastors: [
+        {
+          id: 'leader-2-pastor-1',
+          name: 'Fr. Michael Roberts',
+          role: 'Vicar',
+          photo:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+          bio: "Fr. Michael Roberts has served as Vicar for 5 years, focusing on liturgy, pastoral care, and community outreach.",
+          email: 'michael.roberts@stmarys.org',
+          phone: '+1 (555) 555-1002',
+        },
+      ],
+      clergy: [
+        {
+          id: 'leader-2-clergy-1',
+          name: 'Sister Jane Smith',
+          role: 'Deaconess',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'Jane supports service programs, visitation, and prayer initiatives for families and seniors.',
+          email: 'jane.smith@stmarys.org',
+          phone: '+1 (555) 555-2002',
+        },
+      ],
+      wardens: [
+        {
+          id: 'leader-2-warden-1',
+          name: 'Thomas Green',
+          role: 'Church Warden',
+          photo:
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
+          bio: 'Thomas helps manage operations, facilities, and service-day coordination for the parish.',
+          email: 'thomas.green@stmarys.org',
+          phone: '+1 (555) 555-3002',
+        },
+      ],
+    },
+
     serviceTimes: [
       { day: 'Sunday', time: '8:00 AM', type: 'Holy Communion' },
       { day: 'Sunday', time: '10:00 AM', type: 'Sung Eucharist' },
@@ -189,11 +301,12 @@ export const churches: Church[] = [
     parkingInfo: 'Limited parking available in the front of the building.',
     accessibilityInfo: 'Wheelchair accessible entrance and restrooms.',
     officeHours: 'Monday-Friday, 9:00 AM - 5:00 PM',
-    postsCount: Math.floor(Math.random() * 200),
-    membersCount: Math.floor(Math.random() * 20000) + 5000,
-    memberCount: Math.floor(Math.random() * 200) + 50,
+    postsCount: 93,
+    membersCount: 12650,
+    memberCount: 98,
     isVerified: true,
   },
+
   {
     id: '3',
     name: 'Sacred Heart Catholic Church',
@@ -214,22 +327,70 @@ export const churches: Church[] = [
     lat: 40.7489,
     lng: -73.968,
     hasLivestream: true,
+
     pastor: {
+      id: 'leader-3-priest-1',
       name: 'Fr. David Martinez',
       role: 'Parish Priest',
       photo:
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
-      bio: 'Fr. David Martinez has been serving as the Parish Priest of Sacred Heart Catholic Church for 8 years. He is dedicated to fostering a community of faith and service.',
+      bio: 'Fr. David Martinez has served for 8 years, teaching faithfully and shepherding the parish with compassion.',
+      email: 'david.martinez@sacredheart.org',
+      phone: '+1 (555) 555-1003',
     },
+
     clergy: [
       {
+        id: 'leader-3-clergy-1',
         name: 'Sister Maria Rodriguez',
         role: 'Deaconess',
         photo:
           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        bio: 'Maria supports pastoral visitation, hospitality, and service programs across the parish.',
         email: 'maria.rodriguez@sacredheart.org',
+        phone: '+1 (555) 555-2003',
       },
     ],
+
+    leadership: {
+      priests: [
+        {
+          id: 'leader-3-priest-1',
+          name: 'Fr. David Martinez',
+          role: 'Parish Priest',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'Fr. David Martinez has served for 8 years, teaching faithfully and shepherding the parish with compassion.',
+          email: 'david.martinez@sacredheart.org',
+          phone: '+1 (555) 555-1003',
+        },
+      ],
+      clergy: [
+        {
+          id: 'leader-3-clergy-1',
+          name: 'Sister Maria Rodriguez',
+          role: 'Deaconess',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'Maria supports pastoral visitation, hospitality, and service programs across the parish.',
+          email: 'maria.rodriguez@sacredheart.org',
+          phone: '+1 (555) 555-2003',
+        },
+      ],
+      council: [
+        {
+          id: 'leader-3-council-1',
+          name: 'Anthony Kim',
+          role: 'Parish Council Chair',
+          photo:
+            'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400',
+          bio: 'Anthony helps coordinate parish initiatives, communications, and seasonal programs with the priest and ministry teams.',
+          email: 'anthony.kim@sacredheart.org',
+          phone: '+1 (555) 555-3003',
+        },
+      ],
+    },
+
     serviceTimes: [
       { day: 'Saturday', time: '5:00 PM', type: 'Vigil Mass' },
       { day: 'Sunday', time: '8:00 AM', type: 'Morning Mass' },
@@ -241,11 +402,12 @@ export const churches: Church[] = [
     parkingInfo: 'Free parking available in the rear of the building.',
     accessibilityInfo: 'Wheelchair accessible entrance and restrooms.',
     officeHours: 'Monday-Friday, 9:00 AM - 5:00 PM',
-    postsCount: Math.floor(Math.random() * 200),
-    membersCount: Math.floor(Math.random() * 20000) + 5000,
-    memberCount: Math.floor(Math.random() * 200) + 50,
+    postsCount: 161,
+    membersCount: 22140,
+    memberCount: 164,
     isVerified: true,
   },
+
   {
     id: '4',
     name: 'New Life Baptist Church',
@@ -266,22 +428,70 @@ export const churches: Church[] = [
     lat: 40.7282,
     lng: -73.9942,
     hasLivestream: true,
+
     pastor: {
+      id: 'leader-4-pastor-1',
       name: 'Pastor John Williams',
       role: 'Lead Pastor',
       photo:
         'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
-      bio: 'Pastor John Williams has been serving as the Lead Pastor of New Life Baptist Church for 7 years. He is dedicated to fostering a community of faith and service.',
+      bio: 'John leads preaching and discipleship, with a heart for evangelism and practical teaching.',
+      email: 'john.williams@newlifebaptist.org',
+      phone: '+1 (555) 555-1004',
     },
+
     clergy: [
       {
+        id: 'leader-4-clergy-1',
         name: 'Sister Sarah Johnson',
         role: 'Associate Pastor',
         photo:
           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        bio: 'Sarah supports family ministry, counseling, and prayer team coordination.',
         email: 'sarah.johnson@newlifebaptist.org',
+        phone: '+1 (555) 555-2004',
       },
     ],
+
+    leadership: {
+      pastors: [
+        {
+          id: 'leader-4-pastor-1',
+          name: 'Pastor John Williams',
+          role: 'Lead Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
+          bio: 'John leads preaching and discipleship, with a heart for evangelism and practical teaching.',
+          email: 'john.williams@newlifebaptist.org',
+          phone: '+1 (555) 555-1004',
+        },
+      ],
+      clergy: [
+        {
+          id: 'leader-4-clergy-1',
+          name: 'Sister Sarah Johnson',
+          role: 'Associate Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'Sarah supports family ministry, counseling, and prayer team coordination.',
+          email: 'sarah.johnson@newlifebaptist.org',
+          phone: '+1 (555) 555-2004',
+        },
+      ],
+      deacons: [
+        {
+          id: 'leader-4-deacon-1',
+          name: 'Deacon Mark Hill',
+          role: 'Deacon',
+          photo:
+            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+          bio: 'Mark supports member care, communion prep, and volunteer mobilization across weekend services.',
+          email: 'mark.hill@newlifebaptist.org',
+          phone: '+1 (555) 555-3004',
+        },
+      ],
+    },
+
     serviceTimes: [
       { day: 'Sunday', time: '9:30 AM', type: 'Sunday School' },
       { day: 'Sunday', time: '11:00 AM', type: 'Worship Service' },
@@ -292,11 +502,12 @@ export const churches: Church[] = [
     parkingInfo: 'Free parking available in the rear of the building.',
     accessibilityInfo: 'Wheelchair accessible entrance and restrooms.',
     officeHours: 'Monday-Friday, 9:00 AM - 5:00 PM',
-    postsCount: Math.floor(Math.random() * 200),
-    membersCount: Math.floor(Math.random() * 20000) + 5000,
-    memberCount: Math.floor(Math.random() * 200) + 50,
+    postsCount: 142,
+    membersCount: 15780,
+    memberCount: 121,
     isVerified: true,
   },
+
   {
     id: '5',
     name: 'Seventh-day Adventist Church',
@@ -316,42 +527,86 @@ export const churches: Church[] = [
     lat: 40.7589,
     lng: -73.9851,
     hasLivestream: true,
+
     pastor: {
+      id: 'leader-5-pastor-1',
       name: 'Pastor Samuel Anderson',
       role: 'Senior Pastor',
       photo:
         'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400',
-      bio: 'Pastor Samuel Anderson has been serving as the Senior Pastor of Seventh-day Adventist Church for 6 years. He is dedicated to fostering a community of faith and service.',
+      bio: 'Samuel shepherds the church with a focus on Sabbath teaching, health ministry, and spiritual growth.',
+      email: 'samuel.anderson@sdachurch.org',
+      phone: '+1 (555) 555-1005',
     },
+
     clergy: [
       {
+        id: 'leader-5-clergy-1',
         name: 'Sister Linda Brown',
         role: 'Associate Pastor',
         photo:
           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        bio: 'Linda supports discipleship groups, prayer meetings, and community service initiatives.',
         email: 'linda.brown@sdachurch.org',
+        phone: '+1 (555) 555-2005',
       },
     ],
+
+    leadership: {
+      pastors: [
+        {
+          id: 'leader-5-pastor-1',
+          name: 'Pastor Samuel Anderson',
+          role: 'Senior Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400',
+          bio: 'Samuel shepherds the church with a focus on Sabbath teaching, health ministry, and spiritual growth.',
+          email: 'samuel.anderson@sdachurch.org',
+          phone: '+1 (555) 555-1005',
+        },
+      ],
+      clergy: [
+        {
+          id: 'leader-5-clergy-1',
+          name: 'Sister Linda Brown',
+          role: 'Associate Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'Linda supports discipleship groups, prayer meetings, and community service initiatives.',
+          email: 'linda.brown@sdachurch.org',
+          phone: '+1 (555) 555-2005',
+        },
+      ],
+      directors: [
+        {
+          id: 'leader-5-director-1',
+          name: 'Director Paul Nguyen',
+          role: 'Health Ministry Director',
+          photo:
+            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
+          bio: 'Paul leads wellness programs, seminars, and community health support aligned with Adventist values.',
+          email: 'paul.nguyen@sdachurch.org',
+          phone: '+1 (555) 555-3005',
+        },
+      ],
+    },
+
     serviceTimes: [
       { day: 'Saturday', time: '9:30 AM', type: 'Sabbath School' },
       { day: 'Saturday', time: '11:00 AM', type: 'Divine Service' },
       { day: 'Wednesday', time: '7:00 PM', type: 'Prayer Meeting' },
     ],
-    ministries: [
-      'Health Ministry',
-      'Pathfinders',
-      'Community Services',
-      'Education',
-    ],
+    ministries: ['Health Ministry', 'Pathfinders', 'Community Services', 'Education'],
     accentColor: '#7C3AED',
     parkingInfo: 'Free parking available in the rear of the building.',
     accessibilityInfo: 'Wheelchair accessible entrance and restrooms.',
     officeHours: 'Monday-Friday, 9:00 AM - 5:00 PM',
-    postsCount: Math.floor(Math.random() * 200),
-    membersCount: Math.floor(Math.random() * 20000) + 5000,
-    memberCount: Math.floor(Math.random() * 200) + 50,
+    postsCount: 118,
+    membersCount: 13490,
+    memberCount: 109,
     isVerified: true,
   },
+
   {
     id: '6',
     name: 'Zion African Methodist Episcopal',
@@ -372,40 +627,83 @@ export const churches: Church[] = [
     lat: 40.738,
     lng: -73.9916,
     hasLivestream: true,
+
     pastor: {
+      id: 'leader-6-pastor-1',
       name: 'Rev. Dr. Patricia Johnson',
       role: 'Presiding Elder',
       photo:
         'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400',
-      bio: 'Rev. Dr. Patricia Johnson has been serving as the Presiding Elder of Zion African Methodist Episcopal for 9 years. She is dedicated to fostering a community of faith and service.',
+      bio: 'Patricia leads with a passion for worship, justice, and community transformation through faith.',
+      email: 'patricia.johnson@zionAME.org',
+      phone: '+1 (555) 555-1006',
     },
+
     clergy: [
       {
+        id: 'leader-6-clergy-1',
         name: 'Sister Mary Davis',
         role: 'Associate Pastor',
         photo:
           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+        bio: 'Mary supports teaching, outreach, and member care with a focus on strong community relationships.',
         email: 'mary.davis@zionAME.org',
+        phone: '+1 (555) 555-2006',
       },
     ],
+
+    leadership: {
+      pastors: [
+        {
+          id: 'leader-6-pastor-1',
+          name: 'Rev. Dr. Patricia Johnson',
+          role: 'Presiding Elder',
+          photo:
+            'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400',
+          bio: 'Patricia leads with a passion for worship, justice, and community transformation through faith.',
+          email: 'patricia.johnson@zionAME.org',
+          phone: '+1 (555) 555-1006',
+        },
+      ],
+      clergy: [
+        {
+          id: 'leader-6-clergy-1',
+          name: 'Sister Mary Davis',
+          role: 'Associate Pastor',
+          photo:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+          bio: 'Mary supports teaching, outreach, and member care with a focus on strong community relationships.',
+          email: 'mary.davis@zionAME.org',
+          phone: '+1 (555) 555-2006',
+        },
+      ],
+      stewards: [
+        {
+          id: 'leader-6-steward-1',
+          name: 'Steward Calvin Brooks',
+          role: 'Chief Steward',
+          photo:
+            'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400',
+          bio: 'Calvin supports service-day operations, hospitality flow, and church logistics with excellence.',
+          email: 'calvin.brooks@zionAME.org',
+          phone: '+1 (555) 555-3006',
+        },
+      ],
+    },
+
     serviceTimes: [
       { day: 'Sunday', time: '8:00 AM', type: 'Early Service' },
       { day: 'Sunday', time: '10:30 AM', type: 'Celebration Service' },
       { day: 'Tuesday', time: '6:30 PM', type: 'Bible Study' },
     ],
-    ministries: [
-      'Social Justice',
-      'Music Ministry',
-      "Men's Fellowship",
-      "Women's Ministry",
-    ],
+    ministries: ['Social Justice', 'Music Ministry', "Men's Fellowship", "Women's Ministry"],
     accentColor: '#F59E0B',
     parkingInfo: 'Free parking available in the rear of the building.',
     accessibilityInfo: 'Wheelchair accessible entrance and restrooms.',
     officeHours: 'Monday-Friday, 9:00 AM - 5:00 PM',
-    postsCount: Math.floor(Math.random() * 200),
-    membersCount: Math.floor(Math.random() * 20000) + 5000,
-    memberCount: Math.floor(Math.random() * 200) + 50,
+    postsCount: 149,
+    membersCount: 16930,
+    memberCount: 143,
     isVerified: true,
   },
 ];
@@ -1266,8 +1564,6 @@ export const prayerRequests: PrayerRequest[] = [
   },
 ];
 
-
-
 export interface IDevotional {
   id: string;
   title: string;
@@ -1415,6 +1711,19 @@ export interface FeedItem {
 
 export const FeedItems: FeedItem[] = [
   {
+    id: 'post-101-1',
+    kind: 'quote',
+    thumbnail:
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+    postOwner: 'Daniel Okafor',
+    title: '"Peace I leave with you; my peace I give you."',
+    description: 'A reminder to breathe, pray, and trust the process.',
+    sourceType: FeedSourceType.Individual,
+    sourceId: 'user-101',
+    primaryRoute: { pathname: '/profile', params: { id: 'user-101' } },
+    hasAudio: false,
+  },
+  {
     description: 'Love • 28 min',
     hasAudio: true,
     id: 'sermon-5',
@@ -1429,19 +1738,6 @@ export const FeedItems: FeedItem[] = [
     thumbnail:
       'https://images.unsplash.com/photo-1519491050282-cf00c82424b4?w=800',
     title: "God's Love for All",
-  },
-  {
-    id: 'post-101-1',
-    kind: 'quote',
-    thumbnail:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-    postOwner: 'Daniel Okafor',
-    title: '"Peace I leave with you; my peace I give you."',
-    description: 'A reminder to breathe, pray, and trust the process.',
-    sourceType: FeedSourceType.Individual,
-    sourceId: 'user-101',
-    primaryRoute: { pathname: '/profile', params: { id: 'user-101' } },
-    hasAudio: false,
   },
   {
     id: 'post-101-2',
@@ -2267,6 +2563,7 @@ const Posts = [
   },
 ];
 
+// for gallery page
 export const ProfileData: IProfileData[] = [
   {
     id: '1',
@@ -2391,5 +2688,120 @@ export const ProfileData: IProfileData[] = [
     isVerified: true,
     sourceType: FeedSourceType.Individual,
     posts: Posts.filter((post) => post.owner.id === 'user-102'),
+  },
+];
+
+export type ChurchNewsType =
+  | 'announcement'
+  | 'newsletter'
+  | 'event'
+  | 'ministry'
+  | 'alert'
+  | 'pastor-message';
+
+export interface IChurchNews {
+  id: string;
+  churchId: string;
+
+  type: ChurchNewsType;
+  title: string;
+  summary: string;
+  content: string;
+
+  date: string; // display date
+  author?: string;
+
+  image?: string;
+  isPinned?: boolean;
+  isUrgent?: boolean;
+
+  tags?: string[];
+
+  cta?: {
+    label: string;
+    route: string;
+  };
+}
+
+export const churchNews: IChurchNews[] = [
+  {
+    id: 'news-001',
+    churchId: '1',
+    type: 'announcement',
+    title: 'Midweek Bible Study Resumes',
+    summary: 'Our Wednesday Bible study resumes this week.',
+    content:
+      'We are excited to resume our midweek Bible study this Wednesday at 6:00 PM in the main hall. Everyone is welcome to join as we grow together in God’s Word.',
+    date: 'September 18, 2026',
+    author: 'Church Office',
+    isPinned: true,
+    tags: ['Bible Study', 'Weekly'],
+  },
+  {
+    id: 'news-002',
+    churchId: '1',
+    type: 'event',
+    title: 'Community Food Drive',
+    summary: 'Join us as we serve our local community.',
+    content:
+      'This Saturday, we will be hosting a community food drive from 10:00 AM to 2:00 PM. Volunteers are encouraged to sign up and help us bless families in need.',
+    date: 'September 20, 2026',
+    image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800',
+    tags: ['Outreach', 'Community'],
+    cta: {
+      label: 'Volunteer',
+      route: '/volunteer/food-drive',
+    },
+  },
+  {
+    id: 'news-003',
+    churchId: '2',
+    type: 'newsletter',
+    title: 'Weekly Parish Newsletter',
+    summary: 'Highlights, reflections, and upcoming services.',
+    content:
+      'In this week’s newsletter, we reflect on Sunday’s message, share upcoming service times, and highlight ministries that need volunteers.',
+    date: 'September 19, 2026',
+    author: 'Parish Team',
+    cta: {
+      label: 'Read Full Newsletter',
+      route: '/newsletter/weekly',
+    },
+  },
+  {
+    id: 'news-004',
+    churchId: '3',
+    type: 'pastor-message',
+    title: 'A Message from the Pastor',
+    summary: 'Encouragement for the coming week.',
+    content:
+      'As we step into a new week, I encourage you to remain rooted in prayer and trust God’s guidance in every decision you make.',
+    date: 'September 18, 2026',
+    author: 'Fr. David Martinez',
+    tags: ['Encouragement'],
+  },
+  {
+    id: 'news-005',
+    churchId: '4',
+    type: 'ministry',
+    title: 'Youth Ministry Relaunch',
+    summary: 'New season, new energy for our youth.',
+    content:
+      'Our youth ministry is relaunching with new programs, new leaders, and exciting activities designed to help young people grow in faith.',
+    date: 'September 22, 2026',
+    image: 'https://images.unsplash.com/photo-1520975958221-7087e3edb3c2?w=800',
+    tags: ['Youth', 'Ministry'],
+  },
+  {
+    id: 'news-006',
+    churchId: '5',
+    type: 'alert',
+    title: 'Service Time Change',
+    summary: 'Important update for this weekend.',
+    content:
+      'Please note that this Saturday’s service will begin at 10:00 AM instead of 9:30 AM due to maintenance work.',
+    date: 'September 21, 2026',
+    isUrgent: true,
+    tags: ['Service Update'],
   },
 ];

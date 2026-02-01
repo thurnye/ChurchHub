@@ -1,6 +1,6 @@
 // Re-export all Worship section screens from organized subdirectory
 export {
-  ChurchSundayServicesScreen,
+  // ChurchSundayServicesScreen,
   ChurchWeekdayServicesScreen,
   ChurchWorshipOnlineScreen,
   ChurchSermonsScreen,

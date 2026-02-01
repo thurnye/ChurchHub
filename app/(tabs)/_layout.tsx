@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Home, Church, Radio, Users, User } from 'lucide-react-native';
+import { Home, Church, Radio, Users, User, Book, BookPlus } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function TabLayout() {
@@ -74,10 +74,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='profile'
+        name='bible'
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
+          title: 'Bible',
+          tabBarIcon: ({ color, size }) => <BookPlus color={color} size={size} />,
         }}
       />
 
@@ -187,6 +187,12 @@ export default function TabLayout() {
       />
 
       {/* Profile */}
+      <Tabs.Screen
+        name='profile/my-profile'
+        options={{
+          href: null,
+        }}
+      />
       <Tabs.Screen
         name='profile/my-donations'
         options={{

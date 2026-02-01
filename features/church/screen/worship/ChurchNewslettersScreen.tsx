@@ -17,18 +17,7 @@ export function ChurchNewslettersScreen({
 }: ChurchNewslettersScreenProps) {
   return (
     <ChurchScreenTemplate church={church} title='Newsletters' icon={FileText}>
-      <Card className='mb-4'>
-        <CardContent className='p-4'>
-          <Text className='font-semibold text-gray-900 mb-2'>
-            Subscribe to Our Newsletter
-          </Text>
-          <Text className='text-sm text-gray-600 mb-3'>
-            Stay updated with church news and events.
-          </Text>
-
-          <AppPressable label='Subscribe' onPress={() => {}} />
-        </CardContent>
-      </Card>
+      
 
       <View className='gap-2'>
         {[1, 2, 3].map((i) => (

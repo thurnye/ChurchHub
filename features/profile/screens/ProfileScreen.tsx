@@ -15,7 +15,8 @@ import {
 import { TopBar } from '@/shared/components/TopBar';
 import { Card, Avatar, Badge } from '@/shared/components/ui';
 import { useAuth } from '@/shared/context/AuthContext';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
 
 interface MenuItem {
   icon: typeof Heart;
@@ -58,6 +59,9 @@ const settingsItems: MenuItem[] = [
 ];
 
 export function ProfileScreen() {
+  const { from } = useLocalSearchParams<{
+    from: string;
+  }>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { logout, user } = useAuth();
 
@@ -65,14 +69,14 @@ export function ProfileScreen() {
     router.push({
       pathname: action as any,
       params: {
-        from: 'profile',
+        from: '/profile/my-profile',
       },
     });
   };
 
   return (
     <View className='flex-1 bg-gray-50'>
-      <TopBar title='Profile' />
+      <HiddenScreensTopBar show={true} title='Profile' navigateTo={from} />
 
       <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
         {/* Profile Header */}

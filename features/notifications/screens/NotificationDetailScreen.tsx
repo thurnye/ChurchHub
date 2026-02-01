@@ -4,8 +4,8 @@
 // ✅ lucide-react-native icons
 
 import React, { useMemo } from 'react';
-import { SafeAreaView, View, Text, Pressable, ScrollView } from 'react-native';
-import { ArrowLeft, Bell } from 'lucide-react-native';
+import {  View, Text, Pressable, ScrollView } from 'react-native';
+import {  Bell } from 'lucide-react-native';
 import { notifications } from '@/data/mockData';
 import { useLocalSearchParams } from 'expo-router';
 import { HiddenScreensTopBar } from '@/shared/components/HiddenScreensTopBar';
@@ -85,7 +85,8 @@ export function NotificationDetailScreen({}: NotificationDetailScreenProps) {
     <View className='flex-1 bg-gray-50'>
       {/* Header */}
       <HiddenScreensTopBar
-        show={true}
+        show={false}
+        showNotification={false}
         title={'Notification'}
       />
 
